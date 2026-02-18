@@ -1,7 +1,7 @@
 /*
  * Egg-Catcher Game
  *
- * Written by Istiak Alam [2026]
+ * Written by Istiak Alam - Tanveer Ratul [2026]
  *
  */
 
