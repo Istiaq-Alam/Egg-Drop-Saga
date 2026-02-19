@@ -60,7 +60,7 @@ This release focuses on **core gameplay logic and architecture**, not final grap
 
 ## 🏗 Project Structure
 ```
-EggCatcher/
+EggDropSaga/
 │
 ├── main.cpp
 ├── Game.h / Game.cpp
