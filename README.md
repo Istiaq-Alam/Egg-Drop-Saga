@@ -1,4 +1,4 @@
- # 🥚 Egg Drop Saga (C++ / OpenGL GLUT)
+ # 🐔🥚 Egg Drop Saga (C++ / OpenGL GLUT)
 
 > A 2D Orthographic Arcade Game built using C++ and OpenGL (GLUT)  
 > Developed as part of a Computer Graphics course project.
