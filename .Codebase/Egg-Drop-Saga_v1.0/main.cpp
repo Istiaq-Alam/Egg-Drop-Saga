@@ -22,6 +22,12 @@ void timer(int value) {
 
 void keyboard(unsigned char key, int x, int y) {
     game.handleInput(key);
+
+     if (key == 'f')
+        glutFullScreen();
+
+    if (key == 27) //ESC to small window
+        glutReshapeWindow(800, 600);
 }
 
 
