@@ -67,38 +67,57 @@ void Game::update() {
     checkCollisions();
 }
 
-// change the life as red heart shapes
-void drawHeart(float x, float y, float size) {
-    glColor3f(1.0f, 0.0f, 0.0f); // Red color
+// Gradient Shaded Heart
+void drawHeart(float centerX, float centerY, float size)
+{
+    glShadeModel(GL_SMOOTH);
 
-    // Draw two circles for top of heart
-    int numSegments = 50;
-    float radius = size / 2.0f;
-
+    // ===== Fill with Gradient =====
     glBegin(GL_TRIANGLE_FAN);
-    glVertex2f(x, y);
-    for (int i = 0; i <= numSegments; i++) {
-        float angle = 3.14159f * i / numSegments; // Half circle
-        glVertex2f(x - radius + cos(angle) * radius, y + sin(angle) * radius);
+
+    // Center (brighter red)
+    glColor3f(1.0f, 0.2f, 0.3f);
+    glVertex2f(centerX, centerY);
+
+    for (float t = 0; t <= 2 * M_PI; t += 0.02f)
+    {
+        float x = 16 * pow(sin(t), 3);
+        float y = 13 * cos(t)
+                - 5 * cos(2 * t)
+                - 2 * cos(3 * t)
+                - cos(4 * t);
+
+        float finalX = centerX + (x / 20.0f) * size;
+        float finalY = centerY + (y / 20.0f) * size;
+
+        // Bottom darker, top brighter
+        if (y < 0)
+            glColor3f(0.7f, 0.0f, 0.0f);   // dark red
+        else
+            glColor3f(1.0f, 0.1f, 0.2f);   // bright red
+
+        glVertex2f(finalX, finalY);
     }
+
     glEnd();
 
-    glBegin(GL_TRIANGLE_FAN);
-    glVertex2f(x + radius, y);
-    for (int i = 0; i <= numSegments; i++) {
-        float angle = 3.14159f * i / numSegments; // Half circle
-        glVertex2f(x + radius + cos(angle) * radius, y + sin(angle) * radius);
-    }
-    glEnd();
+    // ===== Black Outline =====
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glLineWidth(2.0f);
+    glBegin(GL_LINE_LOOP);
+    for (float t = 0; t <= 2 * M_PI; t += 0.02f)
+    {
+        float x = 16 * pow(sin(t), 3);
+        float y = 13 * cos(t)
+                - 5 * cos(2 * t)
+                - 2 * cos(3 * t)
+                - cos(4 * t);
 
-    // Draw bottom triangle
-    glBegin(GL_TRIANGLES);
-    glVertex2f(x - size, y);
-    glVertex2f(x + size * 1, y);
-    glVertex2f(x + size / -20.0f, y - size * 1.5f);
+        glVertex2f(centerX + (x / 20.0f) * size,
+                   centerY + (y / 20.0f) * size);
+    }
     glEnd();
 }
-
 
 void Game::render() {
     glClear(GL_COLOR_BUFFER_BIT);

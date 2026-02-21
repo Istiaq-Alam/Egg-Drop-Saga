@@ -28,6 +28,8 @@ void keyboard(unsigned char key, int x, int y) {
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glutInitWindowSize(800, 600);
     glutCreateWindow("Egg Drop Saga - Test Game Sequential Skeleton");
 
