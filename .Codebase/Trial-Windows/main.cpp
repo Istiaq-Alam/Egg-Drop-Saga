@@ -4,9 +4,10 @@
  * Written by Istiak Alam [2026]
  *
  */
-
+#include <windows.h>
 #include <GL/glut.h>
 #include "Game.h"
+#define IDI_ICON1 101
 
 Game game;
 
@@ -73,6 +74,19 @@ int main(int argc, char** argv) {
 
     glutReshapeFunc(reshape);
     glutCreateWindow("Egg Drop Saga - Test Game Sequential Skeleton");
+
+    HWND hwnd = GetActiveWindow();
+
+    HICON hIcon = (HICON)LoadImage(
+        GetModuleHandle(NULL),
+        MAKEINTRESOURCE(IDI_ICON1),
+        IMAGE_ICON,
+        32, 32,
+        LR_DEFAULTCOLOR
+    );
+
+    SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon);
+    SendMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
 
     glutKeyboardFunc(keyboard);
     glutSpecialFunc(specialKeys);

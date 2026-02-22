@@ -43,6 +43,8 @@
 			<Add library="gdi32" />
 			<Add directory="C:/Program Files (x86)/CodeBlocks/MinGW/x86_64-w64-mingw32/lib" />
 		</Linker>
+		<Unit filename="Background.cpp" />
+		<Unit filename="Background.h" />
 		<Unit filename="Bucket.cpp" />
 		<Unit filename="Bucket.h" />
 		<Unit filename="Chicken.cpp" />
@@ -51,6 +53,9 @@
 		<Unit filename="Egg.h" />
 		<Unit filename="Game.cpp" />
 		<Unit filename="Game.h" />
+		<Unit filename="assets/icon.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
