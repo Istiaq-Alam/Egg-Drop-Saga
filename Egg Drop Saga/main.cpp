@@ -22,14 +22,22 @@ void timer(int value) {
 
 void keyboard(unsigned char key, int x, int y) {
     game.handleInput(key);
+
+     if (key == 'f')
+        glutFullScreen();
+
+    if (key == 27) //ESC to small window
+        glutReshapeWindow(800, 600);
 }
 
 
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glutInitWindowSize(800, 600);
-    glutCreateWindow("Egg Catcher - Sequential Egg Skeleton");
+    glutCreateWindow("Egg Drop Saga - Test Game Sequential Skeleton");
 
     glClearColor(0.5, 0.8, 1.0, 1.0); // Sky blue
     gluOrtho2D(0, 800, 0, 600);

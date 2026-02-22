@@ -17,6 +17,7 @@ void Game::init() {
 
     bucket = Bucket(350, 50);
     currentEgg = nullptr;
+    lastTime = glutGet(GLUT_ELAPSED_TIME);
 
     chickens.clear();
     float wireY = 500;
@@ -31,8 +32,8 @@ void Game::spawnEgg() {
     float x = chickens[index].getX();
     float y = chickens[index].getY() - 20;
 
-    float speed = 2.0f + (score * 0.2f);
-    if (speed > 8.0f) speed = 8.0f;
+    float speed = 1.9f + (score * 0.1f);
+    if (speed > 5.0f) speed = 5.0f;
 
     currentEgg = new Egg(x, y, speed);
 }
@@ -56,6 +57,8 @@ void Game::checkCollisions() {
 }
 
 void Game::update() {
+    background.update();
+
     if (state != PLAYING) return;
 
     if (currentEgg == nullptr)
@@ -121,7 +124,7 @@ void drawHeart(float centerX, float centerY, float size)
 
 void Game::render() {
     glClear(GL_COLOR_BUFFER_BIT);
-
+    background.draw(800,600);
     if (state == HOME) {
         drawText(280, 350, "Egg Drop Saga");
         drawText(280, 300, "Press S to Start");

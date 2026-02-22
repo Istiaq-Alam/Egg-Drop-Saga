@@ -5,6 +5,7 @@
 #include "Bucket.h"
 #include "Egg.h"
 #include "Chicken.h"
+#include "Background.h"
 
 enum GameState { HOME, PLAYING, GAME_OVER };
 
@@ -12,8 +13,9 @@ class Game {
 private:
     int score;
     int lives;
+    int lastTime;
     GameState state;
-
+    Background background;
     Bucket bucket;
     Egg* currentEgg;
     std::vector<Chicken> chickens;
