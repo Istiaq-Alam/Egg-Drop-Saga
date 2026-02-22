@@ -13,7 +13,7 @@
 
 ---
 
-![Version](https://img.shields.io/badge/version-v0.2-blue)
+![Version](https://img.shields.io/badge/version-v0.1-blue)
 ![Language](https://img.shields.io/badge/language-C++-00599C)
 ![Graphics](https://img.shields.io/badge/OpenGL-GLUT-red)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen)

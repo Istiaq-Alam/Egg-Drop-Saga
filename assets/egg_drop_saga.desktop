@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Egg Drop Saga
+Exec=./EggDropSaga
+Icon=egg_drop_saga
+Type=Application
+Categories=Game;
+Terminal=false

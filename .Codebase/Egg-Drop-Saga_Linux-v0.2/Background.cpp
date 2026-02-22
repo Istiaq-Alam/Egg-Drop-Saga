@@ -77,4 +77,3 @@ void Background::draw(int screenWidth, int screenHeight) {
     }
     glEnd();
 }
-
