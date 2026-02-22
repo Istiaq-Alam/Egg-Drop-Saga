@@ -13,7 +13,7 @@
 
 ---
 
-![Version](https://img.shields.io/badge/version-v0.1-blue)
+![Version](https://img.shields.io/badge/version-v0.2-blue)
 ![Language](https://img.shields.io/badge/language-C++-00599C)
 ![Graphics](https://img.shields.io/badge/OpenGL-GLUT-red)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen)
@@ -196,3 +196,4 @@ This project is released for academic and educational purposes.
 # ⭐ If You Like This Project
 
 Consider giving it a ⭐ on GitHub!
+
