@@ -15,6 +15,8 @@ const float GAME_HEIGHT = 720.0f;
 
 #endif
 
+
+
 enum GameState { HOME, PLAYING, GAME_OVER };
 
 class Game {
@@ -22,6 +24,8 @@ private:
     int score;
     int lives;
     int lastTime;
+    bool isPaused;
+    int pauseTimer; // counts frames or seconds for showing "Resumed"
     GameState state;
     Background background;
     Bucket bucket;

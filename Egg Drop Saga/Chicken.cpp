@@ -27,4 +27,3 @@ void Chicken::draw() {
     glVertex2f(x + 15, y + 10);
     glEnd();
 }
-

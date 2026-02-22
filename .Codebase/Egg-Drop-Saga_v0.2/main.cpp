@@ -56,7 +56,7 @@ void keyboard(unsigned char key, int x, int y) {
         glutFullScreen();
 
     if (key == 27) //ESC to small window
-        glutReshapeWindow(960, 640);
+        glutReshapeWindow(1080, 780);
 }
 
 void specialKeys(int key, int x, int y) {
@@ -68,7 +68,9 @@ int main(int argc, char** argv) {
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glutInitWindowSize(960, 640);
+    glutInitWindowSize(1080, 780);
+    glutInitWindowPosition(400, 100);
+
     glutReshapeFunc(reshape);
     glutCreateWindow("Egg Drop Saga - Test Game Sequential Skeleton");
 

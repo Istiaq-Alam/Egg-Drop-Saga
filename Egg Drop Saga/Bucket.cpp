@@ -1,6 +1,9 @@
 #include "Bucket.h"
 #include <GL/glut.h>
 
+const float GAME_WIDTH  = 800.0f;
+const float GAME_HEIGHT = 720.0f;
+
 Bucket::Bucket() {}
 Bucket::Bucket(float x, float y) {
     this->x = x;
@@ -10,12 +13,20 @@ Bucket::Bucket(float x, float y) {
     speed = 50;
 }
 
-void Bucket::moveLeft() {
-    if (x > 0) x -= speed;
+void Bucket::moveLeft()
+{
+    x -= speed;
+
+    if (x < 0)
+        x = 0;
 }
 
-void Bucket::moveRight() {
-    if (x + width < 800) x += speed;
+void Bucket::moveRight()
+{
+    x += speed;
+
+    if (x + width > GAME_WIDTH)
+        x = GAME_WIDTH - width;
 }
 
 void Bucket::draw() {
@@ -33,4 +44,3 @@ bool Bucket::checkCollision(Egg& egg) {
             egg.x < x + width &&
             egg.y - egg.radius < y + height);
 }
-

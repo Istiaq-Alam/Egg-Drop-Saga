@@ -24,5 +24,3 @@ void Egg::draw() {
     }
     glEnd();
 }
-
-

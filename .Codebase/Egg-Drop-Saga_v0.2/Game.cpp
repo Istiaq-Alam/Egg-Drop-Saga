@@ -5,7 +5,6 @@
 #include <sstream>
 #include <math.h>
 
-
 void Game::drawText(float x, float y, const char* text)
 {
     // Save current matrices
@@ -36,9 +35,12 @@ void Game::init() {
     lives = 3;
     state = HOME;
 
-    bucket = Bucket(GAME_WIDTH / 2 - 60, GAME_HEIGHT * 0.1f);
+    bucket = Bucket(GAME_WIDTH / 2 - 60, GAME_HEIGHT * 0.03f);
     currentEgg = nullptr;
     lastTime = glutGet(GLUT_ELAPSED_TIME);
+
+    isPaused = false;
+    pauseTimer = 0;
 
     chickens.clear();
     float wireY = GAME_HEIGHT * 0.7f;
@@ -74,7 +76,7 @@ void Game::checkCollisions() {
         currentEgg = nullptr;
     }
     // Check collision with ground
-    else if (currentEgg->y <= GAME_HEIGHT * 0.10f) {
+    else if (currentEgg->y <= GAME_HEIGHT * 0.07f) {
         lives--;
         delete currentEgg;
         currentEgg = nullptr;
@@ -82,8 +84,12 @@ void Game::checkCollisions() {
     }
 }
 
+
 void Game::update() {
     background.update();
+    if (isPaused) {
+        return; // stop game logic while paused
+    }
 
     if (state != PLAYING) return;
 
@@ -110,14 +116,14 @@ void drawHeart(float centerX, float centerY, float size)
 
     for (float t = 0; t <= 2 * M_PI; t += 0.02f)
     {
-        float x = 16 * pow(sin(t), 3);
-        float y = 13 * cos(t)
+        float x = 17 * pow(sin(t), 3);
+        float y = 14 * cos(t)
                 - 5 * cos(2 * t)
                 - 2 * cos(3 * t)
                 - cos(4 * t);
 
         float finalX = centerX + (x / 20.0f) * size;
-        float finalY = centerY + (y / 20.0f) * size;
+        float finalY = centerY + (y / 17.0f) * size;
 
         // Bottom darker, top brighter
         if (y < 0)
@@ -143,7 +149,7 @@ void drawHeart(float centerX, float centerY, float size)
                 - cos(4 * t);
 
         glVertex2f(centerX + (x / 20.0f) * size,
-                   centerY + (y / 20.0f) * size);
+                   centerY + (y / 17.0f) * size);
     }
     glEnd();
 }
@@ -182,7 +188,7 @@ void Game::render() {
         if (currentEgg != nullptr)
             currentEgg->draw();
 
-        // Draw UI
+        // Draw Score
         std::stringstream ss;
         ss << "Score: " << score;
         drawText(30, GAME_HEIGHT - 40, ss.str().c_str());
@@ -191,23 +197,30 @@ void Game::render() {
         // ss.str("");
         // ss << "Lives: " << lives;
         // drawText(700, 570, ss.str().c_str());
-        float startX = 700;
+        float startX = 720;
         float startY = 615;
-        float heartSize = 12.0f; // Adjust for size
+        float heartSize = 11.0f; // Adjust for size
 
         for (int i = 0; i < lives; i++) {
-            drawHeart(startX + i * 25, startY, heartSize);
+            drawHeart(startX + i * 23, startY, heartSize);
         }
 
+        if (isPaused)
+        drawText(580, 400, "PAUSED");
+
+        else if (pauseTimer > 0) {
+        drawText(580, 400, "RESUMED");
+        pauseTimer--;
+        }
 
     }
     else if (state == GAME_OVER) {
         drawText(580, 450, "GAME OVER");
         std::stringstream ss;
         ss << "Final Score: " << score;
-        drawText(580, 310, ss.str().c_str());
-        drawText(580, 260, "Press R to Play Again");
-        drawText(580, 230, "Press Q to Quit");
+        drawText(580, 350, ss.str().c_str());
+        drawText(570, 300, "Press R to Play Again");
+        drawText(580, 250, "Press Q to Quit");
     }
 
     glutSwapBuffers();
@@ -223,8 +236,18 @@ void Game::handleInput(unsigned char key) {
         if (key == 'q') exit(0);
     }
     else if (state == PLAYING) {
-        if ((key == 'a') || (key == 37)) bucket.moveLeft();
+    if (key == 32) { // Spacebar ASCII
+        isPaused = !isPaused;  // toggle pause
+        if (!isPaused) {
+            pauseTimer = 120; // show "Resumed" for 2 seconds
+            }
+        }
+
+    else if (!isPaused) {
+        if (key == 'a') bucket.moveLeft();
         if (key == 'd') bucket.moveRight();
+            }
+
     }
 }
 
@@ -233,9 +256,17 @@ void Game::handleSpecialInput(int key) {
     if(state != PLAYING)
         return;
 
-    if(key == GLUT_KEY_LEFT)
-        bucket.moveLeft();
+    if (key == 32) { // Spacebar ASCII
+        isPaused = !isPaused;  // toggle pause
+        if (!isPaused) {
+            pauseTimer = 120; // show "Resumed" for 2 seconds
+            }
+        }
+    else if (!isPaused) {
+        if(key == GLUT_KEY_LEFT)
+            bucket.moveLeft();
 
-    if(key == GLUT_KEY_RIGHT)
-        bucket.moveRight();
+        if(key == GLUT_KEY_RIGHT)
+            bucket.moveRight();
+    }
 }
