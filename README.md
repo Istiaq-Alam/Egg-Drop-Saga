@@ -1,5 +1,12 @@
- # 🐔🥚 Egg Drop Saga (C++ / OpenGL GLUT)
+<div align="center">
+<a href="https://github.com/Istiaq-Alam/Car-Rental-Website">
+<img align="middle" width="224" height="224" alt="appicon" src="https://github.com/user-attachments/assets/1d5d2ac3-e00b-411b-94d9-24a7df0707cb" />
+</a>
+ 
 
+
+# 🐔🥚 Egg Drop Saga (C++ / OpenGL GLUT)
+</div>
 > A 2D Orthographic Arcade Game built using C++ and OpenGL (GLUT)  
 > Developed as part of a Computer Graphics course project.
 
