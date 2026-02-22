@@ -5,9 +5,30 @@
 #include <sstream>
 #include <math.h>
 
-void Game::drawText(float x, float y, const char* text) {
+
+void Game::drawText(float x, float y, const char* text)
+{
+    // Save current matrices
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    gluOrtho2D(0, GAME_WIDTH, 0, GAME_HEIGHT);
+
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    glColor3f(0, 0, 0);
     glRasterPos2f(x, y);
-    while (*text) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *text++);
+
+    while (*text)
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *text++);
+
+    // Restore matrices
+    glPopMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
 }
 
 void Game::init() {
@@ -15,22 +36,27 @@ void Game::init() {
     lives = 3;
     state = HOME;
 
-    bucket = Bucket(350, 50);
+    bucket = Bucket(GAME_WIDTH / 2 - 60, GAME_HEIGHT * 0.1f);
     currentEgg = nullptr;
     lastTime = glutGet(GLUT_ELAPSED_TIME);
 
     chickens.clear();
-    float wireY = 500;
-    for (int i = 0; i < 5; i++)
-        chickens.push_back(Chicken(100 + i * 130, wireY));
+    float wireY = GAME_HEIGHT * 0.7f;
 
+    float spacing = GAME_WIDTH / 9.0f;
+
+    for (int i = 0; i < 5; i++)
+    {
+        float xPos = spacing * (i + 1);
+        chickens.push_back(Chicken(xPos, wireY));
+    }
     srand(time(0));
 }
 
 void Game::spawnEgg() {
     int index = rand() % chickens.size();
     float x = chickens[index].getX();
-    float y = chickens[index].getY() - 20;
+    float y = chickens[index].getY() - 40;
 
     float speed = 1.9f + (score * 0.1f);
     if (speed > 5.0f) speed = 5.0f;
@@ -48,7 +74,7 @@ void Game::checkCollisions() {
         currentEgg = nullptr;
     }
     // Check collision with ground
-    else if (currentEgg->y <= 50) {
+    else if (currentEgg->y <= GAME_HEIGHT * 0.10f) {
         lives--;
         delete currentEgg;
         currentEgg = nullptr;
@@ -124,21 +150,25 @@ void drawHeart(float centerX, float centerY, float size)
 
 void Game::render() {
     glClear(GL_COLOR_BUFFER_BIT);
-    background.draw(800,600);
+
+    background.draw(GAME_WIDTH, GAME_HEIGHT);
+
     if (state == HOME) {
-        drawText(280, 350, "Egg Drop Saga");
-        drawText(280, 300, "Press S to Start");
-        drawText(280, 270, "Use A/D to Move Bucket");
-        drawText(280, 240, "Catch Eggs Before They Hit Ground");
-        drawText(280, 200, "Press Q to Quit");
+        drawText(580, 450, "Egg Drop Saga");
+        drawText(580, 400, "Press S to Start");
+        drawText(500, 350, "Use A/D or Arrows to Move Bucket");
+        drawText(500, 300, "Catch Eggs Before They Hit Ground");
+        drawText(580, 250, "Press Q to Quit");
     }
     else if (state == PLAYING) {
         // Draw wire
+        float wireY = GAME_HEIGHT * 0.68f;
+
         glColor3f(0.2, 0.2, 0.2);
         glLineWidth(3);
         glBegin(GL_LINES);
-        glVertex2f(50, 500);
-        glVertex2f(750, 500);
+        glVertex2f(GAME_WIDTH * 0.01f, wireY);
+        glVertex2f(GAME_WIDTH * 0.61f, wireY);
         glEnd();
 
         // Draw chickens
@@ -155,15 +185,15 @@ void Game::render() {
         // Draw UI
         std::stringstream ss;
         ss << "Score: " << score;
-        drawText(20, 570, ss.str().c_str());
+        drawText(30, GAME_HEIGHT - 40, ss.str().c_str());
 
         // Old numeric display
         // ss.str("");
         // ss << "Lives: " << lives;
         // drawText(700, 570, ss.str().c_str());
         float startX = 700;
-        float startY = 570;
-        float heartSize = 10.0f; // Adjust for size
+        float startY = 615;
+        float heartSize = 12.0f; // Adjust for size
 
         for (int i = 0; i < lives; i++) {
             drawHeart(startX + i * 25, startY, heartSize);
@@ -172,12 +202,12 @@ void Game::render() {
 
     }
     else if (state == GAME_OVER) {
-        drawText(320, 350, "GAME OVER");
+        drawText(580, 450, "GAME OVER");
         std::stringstream ss;
         ss << "Final Score: " << score;
-        drawText(310, 310, ss.str().c_str());
-        drawText(280, 260, "Press R to Play Again");
-        drawText(330, 230, "Press Q to Quit");
+        drawText(580, 310, ss.str().c_str());
+        drawText(580, 260, "Press R to Play Again");
+        drawText(580, 230, "Press Q to Quit");
     }
 
     glutSwapBuffers();
@@ -193,8 +223,19 @@ void Game::handleInput(unsigned char key) {
         if (key == 'q') exit(0);
     }
     else if (state == PLAYING) {
-        if (key == 'a') bucket.moveLeft();
+        if ((key == 'a') || (key == 37)) bucket.moveLeft();
         if (key == 'd') bucket.moveRight();
     }
 }
 
+void Game::handleSpecialInput(int key) {
+
+    if(state != PLAYING)
+        return;
+
+    if(key == GLUT_KEY_LEFT)
+        bucket.moveLeft();
+
+    if(key == GLUT_KEY_RIGHT)
+        bucket.moveRight();
+}
