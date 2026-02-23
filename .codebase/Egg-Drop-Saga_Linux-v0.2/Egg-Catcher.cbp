@@ -41,6 +41,8 @@
 			<Add library="Xxf86vm" />
 			<Add directory="/usr/lib/x86_64-linux-gnu/" />
 		</Linker>
+		<Unit filename="Background.cpp" />
+		<Unit filename="Background.h" />
 		<Unit filename="Bucket.cpp" />
 		<Unit filename="Bucket.h" />
 		<Unit filename="Chicken.cpp" />
