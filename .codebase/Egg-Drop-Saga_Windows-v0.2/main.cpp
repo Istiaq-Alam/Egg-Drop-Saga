@@ -70,7 +70,7 @@ int main(int argc, char** argv) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glutInitWindowSize(1080, 780);
-    glutInitWindowPosition(400, 100);
+    glutInitWindowPosition(300, 0);
 
     glutReshapeFunc(reshape);
     glutCreateWindow("Egg Drop Saga - Test Game Sequential Skeleton");
