@@ -66,7 +66,7 @@ void drawShadow(float x, float groundY, float eggY, float radius)
     float alpha = maxAlpha - (maxAlpha - minAlpha) * t;
 
     float shadowWidth  = radius * scale;
-    float shadowHeight = radius * 0.35f * scale;
+    float shadowHeight = radius * 0.45f * scale;
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -149,12 +149,48 @@ void Egg::draw(float groundY)
         float angle = 2 * 3.1416f * i / 40;
         float stretch = (sin(angle) < 0) ? 1.15f : 1.0f;
 
+        // subtle shading gradient
+            float shade = 0.95f + 0.05f * sin(angle);
+            glColor3f(shade, shade, shade);
+
         glVertex2f(
             x + cos(angle) * radius * 0.8f * stretch,
             y + sin(angle) * radius * 1.2f
         );
     }
     glEnd();
+
+    // ===== Shiny Highlight =====
+        glBegin(GL_TRIANGLE_FAN);
+        glColor3f(1.0f, 1.0f, 1.0f);  // pure white highlight
+        float highlightRadius = radius * 0.25f;
+        float highlightX = x - radius * 0.2f;
+        float highlightY = y + radius * 0.5f;
+        glVertex2f(highlightX, highlightY);
+        for (int i = 0; i <= 20; i++)
+        {
+            float angle = 2 * 3.1416f * i / 20;
+            glVertex2f(
+                highlightX + cos(angle) * highlightRadius,
+                highlightY + sin(angle) * highlightRadius
+            );
+        }
+        glEnd();
+
+        // ===== Egg Outline =====
+        glColor3f(0.6f, 0.6f, 0.6f);  // outline color
+        glLineWidth(1.5f);
+        glBegin(GL_LINE_LOOP);
+        for (int i = 0; i <= 40; i++)
+        {
+            float angle = 2 * 3.1416f * i / 40;
+            float stretch = (sin(angle) < 0) ? 1.15f : 1.0f;
+            glVertex2f(
+                x + cos(angle) * radius * 0.8f * stretch,
+                y + sin(angle) * radius * 1.2f
+            );
+        }
+        glEnd();
 
     glPopMatrix();
 }
