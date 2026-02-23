@@ -4,13 +4,15 @@
 class Egg {
 public:
     float x, y;
-    float radius;
     float speed;
+    float radius;
+
+    bool isBroken;
 
     Egg(float x, float y, float speed);
 
-    void update();
-    void draw();
+    void update(float groundY);
+    void draw(float groundY);
 };
 
 #endif
