@@ -2,6 +2,9 @@
 #include <GL/glut.h>
 #include <cmath>
 
+const float GAME_WIDTH  = 800.0f;
+const float GAME_HEIGHT = 720.0f;
+
 Background::Background() {
     cloudOffset = 0.0f;
     sunAngle = 0.0f;
@@ -76,5 +79,10 @@ void Background::draw(int screenWidth, int screenHeight) {
                    cloudY + cloudRadiusY * sin(theta));
     }
     glEnd();
-}
 
+
+
+
+
+
+}

@@ -1,13 +1,15 @@
 #include "Game.h"
+#include "Home.h"
 #include <GL/glut.h>
 #include <cstdlib>
 #include <ctime>
 #include <sstream>
-#include <math.h>
+#include <cmath>
+
+#define GROUND_Y (GAME_HEIGHT * 0.03f)
 
 void Game::drawText(float x, float y, const char* text)
 {
-    // Save current matrices
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
@@ -23,39 +25,45 @@ void Game::drawText(float x, float y, const char* text)
     while (*text)
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *text++);
 
-    // Restore matrices
     glPopMatrix();
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
     glMatrixMode(GL_MODELVIEW);
 }
 
-void Game::init() {
+void Game::init()
+{
     score = 0;
     lives = 3;
     state = HOME;
 
+    if (currentEgg != nullptr) {
+        delete currentEgg;
+        currentEgg = nullptr;
+    }
+
     bucket = Bucket(GAME_WIDTH / 2 - 60, GAME_HEIGHT * 0.03f);
-    currentEgg = nullptr;
     lastTime = glutGet(GLUT_ELAPSED_TIME);
 
     isPaused = false;
     pauseTimer = 0;
 
     chickens.clear();
-    float wireY = GAME_HEIGHT * 0.7f;
 
-    float spacing = GAME_WIDTH / 9.0f;
+    float wireY = GAME_HEIGHT * 0.7f;
+    float spacing = GAME_WIDTH / 6.0f;
 
     for (int i = 0; i < 5; i++)
     {
         float xPos = spacing * (i + 1);
         chickens.push_back(Chicken(xPos, wireY));
     }
+
     srand(time(0));
 }
 
-void Game::spawnEgg() {
+void Game::spawnEgg()
+{
     int index = rand() % chickens.size();
     float x = chickens[index].getX();
     float y = chickens[index].getY() - 40;
@@ -66,38 +74,46 @@ void Game::spawnEgg() {
     currentEgg = new Egg(x, y, speed);
 }
 
-void Game::checkCollisions() {
+void Game::checkCollisions()
+{
     if (currentEgg == nullptr) return;
 
-    // Check collision with bucket
-    if (bucket.checkCollision(*currentEgg)) {
+    // Catch by bucket
+    if (!currentEgg->isBroken && bucket.checkCollision(*currentEgg))
+    {
         score++;
         delete currentEgg;
         currentEgg = nullptr;
+        return;
     }
-    // Check collision with ground
-    else if (currentEgg->y <= GAME_HEIGHT * 0.07f) {
+
+    // After break animation duration
+    if (currentEgg->isBroken && currentEgg->breakTimer > 0.6f)
+    {
         lives--;
         delete currentEgg;
         currentEgg = nullptr;
-        if (lives <= 0) state = GAME_OVER;
+
+        if (lives <= 0)
+            state = GAME_OVER;
     }
 }
 
-
-void Game::update() {
+void Game::update()
+{
     background.update();
-    if (isPaused) {
-        return; // stop game logic while paused
-    }
 
+    if (state == HOME)
+        home.update();
+
+    if (isPaused) return;
     if (state != PLAYING) return;
 
     if (currentEgg == nullptr)
         spawnEgg();
 
     if (currentEgg != nullptr)
-        currentEgg->update();
+        currentEgg->update(GROUND_Y);
 
     checkCollisions();
 }
@@ -154,119 +170,141 @@ void drawHeart(float centerX, float centerY, float size)
     glEnd();
 }
 
+
 void Game::render() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     background.draw(GAME_WIDTH, GAME_HEIGHT);
 
     if (state == HOME) {
-        drawText(580, 450, "Egg Drop Saga");
-        drawText(580, 400, "Press S to Start");
-        drawText(500, 350, "Use A/D or Arrows to Move Bucket");
-        drawText(500, 300, "Catch Eggs Before They Hit Ground");
-        drawText(580, 250, "Press Q to Quit");
+
+        home.draw();
+        //drawText(580, 450, "Egg Drop Saga");
+        //drawText(580, 400, "Press S to Start");
+        //drawText(500, 350, "Use A/D or Arrows to Move Bucket");
+        //drawText(500, 300, "Catch Eggs Before They Hit Ground");
+        //drawText(580, 250, "Press Q to Quit");
     }
-    else if (state == PLAYING) {
-        // Draw wire
-        float wireY = GAME_HEIGHT * 0.68f;
 
-        glColor3f(0.2, 0.2, 0.2);
-        glLineWidth(3);
-        glBegin(GL_LINES);
-        glVertex2f(GAME_WIDTH * 0.01f, wireY);
-        glVertex2f(GAME_WIDTH * 0.61f, wireY);
-        glEnd();
+    else if (state == PLAYING)
+{
+    float wireY = GAME_HEIGHT * 0.68f;
 
-        // Draw chickens
-        for (auto& c : chickens)
-            c.draw();
+    glColor3f(0.6f, 0.3f, 0.2f);
+    glLineWidth(1);
+    glBegin(GL_QUADS);
+    glVertex2f(GAME_WIDTH * 0.01f, wireY);
+    glVertex2f(GAME_WIDTH * 0.99f, wireY);
+    glVertex2f(GAME_WIDTH * 0.99f, wireY+20);
+    glVertex2f(GAME_WIDTH * 0.01f, wireY+20);
+    glEnd();
 
-        // Draw bucket
-        bucket.draw();
+    //Draw Chicken
+    for (auto& c : chickens)
+    c.draw();
 
-        // Draw current egg
-        if (currentEgg != nullptr)
-            currentEgg->draw();
+    //Ground Area
+    float groundY = 0;
 
-        // Draw Score
-        std::stringstream ss;
-        ss << "Score: " << score;
-        drawText(30, GAME_HEIGHT - 40, ss.str().c_str());
+    glColor3f(0.698f, 0.745f, 0.710f);
+    glBegin(GL_QUADS);
+    glVertex2f(GAME_WIDTH-20, groundY);
+    glVertex2f(GAME_WIDTH, groundY+27);
+    glVertex2f(GAME_WIDTH, groundY+40);
+    glVertex2f(GAME_WIDTH-20, groundY+40);
+    glEnd();
 
-        // Old numeric display
-        // ss.str("");
-        // ss << "Lives: " << lives;
-        // drawText(700, 570, ss.str().c_str());
-        float startX = 720;
-        float startY = 615;
-        float heartSize = 11.0f; // Adjust for size
+    glColor3f(0.5f, 0.2f, 0.20f);
+    glBegin(GL_QUADS);
+    glVertex2f(0, groundY+10);
+    glVertex2f(GAME_WIDTH-20, groundY+10);
+    glVertex2f(GAME_WIDTH, groundY+40); //2 (-10) //3
+    glVertex2f(20, groundY+40);
+    glEnd();
 
-        for (int i = 0; i < lives; i++) {
-            drawHeart(startX + i * 23, startY, heartSize);
-        }
+    glColor3f(0.5f, 0.5f, 0.0f);
+    glLineWidth(1);
+    glBegin(GL_QUADS);
+    glVertex2f(0, groundY);
+    glVertex2f(GAME_WIDTH-20, groundY); //1
+    glVertex2f(GAME_WIDTH-20, groundY+10); //4
+    glVertex2f(0, groundY+10);
+    glEnd();
 
-        if (isPaused)
+
+    if (currentEgg != nullptr)
+        currentEgg->draw(GROUND_Y);
+
+    bucket.draw();
+
+    std::stringstream ss;
+    ss << "Score: " << score;
+    drawText(30, GAME_HEIGHT - 40, ss.str().c_str());
+
+    float startX = 720;
+    float startY = 615;
+    float heartSize = 11.0f;
+
+    for (int i = 0; i < lives; i++)
+        drawHeart(startX + i * 23, startY, heartSize);
+
+    if (isPaused)
         drawText(580, 400, "PAUSED");
-
-        else if (pauseTimer > 0) {
+    else if (pauseTimer > 0)
+    {
         drawText(580, 400, "RESUMED");
         pauseTimer--;
-        }
-
     }
+}
+
     else if (state == GAME_OVER) {
-        drawText(580, 450, "GAME OVER");
+        drawText(350, 450, "GAME OVER");
         std::stringstream ss;
         ss << "Final Score: " << score;
-        drawText(580, 350, ss.str().c_str());
-        drawText(570, 300, "Press R to Play Again");
-        drawText(580, 250, "Press Q to Quit");
+        drawText(350, 400, ss.str().c_str());
+        drawText(320, 350, "Press R to Home Screen");
+        drawText(340, 300, "Press Q to Quit");
     }
 
     glutSwapBuffers();
 }
 
-void Game::handleInput(unsigned char key) {
-    if (state == HOME) {
+void Game::handleInput(unsigned char key)
+{
+    if (state == HOME)
+    {
         if (key == 's') state = PLAYING;
         if (key == 'q') exit(0);
     }
-    else if (state == GAME_OVER) {
+    else if (state == GAME_OVER)
+    {
         if (key == 'r') init();
         if (key == 'q') exit(0);
     }
-    else if (state == PLAYING) {
-    if (key == 32) { // Spacebar ASCII
-        isPaused = !isPaused;  // toggle pause
-        if (!isPaused) {
-            pauseTimer = 120; // show "Resumed" for 2 seconds
-            }
+    else if (state == PLAYING)
+    {
+        if (key == 32) // Space
+        {
+            isPaused = !isPaused;
+            if (!isPaused)
+                pauseTimer = 120;
         }
-
-    else if (!isPaused) {
-        if (key == 'a') bucket.moveLeft();
-        if (key == 'd') bucket.moveRight();
-            }
-
+        else if (!isPaused)
+        {
+            if (key == 'a') bucket.moveLeft();
+            if (key == 'd') bucket.moveRight();
+        }
     }
 }
 
-void Game::handleSpecialInput(int key) {
-
-    if(state != PLAYING)
+void Game::handleSpecialInput(int key)
+{
+    if (state != PLAYING || isPaused)
         return;
 
-    if (key == 32) { // Spacebar ASCII
-        isPaused = !isPaused;  // toggle pause
-        if (!isPaused) {
-            pauseTimer = 120; // show "Resumed" for 2 seconds
-            }
-        }
-    else if (!isPaused) {
-        if(key == GLUT_KEY_LEFT)
-            bucket.moveLeft();
+    if (key == GLUT_KEY_LEFT)
+        bucket.moveLeft();
 
-        if(key == GLUT_KEY_RIGHT)
-            bucket.moveRight();
-    }
+    if (key == GLUT_KEY_RIGHT)
+        bucket.moveRight();
 }

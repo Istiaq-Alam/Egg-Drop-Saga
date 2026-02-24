@@ -6,12 +6,11 @@
 #include "Egg.h"
 #include "Chicken.h"
 #include "Background.h"
+#include "Home.h"
 
 #ifndef GAME_DIMENSIONS_H
 #define GAME_DIMENSIONS_H
 
-const float GAME_WIDTH  = 1280.0f;
-const float GAME_HEIGHT = 720.0f;
 
 #endif
 
@@ -27,6 +26,7 @@ private:
     bool isPaused;
     int pauseTimer; // counts frames or seconds for showing "Resumed"
     GameState state;
+    Home home;
     Background background;
     Bucket bucket;
     Egg* currentEgg;
