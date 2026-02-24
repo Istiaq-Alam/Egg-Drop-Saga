@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "Home.h"
 #include <GL/glut.h>
 #include <cstdlib>
 #include <ctime>
@@ -102,6 +103,9 @@ void Game::update()
 {
     background.update();
 
+    if (state == HOME)
+        home.update();
+
     if (isPaused) return;
     if (state != PLAYING) return;
 
@@ -173,11 +177,13 @@ void Game::render() {
     background.draw(GAME_WIDTH, GAME_HEIGHT);
 
     if (state == HOME) {
-        drawText(580, 450, "Egg Drop Saga");
-        drawText(580, 400, "Press S to Start");
-        drawText(500, 350, "Use A/D or Arrows to Move Bucket");
-        drawText(500, 300, "Catch Eggs Before They Hit Ground");
-        drawText(580, 250, "Press Q to Quit");
+
+        home.draw();
+        //drawText(580, 450, "Egg Drop Saga");
+        //drawText(580, 400, "Press S to Start");
+        //drawText(500, 350, "Use A/D or Arrows to Move Bucket");
+        //drawText(500, 300, "Catch Eggs Before They Hit Ground");
+        //drawText(580, 250, "Press Q to Quit");
     }
 
     else if (state == PLAYING)
