@@ -103,41 +103,41 @@ void drawBrokenEgg(float x, float groundY, float radius)
     glEnd();
 
     // Yolk base with gradient
-glBegin(GL_TRIANGLE_FAN);
-glColor3f(1.0f, 0.8f, 0.0f);
-glVertex2f(x, groundY + 5);
+    glBegin(GL_TRIANGLE_FAN);
+    glColor3f(1.0f, 0.8f, 0.0f);
+    glVertex2f(x, groundY + 5);
 
-for (int i = 0; i <= 40; i++)
-{
-    float angle = 3.1416f * i / 40;
-    float nx = cos(angle);
-    float ny = sin(angle);
+    for (int i = 0; i <= 40; i++)
+    {
+        float angle = 3.1416f * i / 40;
+        float nx = cos(angle);
+        float ny = sin(angle);
 
-    // gradient: top lighter, bottom darker
-    float shade = 0.8f + 0.2f * (ny + 1.0f) / 2.0f;
-    glColor3f(shade, shade * 0.8f, 0.0f);
+        // gradient: top lighter, bottom darker
+        float shade = 0.8f + 0.2f * (ny + 1.0f) / 2.0f;
+        glColor3f(shade, shade * 0.8f, 0.0f);
 
-    glVertex2f(x + nx * radius, groundY + 5 + ny * radius);
-}
-glEnd();
+        glVertex2f(x + nx * radius, groundY + 5 + ny * radius);
+    }
+    glEnd();
 
-// Yolk shiny highlight
-glBegin(GL_TRIANGLE_FAN);
-float highlightRadius = radius * 0.3f;
-float highlightX = x - radius * 0.2f;
-float highlightY = groundY + 5 + radius * 0.3f;
-glColor3f(1.0f, 1.0f, 1.0f); // bright white
-glVertex2f(highlightX, highlightY);
-for (int i = 0; i <= 20; i++)
-{
-    float angle = 2 * 3.1416f * i / 20;
-    glVertex2f(
-    highlightX + cos(angle) * highlightRadius * 0.7f, // squash X
-    highlightY + sin(angle) * highlightRadius * 1.0f  // full Y
-);
-}
-glEnd();
-}
+    // Yolk shiny highlight
+    glBegin(GL_TRIANGLE_FAN);
+    float highlightRadius = radius * 0.3f;
+    float highlightX = x - radius * 0.2f;
+    float highlightY = groundY + 5 + radius * 0.3f;
+    glColor3f(1.0f, 1.0f, 1.0f); // bright white
+    glVertex2f(highlightX, highlightY);
+    for (int i = 0; i <= 20; i++)
+    {
+        float angle = 2 * 3.1416f * i / 20;
+        glVertex2f(
+        highlightX + cos(angle) * highlightRadius * 0.7f, // squash X
+        highlightY + sin(angle) * highlightRadius * 1.0f  // full Y
+    );
+    }
+    glEnd();
+    }
 
 void Egg::draw(float groundY)
 {
