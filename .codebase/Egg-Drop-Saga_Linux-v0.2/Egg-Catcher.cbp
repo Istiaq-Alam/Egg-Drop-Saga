@@ -51,6 +51,8 @@
 		<Unit filename="Egg.h" />
 		<Unit filename="Game.cpp" />
 		<Unit filename="Game.h" />
+		<Unit filename="Home.cpp" />
+		<Unit filename="Home.h" />
 		<Unit filename="main.cpp" />
 		<Extensions />
 	</Project>

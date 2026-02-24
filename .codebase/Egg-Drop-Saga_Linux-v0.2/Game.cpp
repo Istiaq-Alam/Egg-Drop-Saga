@@ -51,7 +51,7 @@ void Game::init()
     chickens.clear();
 
     float wireY = GAME_HEIGHT * 0.7f;
-    float spacing = GAME_WIDTH / 9.0f;
+    float spacing = GAME_WIDTH / 6.0f;
 
     for (int i = 0; i < 5; i++)
     {
@@ -190,15 +190,47 @@ void Game::render() {
 {
     float wireY = GAME_HEIGHT * 0.68f;
 
-    glColor3f(0.2, 0.2, 0.2);
-    glLineWidth(3);
-    glBegin(GL_LINES);
+    glColor3f(0.6f, 0.3f, 0.2f);
+    glLineWidth(1);
+    glBegin(GL_QUADS);
     glVertex2f(GAME_WIDTH * 0.01f, wireY);
-    glVertex2f(GAME_WIDTH * 0.61f, wireY);
+    glVertex2f(GAME_WIDTH * 0.99f, wireY);
+    glVertex2f(GAME_WIDTH * 0.99f, wireY+20);
+    glVertex2f(GAME_WIDTH * 0.01f, wireY+20);
     glEnd();
 
+    //Draw Chicken
     for (auto& c : chickens)
-        c.draw();
+    c.draw();
+
+    //Ground Area
+    float groundY = 0;
+
+    glColor3f(0.698f, 0.745f, 0.710f);
+    glBegin(GL_QUADS);
+    glVertex2f(GAME_WIDTH-20, groundY);
+    glVertex2f(GAME_WIDTH, groundY+27);
+    glVertex2f(GAME_WIDTH, groundY+40);
+    glVertex2f(GAME_WIDTH-20, groundY+40);
+    glEnd();
+
+    glColor3f(0.5f, 0.2f, 0.20f);
+    glBegin(GL_QUADS);
+    glVertex2f(0, groundY+10);
+    glVertex2f(GAME_WIDTH-20, groundY+10);
+    glVertex2f(GAME_WIDTH, groundY+40); //2 (-10) //3
+    glVertex2f(20, groundY+40);
+    glEnd();
+
+    glColor3f(0.5f, 0.5f, 0.0f);
+    glLineWidth(1);
+    glBegin(GL_QUADS);
+    glVertex2f(0, groundY);
+    glVertex2f(GAME_WIDTH-20, groundY); //1
+    glVertex2f(GAME_WIDTH-20, groundY+10); //4
+    glVertex2f(0, groundY+10);
+    glEnd();
+
 
     if (currentEgg != nullptr)
         currentEgg->draw(GROUND_Y);
@@ -226,12 +258,12 @@ void Game::render() {
 }
 
     else if (state == GAME_OVER) {
-        drawText(580, 450, "GAME OVER");
+        drawText(350, 450, "GAME OVER");
         std::stringstream ss;
         ss << "Final Score: " << score;
-        drawText(580, 350, ss.str().c_str());
-        drawText(570, 300, "Press R to Play Again");
-        drawText(580, 250, "Press Q to Quit");
+        drawText(350, 400, ss.str().c_str());
+        drawText(320, 350, "Press R to Home Screen");
+        drawText(340, 300, "Press Q to Quit");
     }
 
     glutSwapBuffers();

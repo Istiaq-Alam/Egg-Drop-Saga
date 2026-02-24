@@ -1,6 +1,6 @@
 #ifndef HOME_H
 #define HOME_H
-const float GAME_WIDTH  = 1280.0f;
+const float GAME_WIDTH  = 800.0f;
 const float GAME_HEIGHT = 720.0f;
 
 class Home {
