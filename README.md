@@ -130,7 +130,7 @@ g++ main.cpp Game.cpp Bucket.cpp Egg.cpp Chicken.cpp -o EggCatcher -lGL -lGLU -l
 
 ### 3️⃣ Run
 ```bash
-./EggCatcher
+./EggDropSaga
 ```
 
 ---
@@ -196,4 +196,5 @@ This project is released for academic and educational purposes.
 # ⭐ If You Like This Project
 
 Consider giving it a ⭐ on GitHub!
+
 
