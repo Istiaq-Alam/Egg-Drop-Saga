@@ -53,6 +53,8 @@
 		<Unit filename="Egg.h" />
 		<Unit filename="Game.cpp" />
 		<Unit filename="Game.h" />
+		<Unit filename="Home.cpp" />
+		<Unit filename="Home.h" />
 		<Unit filename="assets/icon.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
