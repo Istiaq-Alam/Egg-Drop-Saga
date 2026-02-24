@@ -36,6 +36,8 @@ void Game::init()
     score = 0;
     lives = 3;
     state = HOME;
+    //Mix_VolumeMusic(64);          // 0-128
+    //Mix_Volume(-1, 96);           // all channels
 
     if (currentEgg != nullptr) {
         delete currentEgg;
@@ -64,6 +66,7 @@ void Game::init()
 
 void Game::spawnEgg()
 {
+    //AudioManager::playChickenDrop();
     int index = rand() % chickens.size();
     float x = chickens[index].getX();
     float y = chickens[index].getY() - 40;
@@ -81,6 +84,7 @@ void Game::checkCollisions()
     // Catch by bucket
     if (!currentEgg->isBroken && bucket.checkCollision(*currentEgg))
     {
+        //AudioManager::playCatch();
         score++;
         delete currentEgg;
         currentEgg = nullptr;
@@ -90,12 +94,14 @@ void Game::checkCollisions()
     // After break animation duration
     if (currentEgg->isBroken && currentEgg->breakTimer > 0.6f)
     {
+        //AudioManager::playEggBreak();
         lives--;
         delete currentEgg;
         currentEgg = nullptr;
 
-        if (lives <= 0)
+        if (lives <= 0){
             state = GAME_OVER;
+        }
     }
 }
 
@@ -177,7 +183,7 @@ void Game::render() {
     background.draw(GAME_WIDTH, GAME_HEIGHT);
 
     if (state == HOME) {
-
+        //AudioManager::playHomeMusic();
         home.draw();
         //drawText(580, 450, "Egg Drop Saga");
         //drawText(580, 400, "Press S to Start");
@@ -186,9 +192,9 @@ void Game::render() {
         //drawText(580, 250, "Press Q to Quit");
     }
 
-    else if (state == PLAYING)
-{
-    float wireY = GAME_HEIGHT * 0.68f;
+    else if (state == PLAYING){
+        //AudioManager::playGameMusic();
+        float wireY = GAME_HEIGHT * 0.68f;
 
     glColor3f(0.6f, 0.3f, 0.2f);
     glLineWidth(1);
@@ -258,6 +264,7 @@ void Game::render() {
 }
 
     else if (state == GAME_OVER) {
+        //AudioManager::playGameOverMusic();
         drawText(350, 450, "GAME OVER");
         std::stringstream ss;
         ss << "Final Score: " << score;

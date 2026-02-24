@@ -65,6 +65,8 @@ void specialKeys(int key, int x, int y) {
 }
 
 int main(int argc, char** argv) {
+//    AudioManager::init();
+//    AudioManager::loadSounds();
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
     glEnable(GL_BLEND);
@@ -101,5 +103,6 @@ int main(int argc, char** argv) {
     glutTimerFunc(16, timer, 0);
 
     glutMainLoop();
+//    AudioManager::cleanup();
     return 0;
 }
