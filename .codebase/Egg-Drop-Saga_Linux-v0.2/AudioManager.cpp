@@ -79,7 +79,7 @@ void AudioManager::playMusic(Mix_Music* music, int loops)
 
 void AudioManager::playHomeMusic()
 {
-    playMusic(homeMusic, -1);
+    playMusic(homeMusic, 0);
 }
 
 void AudioManager::playGameMusic()
@@ -89,7 +89,7 @@ void AudioManager::playGameMusic()
 
 void AudioManager::playGameOverMusic()
 {
-    playMusic(gameOverMusic, 0);
+    playMusic(gameOverMusic, -1);
 }
 
 void AudioManager::stopMusic() {

@@ -13,3 +13,5 @@ chmod +x appappimagetool-x86_64.AppImage
 ```bash
 ./appimagetool-x86_64.AppImage Egg-Drop-Saga.AppDir
 ```
+
+> For First building Run `builder.sh`

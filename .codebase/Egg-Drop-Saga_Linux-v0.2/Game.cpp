@@ -55,7 +55,7 @@ void Game::init()
 
     chickens.clear();
 
-    float wireY = GAME_HEIGHT * 0.7f;
+    float wireY = GAME_HEIGHT * 0.74f;
     float spacing = GAME_WIDTH / 6.0f;
 
     for (int i = 0; i < 5; i++)
