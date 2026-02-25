@@ -56,6 +56,12 @@ void AudioManager::load()
     catchSound = Mix_LoadWAV((basePath + "sounds/bucket-catch.wav").c_str());
     eggBreak = Mix_LoadWAV((basePath + "sounds/egg-broke.wav").c_str());
     lifeLost = Mix_LoadWAV((basePath + "sounds/life_lost.wav").c_str());
+
+    // SFX louder than music
+    Mix_VolumeChunk(chickenDrop, 100);
+    Mix_VolumeChunk(catchSound, 110);
+    Mix_VolumeChunk(eggBreak, 115);
+    Mix_VolumeChunk(lifeLost, 100);
 }
 
 // -------- MUSIC --------
@@ -65,7 +71,7 @@ void AudioManager::playMusic(Mix_Music* music, int loops)
     if (currentMusic == music) return;  // already playing
 
     Mix_FadeOutMusic(500);
-    Mix_FadeInMusic(music, loops, 500); //smooth music transitions
+    Mix_PlayMusic(music, loops);
 
     Mix_PlayMusic(music, loops);
     currentMusic = music;
@@ -106,6 +112,23 @@ void AudioManager::playEggBreak() {
 
 void AudioManager::playLifeLost() {
     Mix_PlayChannel(-1, lifeLost, 0);
+}
+
+void AudioManager::toggleMusic()
+{
+    if (Mix_PlayingMusic())
+    {
+        if (Mix_PausedMusic())
+        {
+            Mix_ResumeMusic();
+            std::cout << "Music Resumed\n";
+        }
+        else
+        {
+            Mix_PauseMusic();
+            std::cout << "Music Paused\n";
+        }
+    }
 }
 
 void AudioManager::cleanup() {
