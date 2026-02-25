@@ -2,17 +2,16 @@
 #include <iostream>
 #include <unistd.h>
 
-
 // Music
 static Mix_Music* currentMusic = nullptr;
-Mix_Music* AudioManager::homeMusic = nullptr; //downloaded
+Mix_Music* AudioManager::homeMusic = nullptr;
 Mix_Music* AudioManager::gameMusic = nullptr;
-Mix_Music* AudioManager::gameOverMusic = nullptr; //downloaded
+Mix_Music* AudioManager::gameOverMusic = nullptr;
 
 // SFX
-Mix_Chunk* AudioManager::chickenDrop = nullptr; //need to edit
-Mix_Chunk* AudioManager::catchSound = nullptr; //downloaded
-Mix_Chunk* AudioManager::eggBreak = nullptr;   //downloaded
+Mix_Chunk* AudioManager::chickenDrop = nullptr;
+Mix_Chunk* AudioManager::catchSound = nullptr;
+Mix_Chunk* AudioManager::eggBreak = nullptr;
 Mix_Chunk* AudioManager::lifeLost = nullptr;
 
 bool AudioManager::init() {
