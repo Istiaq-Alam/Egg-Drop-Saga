@@ -38,8 +38,8 @@ void Game::init()
     lives = 3;
     state = HOME;
     AudioManager::playHomeMusic();
-    Mix_VolumeMusic(64);          // 0-128
-    Mix_Volume(-1, 96);           // all channels
+    Mix_VolumeMusic(32);          // 0-128
+    Mix_Volume(-1, 32);           // all channels
 
 
     if (currentEgg != nullptr) {
@@ -98,7 +98,6 @@ void Game::checkCollisions()
     // After break animation duration
     if (currentEgg->isBroken && currentEgg->breakTimer > 0.6f)
     {
-        AudioManager::playEggBreak();
         lives--;
         delete currentEgg;
         currentEgg = nullptr;

@@ -1,4 +1,5 @@
 #include "Egg.h"
+#include "AudioManager.h"
 #include <GL/glut.h>
 #include <cmath>
 
@@ -34,6 +35,7 @@ void Egg::update(float groundY)
         if (squashTimer > 0.12f)   // squash duration
         {
             isSquashing = false;
+            AudioManager::playEggBreak();
             isBroken = true;
         }
     }
