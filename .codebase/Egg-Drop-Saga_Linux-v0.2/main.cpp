@@ -7,6 +7,7 @@
 
 #include <GL/glut.h>
 #include "Game.h"
+#include "AudioManager.h"
 
 Game game;
 
@@ -86,6 +87,13 @@ int main(int argc, char** argv) {
     glutKeyboardFunc(keyboard);
     glutTimerFunc(16, timer, 0);
 
+    AudioManager::init();
+    AudioManager::load();
+    AudioManager::playHomeMusic();
+
     glutMainLoop();
+
+    AudioManager::cleanup();
+
     return 0;
 }

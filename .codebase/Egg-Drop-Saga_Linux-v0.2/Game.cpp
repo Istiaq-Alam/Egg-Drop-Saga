@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "Home.h"
+#include "AudioManager.h"
 #include <GL/glut.h>
 #include <cstdlib>
 #include <ctime>
@@ -36,6 +37,10 @@ void Game::init()
     score = 0;
     lives = 3;
     state = HOME;
+    AudioManager::playHomeMusic();
+    Mix_VolumeMusic(64);          // 0-128
+    Mix_Volume(-1, 96);           // all channels
+
 
     if (currentEgg != nullptr) {
         delete currentEgg;
@@ -59,11 +64,13 @@ void Game::init()
         chickens.push_back(Chicken(xPos, wireY));
     }
 
+
     srand(time(0));
 }
 
 void Game::spawnEgg()
 {
+    AudioManager::playChickenDrop();
     int index = rand() % chickens.size();
     float x = chickens[index].getX();
     float y = chickens[index].getY() - 40;
@@ -81,6 +88,7 @@ void Game::checkCollisions()
     // Catch by bucket
     if (!currentEgg->isBroken && bucket.checkCollision(*currentEgg))
     {
+        AudioManager::playCatch();
         score++;
         delete currentEgg;
         currentEgg = nullptr;
@@ -90,12 +98,15 @@ void Game::checkCollisions()
     // After break animation duration
     if (currentEgg->isBroken && currentEgg->breakTimer > 0.6f)
     {
+        AudioManager::playEggBreak();
         lives--;
         delete currentEgg;
         currentEgg = nullptr;
 
-        if (lives <= 0)
+        if (lives <= 0){
             state = GAME_OVER;
+            AudioManager::playGameOverMusic();
+        }
     }
 }
 
@@ -103,10 +114,12 @@ void Game::update()
 {
     background.update();
 
-    if (state == HOME)
+    if (state == HOME){
         home.update();
+    }
 
     if (isPaused) return;
+
     if (state != PLAYING) return;
 
     if (currentEgg == nullptr)
@@ -186,9 +199,8 @@ void Game::render() {
         //drawText(580, 250, "Press Q to Quit");
     }
 
-    else if (state == PLAYING)
-{
-    float wireY = GAME_HEIGHT * 0.68f;
+    else if (state == PLAYING){
+        float wireY = GAME_HEIGHT * 0.68f;
 
     glColor3f(0.6f, 0.3f, 0.2f);
     glLineWidth(1);
@@ -249,21 +261,21 @@ void Game::render() {
         drawHeart(startX + i * 23, startY, heartSize);
 
     if (isPaused)
-        drawText(580, 400, "PAUSED");
+        drawText(370, 400, "PAUSED");
     else if (pauseTimer > 0)
     {
-        drawText(580, 400, "RESUMED");
+        drawText(370, 400, "RESUMED");
         pauseTimer--;
     }
 }
 
     else if (state == GAME_OVER) {
-        drawText(350, 450, "GAME OVER");
+        drawText(370, 450, "GAME OVER");
         std::stringstream ss;
         ss << "Final Score: " << score;
-        drawText(350, 400, ss.str().c_str());
-        drawText(320, 350, "Press R to Home Screen");
-        drawText(340, 300, "Press Q to Quit");
+        drawText(370, 400, ss.str().c_str());
+        drawText(340, 350, "Press R to Home Screen");
+        drawText(365, 300, "Press Q to Quit");
     }
 
     glutSwapBuffers();
@@ -273,16 +285,23 @@ void Game::handleInput(unsigned char key)
 {
     if (state == HOME)
     {
-        if (key == 's') state = PLAYING;
+        if (key == 's'){
+        state = PLAYING;
+        AudioManager::playGameMusic();
+        }
         if (key == 'q') exit(0);
     }
     else if (state == GAME_OVER)
     {
-        if (key == 'r') init();
+        if (key == 'r'){
+        init();
+        AudioManager::playHomeMusic();
+        }
         if (key == 'q') exit(0);
     }
     else if (state == PLAYING)
     {
+        AudioManager::playGameMusic();
         if (key == 32) // Space
         {
             isPaused = !isPaused;
