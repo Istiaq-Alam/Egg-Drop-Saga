@@ -8,6 +8,7 @@
 #include <GL/glut.h>
 #include "Game.h"
 #define IDI_ICON1 101
+#include "AudioManager.h"
 
 Game game;
 
@@ -77,8 +78,8 @@ int main(int argc, char** argv) {
     glutReshapeFunc(reshape);
     glutCreateWindow("Egg Drop Saga - Test Game Sequential Skeleton");
 
+    //Icon setup
     HWND hwnd = GetActiveWindow();
-
     HICON hIcon = (HICON)LoadImage(
         GetModuleHandle(NULL),
         MAKEINTRESOURCE(IDI_ICON1),
@@ -86,7 +87,6 @@ int main(int argc, char** argv) {
         32, 32,
         LR_DEFAULTCOLOR
     );
-
     SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon);
     SendMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
 
@@ -102,7 +102,11 @@ int main(int argc, char** argv) {
     glutKeyboardFunc(keyboard);
     glutTimerFunc(16, timer, 0);
 
+    AudioManager::init();
+    AudioManager::load();
+    AudioManager::playHomeMusic();
+
     glutMainLoop();
-//    AudioManager::cleanup();
+    AudioManager::cleanup();
     return 0;
 }
