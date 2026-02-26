@@ -44,13 +44,11 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add directory="C:/Program Files (x86)/CodeBlocks/MinGW/x86_64-w64-mingw32/include" />
-			<Add directory="C:/Libraries/SDL2/include/SDL2" />
-			<Add directory="C:/Libraries/SDL2_mixer/include/SDL2" />
+			<Add directory="C:/Libraries/SDL2/include" />
+			<Add directory="C:/Libraries/SDL2_mixer/include" />
 		</Compiler>
 		<Linker>
-			<Add option="-static -static-libgcc -static-libstdc++ -lmingw32 -lSDL2main -lSDL2 -lSDL2_mixer" />
 			<Add library="mingw32" />
-			<Add library="SDL2_main" />
 			<Add library="SDL2" />
 			<Add library="SDL2_mixer" />
 			<Add library="opengl32" />

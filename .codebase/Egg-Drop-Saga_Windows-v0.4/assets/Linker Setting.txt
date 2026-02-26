@@ -4,6 +4,7 @@
 
 2. Change Linker Settings -> 
 -static -static-libgcc -static-libstdc++ -lmingw32 -lSDL2main -lSDL2 -lSDL2_mixer
+	remove the -static library if doesn't need it.
 
 3. Change Execute directory -> Project Directory
 
@@ -13,7 +14,12 @@
 	SDL2
 	SDL2_mixer
 
-5. Icon setup for windows in main.cpp : 
+5. windows Linux cross header in AudioManager : 
+	#ifdef _WIN32
+	#define SDL_MAIN_HANDLED
+	#endif
+
+6. Icon setup for windows in main.cpp : 
 	//Icon setup
     HWND hwnd = GetActiveWindow();
     HICON hIcon = (HICON)LoadImage(

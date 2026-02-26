@@ -1,8 +1,12 @@
+#ifdef _WIN32
+#define SDL_MAIN_HANDLED
+#endif
+
 #ifndef AUDIOMANAGER_H
 #define AUDIOMANAGER_H
 
 #include <SDL.h>
-#include <SDL_mixer.h>
+#include <SDL2/SDL_mixer.h>
 
 class AudioManager {
 public:
