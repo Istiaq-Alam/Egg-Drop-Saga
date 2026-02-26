@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
     glutInitWindowPosition(300, 0);
 
     glutReshapeFunc(reshape);
-    glutCreateWindow("Egg Drop Saga - Test Game Sequential Skeleton");
+    glutCreateWindow("Egg Drop Saga - v0.4 - Developed By Istiak Alam");
 
     //Icon setup
     HWND hwnd = GetActiveWindow();
