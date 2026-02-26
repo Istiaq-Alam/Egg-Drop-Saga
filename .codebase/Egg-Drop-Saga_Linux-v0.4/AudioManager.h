@@ -1,3 +1,7 @@
+#ifdef _WIN32
+#define SDL_MAIN_HANDLED
+#endif
+
 #ifndef AUDIOMANAGER_H
 #define AUDIOMANAGER_H
 

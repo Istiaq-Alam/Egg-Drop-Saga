@@ -38,11 +38,12 @@ void Game::init()
     lives = 3;
     state = HOME;
     AudioManager::playHomeMusic();
-    Mix_VolumeMusic(64);          // 0-128
-    Mix_Volume(-1, 96);           // all channels
+    Mix_VolumeMusic(32);          // 0-128
+    Mix_Volume(-1, 32);           // all channels
 
 
-    if (currentEgg != nullptr) {
+    if (currentEgg != nullptr)
+    {
         delete currentEgg;
         currentEgg = nullptr;
     }
@@ -55,7 +56,7 @@ void Game::init()
 
     chickens.clear();
 
-    float wireY = GAME_HEIGHT * 0.7f;
+    float wireY = GAME_HEIGHT * 0.74f;
     float spacing = GAME_WIDTH / 6.0f;
 
     for (int i = 0; i < 5; i++)
@@ -98,12 +99,12 @@ void Game::checkCollisions()
     // After break animation duration
     if (currentEgg->isBroken && currentEgg->breakTimer > 0.6f)
     {
-        AudioManager::playEggBreak();
         lives--;
         delete currentEgg;
         currentEgg = nullptr;
 
-        if (lives <= 0){
+        if (lives <= 0)
+        {
             state = GAME_OVER;
             AudioManager::playGameOverMusic();
         }
@@ -114,7 +115,8 @@ void Game::update()
 {
     background.update();
 
-    if (state == HOME){
+    if (state == HOME)
+    {
         home.update();
     }
 
@@ -147,9 +149,9 @@ void drawHeart(float centerX, float centerY, float size)
     {
         float x = 17 * pow(sin(t), 3);
         float y = 14 * cos(t)
-                - 5 * cos(2 * t)
-                - 2 * cos(3 * t)
-                - cos(4 * t);
+                  - 5 * cos(2 * t)
+                  - 2 * cos(3 * t)
+                  - cos(4 * t);
 
         float finalX = centerX + (x / 20.0f) * size;
         float finalY = centerY + (y / 17.0f) * size;
@@ -173,9 +175,9 @@ void drawHeart(float centerX, float centerY, float size)
     {
         float x = 16 * pow(sin(t), 3);
         float y = 13 * cos(t)
-                - 5 * cos(2 * t)
-                - 2 * cos(3 * t)
-                - cos(4 * t);
+                  - 5 * cos(2 * t)
+                  - 2 * cos(3 * t)
+                  - cos(4 * t);
 
         glVertex2f(centerX + (x / 20.0f) * size,
                    centerY + (y / 17.0f) * size);
@@ -184,12 +186,14 @@ void drawHeart(float centerX, float centerY, float size)
 }
 
 
-void Game::render() {
+void Game::render()
+{
     glClear(GL_COLOR_BUFFER_BIT);
 
     background.draw(GAME_WIDTH, GAME_HEIGHT);
 
-    if (state == HOME) {
+    if (state == HOME)
+    {
 
         home.draw();
         //drawText(580, 450, "Egg Drop Saga");
@@ -199,77 +203,79 @@ void Game::render() {
         //drawText(580, 250, "Press Q to Quit");
     }
 
-    else if (state == PLAYING){
+    else if (state == PLAYING)
+    {
         float wireY = GAME_HEIGHT * 0.68f;
 
-    glColor3f(0.6f, 0.3f, 0.2f);
-    glLineWidth(1);
-    glBegin(GL_QUADS);
-    glVertex2f(GAME_WIDTH * 0.01f, wireY);
-    glVertex2f(GAME_WIDTH * 0.99f, wireY);
-    glVertex2f(GAME_WIDTH * 0.99f, wireY+20);
-    glVertex2f(GAME_WIDTH * 0.01f, wireY+20);
-    glEnd();
+        glColor3f(0.6f, 0.3f, 0.2f);
+        glLineWidth(1);
+        glBegin(GL_QUADS);
+        glVertex2f(GAME_WIDTH * 0.01f, wireY);
+        glVertex2f(GAME_WIDTH * 0.99f, wireY);
+        glVertex2f(GAME_WIDTH * 0.99f, wireY+20);
+        glVertex2f(GAME_WIDTH * 0.01f, wireY+20);
+        glEnd();
 
-    //Draw Chicken
-    for (auto& c : chickens)
-    c.draw();
+        //Draw Chicken
+        for (auto& c : chickens)
+            c.draw();
 
-    //Ground Area
-    float groundY = 0;
+        //Ground Area
+        float groundY = 0;
 
-    glColor3f(0.698f, 0.745f, 0.710f);
-    glBegin(GL_QUADS);
-    glVertex2f(GAME_WIDTH-20, groundY);
-    glVertex2f(GAME_WIDTH, groundY+27);
-    glVertex2f(GAME_WIDTH, groundY+40);
-    glVertex2f(GAME_WIDTH-20, groundY+40);
-    glEnd();
+        glColor3f(0.698f, 0.745f, 0.710f);
+        glBegin(GL_QUADS);
+        glVertex2f(GAME_WIDTH-20, groundY);
+        glVertex2f(GAME_WIDTH, groundY+27);
+        glVertex2f(GAME_WIDTH, groundY+40);
+        glVertex2f(GAME_WIDTH-20, groundY+40);
+        glEnd();
 
-    glColor3f(0.5f, 0.2f, 0.20f);
-    glBegin(GL_QUADS);
-    glVertex2f(0, groundY+10);
-    glVertex2f(GAME_WIDTH-20, groundY+10);
-    glVertex2f(GAME_WIDTH, groundY+40); //2 (-10) //3
-    glVertex2f(20, groundY+40);
-    glEnd();
+        glColor3f(0.5f, 0.2f, 0.20f);
+        glBegin(GL_QUADS);
+        glVertex2f(0, groundY+10);
+        glVertex2f(GAME_WIDTH-20, groundY+10);
+        glVertex2f(GAME_WIDTH, groundY+40); //2 (-10) //3
+        glVertex2f(20, groundY+40);
+        glEnd();
 
-    glColor3f(0.5f, 0.5f, 0.0f);
-    glLineWidth(1);
-    glBegin(GL_QUADS);
-    glVertex2f(0, groundY);
-    glVertex2f(GAME_WIDTH-20, groundY); //1
-    glVertex2f(GAME_WIDTH-20, groundY+10); //4
-    glVertex2f(0, groundY+10);
-    glEnd();
+        glColor3f(0.5f, 0.5f, 0.0f);
+        glLineWidth(1);
+        glBegin(GL_QUADS);
+        glVertex2f(0, groundY);
+        glVertex2f(GAME_WIDTH-20, groundY); //1
+        glVertex2f(GAME_WIDTH-20, groundY+10); //4
+        glVertex2f(0, groundY+10);
+        glEnd();
 
 
-    if (currentEgg != nullptr)
-        currentEgg->draw(GROUND_Y);
+        if (currentEgg != nullptr)
+            currentEgg->draw(GROUND_Y);
 
-    bucket.draw();
+        bucket.draw();
 
-    std::stringstream ss;
-    ss << "Score: " << score;
-    drawText(30, GAME_HEIGHT - 40, ss.str().c_str());
+        std::stringstream ss;
+        ss << "Score: " << score;
+        drawText(30, GAME_HEIGHT - 40, ss.str().c_str());
 
-    float startX = 720;
-    float startY = 615;
-    float heartSize = 11.0f;
+        float startX = 720;
+        float startY = 615;
+        float heartSize = 11.0f;
 
-    for (int i = 0; i < lives; i++)
-        drawHeart(startX + i * 23, startY, heartSize);
+        for (int i = 0; i < lives; i++)
+            drawHeart(startX + i * 23, startY, heartSize);
 
-    if (isPaused)
-        drawText(370, 400, "PAUSED");
-    else if (pauseTimer > 0)
-    {
-        drawText(370, 400, "RESUMED");
-        pauseTimer--;
+        if (isPaused)
+            drawText(370, 400, "PAUSED");
+        else if (pauseTimer > 0)
+        {
+            drawText(370, 400, "RESUMED");
+            pauseTimer--;
+        }
     }
-}
 
-    else if (state == GAME_OVER) {
+    else if (state == GAME_OVER)
+    {
         drawText(370, 450, "GAME OVER");
         std::stringstream ss;
         ss << "Final Score: " << score;
@@ -285,17 +291,19 @@ void Game::handleInput(unsigned char key)
 {
     if (state == HOME)
     {
-        if (key == 's'){
-        state = PLAYING;
-        AudioManager::playGameMusic();
+        if (key == 's')
+        {
+            state = PLAYING;
+            AudioManager::playGameMusic();
         }
         if (key == 'q') exit(0);
     }
     else if (state == GAME_OVER)
     {
-        if (key == 'r'){
-        init();
-        AudioManager::playHomeMusic();
+        if (key == 'r')
+        {
+            init();
+            AudioManager::playHomeMusic();
         }
         if (key == 'q') exit(0);
     }

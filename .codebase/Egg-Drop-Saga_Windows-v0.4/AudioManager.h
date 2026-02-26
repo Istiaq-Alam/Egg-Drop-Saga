@@ -14,6 +14,7 @@ public:
     static void load();
 
     // Music
+    static void toggleMusic();
     static void playHomeMusic();
     static void playMusic(Mix_Music* music, int loops);
     static void playGameMusic();

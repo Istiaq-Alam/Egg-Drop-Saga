@@ -4,21 +4,17 @@
 
 // Music
 static Mix_Music* currentMusic = nullptr;
-Mix_Music* AudioManager::homeMusic = nullptr; //downloaded
+Mix_Music* AudioManager::homeMusic = nullptr;
 Mix_Music* AudioManager::gameMusic = nullptr;
-Mix_Music* AudioManager::gameOverMusic = nullptr; //downloaded
+Mix_Music* AudioManager::gameOverMusic = nullptr;
 
 // SFX
-Mix_Chunk* AudioManager::chickenDrop = nullptr; //need to edit
-Mix_Chunk* AudioManager::catchSound = nullptr; //downloaded
-Mix_Chunk* AudioManager::eggBreak = nullptr;   //downloaded
+Mix_Chunk* AudioManager::chickenDrop = nullptr;
+Mix_Chunk* AudioManager::catchSound = nullptr;
+Mix_Chunk* AudioManager::eggBreak = nullptr;
 Mix_Chunk* AudioManager::lifeLost = nullptr;
 
 bool AudioManager::init() {
-
-    char cwd[1024];
-getcwd(cwd, sizeof(cwd));
-std::cout << "Current working directory: " << cwd << std::endl;
     if (SDL_Init(SDL_INIT_AUDIO) < 0) {
         std::cout << "SDL Init Error: " << SDL_GetError() << std::endl;
         return false;
@@ -30,39 +26,42 @@ std::cout << "Current working directory: " << cwd << std::endl;
     }
 
     Mix_AllocateChannels(16);
+
+    //  Music lower
+    Mix_VolumeMusic(50);   // 0–128
+
     std::cout << "SDL Audio Init Success\n";
     return true;
 }
 
-void AudioManager::load() {
+void AudioManager::load()
+{
+    const char* appDir = getenv("APPDIR");
 
-    homeMusic = Mix_LoadMUS("sounds/home_music.mp3");
+    std::string basePath;
+
+    if (appDir)
+        basePath = std::string(appDir) + "/usr/bin/";
+    else
+        basePath = SDL_GetBasePath();  // fallback for normal run
+
+    homeMusic = Mix_LoadMUS((basePath + "sounds/home_music.mp3").c_str());
     if (!homeMusic)
         std::cout << "Home music load error: " << Mix_GetError() << std::endl;
 
-    gameMusic = Mix_LoadMUS("sounds/gamemusic.mp3");
-    if (!gameMusic)
-        std::cout << "Game music load error: " << Mix_GetError() << std::endl;
+    gameMusic = Mix_LoadMUS((basePath + "sounds/gamemusic.mp3").c_str());
+    gameOverMusic = Mix_LoadMUS((basePath + "sounds/gameover_music.mp3").c_str());
 
-    gameOverMusic = Mix_LoadMUS("sounds/gameover_music.mp3");
-    if (!gameOverMusic)
-        std::cout << "GameOver music load error: " << Mix_GetError() << std::endl;
+    chickenDrop = Mix_LoadWAV((basePath + "sounds/chickenpokpok.wav").c_str());
+    catchSound = Mix_LoadWAV((basePath + "sounds/bucket-catch.wav").c_str());
+    eggBreak = Mix_LoadWAV((basePath + "sounds/egg-broke.wav").c_str());
+    lifeLost = Mix_LoadWAV((basePath + "sounds/life_lost.wav").c_str());
 
-    chickenDrop = Mix_LoadWAV("sounds/chickenpokpok.wav");
-    if (!chickenDrop)
-        std::cout << "Chicken load error: " << Mix_GetError() << std::endl;
-
-    catchSound = Mix_LoadWAV("sounds/bucket-catch.wav");
-    if (!catchSound)
-        std::cout << "Catch load error: " << Mix_GetError() << std::endl;
-
-    eggBreak = Mix_LoadWAV("sounds/egg_break.wav");
-    if (!eggBreak)
-        std::cout << "EggBreak load error: " << Mix_GetError() << std::endl;
-
-    lifeLost = Mix_LoadWAV("sounds/life_lost.wav");
-    if (!lifeLost)
-        std::cout << "LifeLost load error: " << Mix_GetError() << std::endl;
+    // SFX louder than music
+    Mix_VolumeChunk(chickenDrop, 100);
+    Mix_VolumeChunk(catchSound, 110);
+    Mix_VolumeChunk(eggBreak, 115);
+    Mix_VolumeChunk(lifeLost, 100);
 }
 
 // -------- MUSIC --------
@@ -72,7 +71,7 @@ void AudioManager::playMusic(Mix_Music* music, int loops)
     if (currentMusic == music) return;  // already playing
 
     Mix_FadeOutMusic(500);
-    Mix_FadeInMusic(music, loops, 500); //smooth music transitions
+    Mix_PlayMusic(music, loops);
 
     Mix_PlayMusic(music, loops);
     currentMusic = music;
@@ -80,7 +79,7 @@ void AudioManager::playMusic(Mix_Music* music, int loops)
 
 void AudioManager::playHomeMusic()
 {
-    playMusic(homeMusic, -1);
+    playMusic(homeMusic, 0);
 }
 
 void AudioManager::playGameMusic()
@@ -90,7 +89,7 @@ void AudioManager::playGameMusic()
 
 void AudioManager::playGameOverMusic()
 {
-    playMusic(gameOverMusic, 0);
+    playMusic(gameOverMusic, -1);
 }
 
 void AudioManager::stopMusic() {
@@ -113,6 +112,23 @@ void AudioManager::playEggBreak() {
 
 void AudioManager::playLifeLost() {
     Mix_PlayChannel(-1, lifeLost, 0);
+}
+
+void AudioManager::toggleMusic()
+{
+    if (Mix_PlayingMusic())
+    {
+        if (Mix_PausedMusic())
+        {
+            Mix_ResumeMusic();
+            std::cout << "Music Resumed\n";
+        }
+        else
+        {
+            Mix_PauseMusic();
+            std::cout << "Music Paused\n";
+        }
+    }
 }
 
 void AudioManager::cleanup() {

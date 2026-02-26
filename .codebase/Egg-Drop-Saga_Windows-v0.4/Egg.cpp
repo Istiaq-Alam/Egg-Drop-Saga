@@ -1,4 +1,5 @@
 #include "Egg.h"
+#include "AudioManager.h"
 #include <GL/glut.h>
 #include <cmath>
 
@@ -34,6 +35,7 @@ void Egg::update(float groundY)
         if (squashTimer > 0.12f)   // squash duration
         {
             isSquashing = false;
+            AudioManager::playEggBreak();
             isBroken = true;
         }
     }
@@ -132,132 +134,126 @@ void drawBrokenEgg(float x, float groundY, float radius)
     {
         float angle = 2 * 3.1416f * i / 20;
         glVertex2f(
-        highlightX + cos(angle) * highlightRadius * 0.7f, // squash X
-        highlightY + sin(angle) * highlightRadius * 1.0f  // full Y
-    );
+            highlightX + cos(angle) * highlightRadius * 0.7f, // squash X
+            highlightY + sin(angle) * highlightRadius * 1.0f  // full Y
+        );
     }
     glEnd();
-    }
+}
 
 void Egg::draw(float groundY)
 {
     if (!isBroken)
-{
-    float scaleX = 1.0f;
-    float scaleY = 1.0f;
-
-    if (isSquashing)
     {
-        float t = squashTimer / 0.12f;
+        float scaleX = 1.0f;
+        float scaleY = 1.0f;
 
-        // Ease curve
-        float squashAmount = sin(t * 3.1416f);
+        if (isSquashing)
+        {
+            float t = squashTimer / 0.12f;
 
-        scaleY = 1.0f - 0.5f * squashAmount;   // shrink vertically
-        scaleX = 1.0f + 0.4f * squashAmount;   // stretch horizontally
+            // Ease curve
+            float squashAmount = sin(t * 3.1416f);
+
+            scaleY = 1.0f - 0.5f * squashAmount;   // shrink vertically
+            scaleX = 1.0f + 0.4f * squashAmount;   // stretch horizontally
+        }
+
+        drawShadow(x, groundY, y, radius);
+
+        glPushMatrix();
+        glTranslatef(x, y, 0);
+        glScalef(scaleX, scaleY, 1.0f);
+        glTranslatef(-x, -y, 0);
+
+        // ===== Egg Body (Brown Gradient) =====
+        glBegin(GL_TRIANGLE_FAN);
+
+        // Center slightly lighter
+        glColor3f(1.0f, 0.6f, 0.00f);
+        glVertex2f(x, y);
+
+        for (int i = 0; i <= 60; i++)
+        {
+            float angle = 2 * 3.1416f * i / 60;
+            float nx = cos(angle);
+            float ny = sin(angle);
+
+            float stretch = (ny < 0) ? 1.12f : 1.0f;
+
+            // Right side darker shading
+            float sideShade = 0.85f - 0.15f * nx;
+
+            float r = 0.90f * sideShade;
+            float g = 0.68f * sideShade;
+            float b = 0.45f * sideShade;
+
+            glColor3f(r, g, b);
+
+            glVertex2f(
+                x + nx * radius * 0.8f * stretch,
+                y + ny * radius * 1.2f
+            );
+        }
+        glEnd();
+
+
+        // ===== Elliptical Highlight =====
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        float highlightX = x - radius * 0.25f;
+        float highlightY = y + radius * 0.55f;
+
+        glBegin(GL_TRIANGLE_FAN);
+
+        // soft center white
+        glColor4f(1.0f, 1.0f, 1.0f, 0.55f);
+        glVertex2f(highlightX, highlightY);
+
+        for (int i = 0; i <= 40; i++)
+        {
+            float angle = 2 * 3.1416f * i / 40;
+
+            // elliptical stretch
+            float hx = cos(angle) * radius * 0.45f;
+            float hy = sin(angle) * radius * 0.65f;
+
+            // soft fade out
+            glColor4f(1.0f, 1.0f, 1.0f, 0.0f);
+
+            glVertex2f(highlightX + hx, highlightY + hy);
+        }
+        glEnd();
+
+        glDisable(GL_BLEND);
+
+
+        // ===== Outline =====
+        glColor3f(0.4f, 0.4f, 0.4f);
+        glLineWidth(2.0f);
+        glBegin(GL_LINE_LOOP);
+        for (int i = 0; i <= 60; i++)
+        {
+            float angle = 2 * 3.1416f * i / 60;
+            float nx = cos(angle);
+            float ny = sin(angle);
+            float stretch = (ny < 0) ? 1.12f : 1.0f;
+
+            glVertex2f(
+                x + nx * radius * 0.8f * stretch,
+                y + ny * radius * 1.2f
+            );
+        }
+        glEnd();
+
+        glPopMatrix();
+
+        glPopMatrix();
     }
-
-    drawShadow(x, groundY, y, radius);
-
-    glPushMatrix();
-    glTranslatef(x, y, 0);
-    glScalef(scaleX, scaleY, 1.0f);
-    glTranslatef(-x, -y, 0);
-
-    // ===== Egg Body (Brown Gradient) =====
-    glBegin(GL_TRIANGLE_FAN);
-
-    // Center slightly lighter
-    glColor3f(1.0f, 0.6f, 0.00f);
-    glVertex2f(x, y);
-
-    for (int i = 0; i <= 60; i++)
+    else
     {
-        float angle = 2 * 3.1416f * i / 60;
-        float nx = cos(angle);
-        float ny = sin(angle);
-
-        float stretch = (ny < 0) ? 1.12f : 1.0f;
-
-        // Right side darker shading
-        float sideShade = 0.85f - 0.15f * nx;
-
-        float r = 0.90f * sideShade;
-        float g = 0.68f * sideShade;
-        float b = 0.45f * sideShade;
-
-        glColor3f(r, g, b);
-
-        glVertex2f(
-            x + nx * radius * 0.8f * stretch,
-            y + ny * radius * 1.2f
-        );
+        drawShadow(x, groundY, 0, radius);
+        drawBrokenEgg(x, groundY, radius);
     }
-    glEnd();
-
-
-    // ===== Elliptical Highlight =====
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    float highlightX = x - radius * 0.25f;
-    float highlightY = y + radius * 0.55f;
-
-    glBegin(GL_TRIANGLE_FAN);
-
-    // soft center white
-    glColor4f(1.0f, 1.0f, 1.0f, 0.55f);
-    glVertex2f(highlightX, highlightY);
-
-    for (int i = 0; i <= 40; i++)
-    {
-        float angle = 2 * 3.1416f * i / 40;
-
-        // elliptical stretch
-        float hx = cos(angle) * radius * 0.45f;
-        float hy = sin(angle) * radius * 0.65f;
-
-        // soft fade out
-        glColor4f(1.0f, 1.0f, 1.0f, 0.0f);
-
-        glVertex2f(highlightX + hx, highlightY + hy);
-    }
-    glEnd();
-
-    glDisable(GL_BLEND);
-
-
-    // ===== Outline =====
-    glColor3f(0.4f, 0.4f, 0.4f);
-    glLineWidth(2.0f);
-    glBegin(GL_LINE_LOOP);
-    for (int i = 0; i <= 60; i++)
-    {
-        float angle = 2 * 3.1416f * i / 60;
-        float nx = cos(angle);
-        float ny = sin(angle);
-        float stretch = (ny < 0) ? 1.12f : 1.0f;
-
-        glVertex2f(
-            x + nx * radius * 0.8f * stretch,
-            y + ny * radius * 1.2f
-        );
-    }
-    glEnd();
-
-    glPopMatrix();
-
-    glPopMatrix();
 }
-else
-{
-    drawShadow(x, groundY, 0, radius);
-    drawBrokenEgg(x, groundY, radius);
-}
-}
-
-
-
-
-
-
