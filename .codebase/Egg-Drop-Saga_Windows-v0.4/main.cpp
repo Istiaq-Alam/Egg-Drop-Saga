@@ -57,6 +57,9 @@ void keyboard(unsigned char key, int x, int y) {
      if (key == 'f')
         glutFullScreen();
 
+    if (key == 'm' || key == 'M')
+        AudioManager::toggleMusic();
+
     if (key == 27) //ESC to small window
         glutReshapeWindow(1080, 780);
 }
