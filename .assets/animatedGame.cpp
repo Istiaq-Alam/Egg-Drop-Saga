@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "Home.h"
+#include "Chicken.h"
 #include "AudioManager.h"
 #include <GL/glut.h>
 #include <cstdlib>
@@ -42,8 +43,7 @@ void Game::init()
     Mix_Volume(-1, 32);           // all channels
 
 
-    if (currentEgg != nullptr)
-    {
+    if (currentEgg != nullptr) {
         delete currentEgg;
         currentEgg = nullptr;
     }
@@ -72,7 +72,12 @@ void Game::init()
 void Game::spawnEgg()
 {
     AudioManager::playChickenDrop();
+
     int index = rand() % chickens.size();
+
+    // 🔥 Trigger animation for that chicken
+    //chickens[index].startLayEgg();
+
     float x = chickens[index].getX();
     float y = chickens[index].getY() - 40;
 
@@ -103,8 +108,7 @@ void Game::checkCollisions()
         delete currentEgg;
         currentEgg = nullptr;
 
-        if (lives <= 0)
-        {
+        if (lives <= 0){
             state = GAME_OVER;
             AudioManager::playGameOverMusic();
         }
@@ -115,15 +119,16 @@ void Game::update()
 {
     background.update();
 
-    if (state == HOME)
-    {
+    if (state == HOME){
         home.update();
     }
 
     if (isPaused) return;
 
     if (state != PLAYING) return;
-
+    // Update all chickens (animation)
+    //for (auto& c : chickens)
+    //c.update();
     if (currentEgg == nullptr)
         spawnEgg();
 
@@ -149,9 +154,9 @@ void drawHeart(float centerX, float centerY, float size)
     {
         float x = 17 * pow(sin(t), 3);
         float y = 14 * cos(t)
-                  - 5 * cos(2 * t)
-                  - 2 * cos(3 * t)
-                  - cos(4 * t);
+                - 5 * cos(2 * t)
+                - 2 * cos(3 * t)
+                - cos(4 * t);
 
         float finalX = centerX + (x / 20.0f) * size;
         float finalY = centerY + (y / 17.0f) * size;
@@ -175,9 +180,9 @@ void drawHeart(float centerX, float centerY, float size)
     {
         float x = 16 * pow(sin(t), 3);
         float y = 13 * cos(t)
-                  - 5 * cos(2 * t)
-                  - 2 * cos(3 * t)
-                  - cos(4 * t);
+                - 5 * cos(2 * t)
+                - 2 * cos(3 * t)
+                - cos(4 * t);
 
         glVertex2f(centerX + (x / 20.0f) * size,
                    centerY + (y / 17.0f) * size);
@@ -190,70 +195,73 @@ void Game::render()
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
+    // 🔥 Always reset projection every frame
+    //glMatrixMode(GL_PROJECTION);
+    //glLoadIdentity();
+    //gluOrtho2D(0, GAME_WIDTH, 0, GAME_HEIGHT);
+
+    //glMatrixMode(GL_MODELVIEW);
+    //glLoadIdentity();
+
+    // Draw background first
     background.draw(GAME_WIDTH, GAME_HEIGHT);
 
     if (state == HOME)
     {
-
         home.draw();
-        //drawText(580, 450, "Egg Drop Saga");
-        //drawText(580, 400, "Press S to Start");
-        //drawText(500, 350, "Use A/D or Arrows to Move Bucket");
-        //drawText(500, 300, "Catch Eggs Before They Hit Ground");
-        //drawText(580, 250, "Press Q to Quit");
     }
 
     else if (state == PLAYING)
     {
+        // ================= WIRE =================
         float wireY = GAME_HEIGHT * 0.65f;
-
         glColor3f(0.6f, 0.3f, 0.2f);
-        glLineWidth(1);
         glBegin(GL_QUADS);
         glVertex2f(GAME_WIDTH * 0.01f, wireY);
         glVertex2f(GAME_WIDTH * 0.99f, wireY);
-        glVertex2f(GAME_WIDTH * 0.99f, wireY+20);
-        glVertex2f(GAME_WIDTH * 0.01f, wireY+20);
+        glVertex2f(GAME_WIDTH * 0.99f, wireY + 20);
+        glVertex2f(GAME_WIDTH * 0.01f, wireY + 20);
         glEnd();
 
-        //Draw Chicken
+        // ================= CHICKENS =================
         for (auto& c : chickens)
             c.draw();
 
-        //Ground Area
+        // ================= GROUND =================
         float groundY = 0;
 
         glColor3f(0.698f, 0.745f, 0.710f);
         glBegin(GL_QUADS);
-        glVertex2f(GAME_WIDTH-20, groundY);
-        glVertex2f(GAME_WIDTH, groundY+27);
-        glVertex2f(GAME_WIDTH, groundY+40);
-        glVertex2f(GAME_WIDTH-20, groundY+40);
+        glVertex2f(GAME_WIDTH - 20, groundY);
+        glVertex2f(GAME_WIDTH, groundY + 27);
+        glVertex2f(GAME_WIDTH, groundY + 40);
+        glVertex2f(GAME_WIDTH - 20, groundY + 40);
         glEnd();
 
         glColor3f(0.5f, 0.2f, 0.20f);
         glBegin(GL_QUADS);
-        glVertex2f(0, groundY+10);
-        glVertex2f(GAME_WIDTH-20, groundY+10);
-        glVertex2f(GAME_WIDTH, groundY+40); //2 (-10) //3
-        glVertex2f(20, groundY+40);
+        glVertex2f(0, groundY + 10);
+        glVertex2f(GAME_WIDTH - 20, groundY + 10);
+        glVertex2f(GAME_WIDTH, groundY + 40);
+        glVertex2f(20, groundY + 40);
         glEnd();
 
         glColor3f(0.5f, 0.5f, 0.0f);
-        glLineWidth(1);
         glBegin(GL_QUADS);
         glVertex2f(0, groundY);
-        glVertex2f(GAME_WIDTH-20, groundY); //1
-        glVertex2f(GAME_WIDTH-20, groundY+10); //4
-        glVertex2f(0, groundY+10);
+        glVertex2f(GAME_WIDTH - 20, groundY);
+        glVertex2f(GAME_WIDTH - 20, groundY + 10);
+        glVertex2f(0, groundY + 10);
         glEnd();
 
-
+        // ================= EGG =================
         if (currentEgg != nullptr)
             currentEgg->draw(GROUND_Y);
 
+        // ================= BUCKET =================
         bucket.draw();
 
+        // ================= UI =================
         std::stringstream ss;
         ss << "Score: " << score;
         drawText(30, GAME_HEIGHT - 40, ss.str().c_str());
@@ -277,9 +285,11 @@ void Game::render()
     else if (state == GAME_OVER)
     {
         drawText(370, 450, "GAME OVER");
+
         std::stringstream ss;
         ss << "Final Score: " << score;
         drawText(370, 400, ss.str().c_str());
+
         drawText(340, 350, "Press R to Home Screen");
         drawText(365, 300, "Press Q to Quit");
     }
@@ -291,19 +301,17 @@ void Game::handleInput(unsigned char key)
 {
     if (state == HOME)
     {
-        if (key == 's')
-        {
-            state = PLAYING;
-            AudioManager::playGameMusic();
+        if (key == 's'){
+        state = PLAYING;
+        AudioManager::playGameMusic();
         }
         if (key == 'q') exit(0);
     }
     else if (state == GAME_OVER)
     {
-        if (key == 'r')
-        {
-            init();
-            AudioManager::playHomeMusic();
+        if (key == 'r'){
+        init();
+        AudioManager::playHomeMusic();
         }
         if (key == 'q') exit(0);
     }

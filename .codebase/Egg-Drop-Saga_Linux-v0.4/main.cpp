@@ -75,7 +75,7 @@ int main(int argc, char** argv) {
     glutInitWindowPosition(400, 100);
 
     glutReshapeFunc(reshape);
-    glutCreateWindow("Egg Drop Saga - Test Game Sequential Skeleton");
+    glutCreateWindow("Egg Drop Saga - By Istiak Alam");
 
     glutKeyboardFunc(keyboard);
     glutSpecialFunc(specialKeys);

@@ -1,0 +1,287 @@
+Okay as far till now we have worked the chicken is look like this image normal (the left side) . 
+And now I want to animate this chicken as when the chicken drops an egg it will instantly make this right-side chicken animation. Where: 
+- the chicken body is moved up previous chicken position.
+- The wing is move to up
+- the bake is open as it is making coccorukko sound.
+- the head is upward
+- the eyes get closes like the image. 
+
+keep the lag position same and unchanged in this case. just make the body animated transition when the chicken laying an egg. I have given you my full debuged Chicken.cpp code where you will read it and tell me step by step to make this chicken more real. 
+
+chicken.cpp : 
+#include "Chicken.h"
+#include <GL/glut.h>
+#include <cmath>
+
+Chicken::Chicken(float x, float y) {
+    this->x = x;
+    this->y = y;
+}
+
+void Chicken::draw()
+{
+    glPushMatrix();
+    glTranslatef(x, y, 0);
+
+    float bodyR = 35.0f;
+    float headX = 20;
+    float headY = 55;
+    float headR = 14;
+
+    // =========================
+    // BODY
+    // =========================
+    glColor3f(1,1,1);
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex2f(0,0);
+    for(int i=0;i<=60;i++){
+        float a = 2*3.1416f*i/60;
+        glVertex2f(cos(a)*bodyR, sin(a)*bodyR);
+    }
+    glEnd();
+
+    glColor3f(0,0,0);
+    glLineWidth(3);
+    glBegin(GL_LINE_LOOP);
+    for(int i=0;i<=60;i++){
+        float a = 2*3.1416f*i/60;
+        glVertex2f(cos(a)*bodyR, sin(a)*bodyR);
+    }
+    glEnd();
+
+
+    // =========================
+// TAIL (Connected & Natural)
+// =========================
+
+float tailPos[3][2] = {
+    {-35, 20},  // top
+    {-42, 11}  // bottom left
+    //{-35, 18}   // bottom right
+};
+
+for(int k=0;k<3;k++)
+{
+    glColor3f(1,1,1);
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex2f(tailPos[k][0], tailPos[k][1]);
+    for(int i=0;i<=40;i++){
+        float a = 2*3.1416f*i/40;
+        glVertex2f(tailPos[k][0] + cos(a)*12,
+                   tailPos[k][1] + sin(a)*12);
+    }
+    glEnd();
+
+    glColor3f(0,0,0);
+    glBegin(GL_LINE_LOOP);
+    for(int i=0;i<=40;i++){
+        float a = 2*3.1416f*i/40;
+        glVertex2f(tailPos[k][0] + cos(a)*12,
+                   tailPos[k][1] + sin(a)*12);
+    }
+    glEnd();
+}
+
+
+    // =========================
+    // NECK
+    // =========================
+    glColor3f(1,1,1);
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex2f(20,30);
+    for(int i=0;i<=40;i++){
+        float a = 2*3.1416f*i/40;
+        glVertex2f(20 + cos(a)*12,
+                   30 + sin(a)*20);
+    }
+    glEnd();
+
+    glColor3f(0,0,0);
+    glBegin(GL_LINE_LOOP);
+    for(int i=0;i<=40;i++){
+        float a = 2*3.1416f*i/40;
+        glVertex2f(20 + cos(a)*12,
+                   30 + sin(a)*20);
+    }
+    glEnd();
+
+
+    // =========================
+    // HEAD
+    // =========================
+    glColor3f(1,1,1);
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex2f(headX,headY);
+    for(int i=0;i<=40;i++){
+        float a = 2*3.1416f*i/40;
+        glVertex2f(headX + cos(a)*headR,
+                   headY + sin(a)*headR);
+    }
+    glEnd();
+
+    glColor3f(0,0,0);
+    glBegin(GL_LINE_LOOP);
+    for(int i=0;i<=40;i++){
+        float a = 2*3.1416f*i/40;
+        glVertex2f(headX + cos(a)*headR,
+                   headY + sin(a)*headR);
+    }
+    glEnd();
+
+
+    // =========================
+// WING (Tilted Feather Style)
+// =========================
+
+glPushMatrix();
+
+// Move to wing anchor position on body
+glTranslatef(3, 3, 0);
+
+// Rotate upward (adjust angle if needed)
+glRotatef(25.0f, 0, 0, 1);   // 25 degrees tilt
+
+glColor3f(1,1,1);
+glBegin(GL_POLYGON);
+
+// Upper arc
+for(int i = 160; i <= 360; i++){
+    float a = i * 3.1416f / 180.0f;
+    glVertex2f(cos(a) * 28,
+               sin(a) * 18);
+}
+
+// Lower arc
+for(int i = 0; i <= 160; i++){
+    float a = i * 3.1416f / 180.0f;
+    glVertex2f(cos(a) * 25,
+               sin(a) * 12);
+}
+
+glEnd();
+
+
+// Outline
+glColor3f(0,0,0);
+glLineWidth(3);
+glBegin(GL_LINE_LOOP);
+
+for(int i = 160; i <= 360; i++){
+    float a = i * 3.1416f / 180.0f;
+    glVertex2f(cos(a) * 28,
+               sin(a) * 18);
+}
+for(int i = 0; i <= 160; i++){
+    float a = i * 3.1416f / 180.0f;
+    glVertex2f(cos(a) * 25,
+               sin(a) * 12);
+}
+
+glEnd();
+
+// Inner feather line
+glBegin(GL_LINE_STRIP);
+for(int i = 180; i <= 350; i++){
+    float a = i * 3.1416f / 180.0f;
+    glVertex2f(cos(a) * 20,
+               sin(a) * 10);
+}
+glEnd();
+
+glPopMatrix();
+
+
+    // =========================
+    // BEAK
+    // =========================
+    glColor3f(1,0.8f,0);
+    glBegin(GL_TRIANGLES);
+    glVertex2f(headX+12, headY);
+    glVertex2f(headX+25, headY+5);
+    glVertex2f(headX+12, headY+10);
+    glEnd();
+
+    glColor3f(0,0,0);
+    glBegin(GL_LINE_LOOP);
+    glVertex2f(headX+12, headY);
+    glVertex2f(headX+25, headY+5);
+    glVertex2f(headX+12, headY+10);
+    glEnd();
+
+
+    // =========================
+    // COMB (Vertical Ellipses Big→Medium→Small)
+    // =========================
+    float combSize[3][2] = {
+        {6,6},
+        {5,8},
+        {6,8}   // biggest
+    };
+
+    for(int i=0;i<3;i++){
+        float cx = headX - 8 + i*6;
+        float cy = headY + 14 + i*2;
+
+        glColor3f(0.9f,0.1f,0.1f);
+        glBegin(GL_TRIANGLE_FAN);
+        glVertex2f(cx,cy);
+        for(int j=0;j<=30;j++){
+            float a = 2*3.1416f*j/30;
+            glVertex2f(cx + cos(a)*combSize[i][0],
+                       cy + sin(a)*combSize[i][1]);
+        }
+        glEnd();
+
+        glColor3f(0,0,0);
+        glBegin(GL_LINE_LOOP);
+        for(int j=0;j<=30;j++){
+            float a = 2*3.1416f*j/30;
+            glVertex2f(cx + cos(a)*combSize[i][0],
+                       cy + sin(a)*combSize[i][1]);
+        }
+        glEnd();
+    }
+
+
+    // =========================
+    // EYE
+    // =========================
+    glColor3f(0,0,0);
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex2f(headX+3, headY+4);
+    for(int i=0;i<=20;i++){
+        float a = 2*3.1416f*i/20;
+        glVertex2f(headX+3 + cos(a)*3,
+                   headY+4 + sin(a)*3);
+    }
+    glEnd();
+
+
+    // =========================
+    // LEGS + 3 FINGERS
+    // =========================
+    glLineWidth(2.5f);
+    glBegin(GL_LINES);
+
+    // left leg
+    glVertex2f(-10,-32);
+    glVertex2f(-10,-45);
+
+    // left toes
+    glVertex2f(-10,-45); glVertex2f(-18,-55);
+    glVertex2f(-10,-45); glVertex2f(-10,-58);
+    glVertex2f(-10,-45); glVertex2f(-2,-55);
+
+    // right leg
+    glVertex2f(10,-35);
+    glVertex2f(10,-45);
+
+    // right toes
+    glVertex2f(10,-45); glVertex2f(2,-55);
+    glVertex2f(10,-45); glVertex2f(10,-58);
+    glVertex2f(10,-45); glVertex2f(18,-55);
+
+    glEnd();
+
+    glPopMatrix();
+}

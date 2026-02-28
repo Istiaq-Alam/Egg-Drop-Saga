@@ -230,7 +230,7 @@ void Egg::draw(float groundY)
 
 
     // ===== Outline =====
-    glColor3f(0.4f, 0.4f, 0.4f);
+    glColor3f(0.2f, 0.2f, 0.2f);
     glLineWidth(2.0f);
     glBegin(GL_LINE_LOOP);
     for (int i = 0; i <= 60; i++)
