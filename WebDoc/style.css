@@ -1,201 +1,290 @@
-body{
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-margin:0;
-font-family:'Orbitron',sans-serif;
-background:#0b0b0b;
-color:white;
+body {
+
+    font-family: 'Orbitron', sans-serif;
+    color: white;
+    background: #000;
+    overflow-x: hidden;
 
 }
 
-header{
 
-display:flex;
-justify-content:space-between;
-align-items:center;
+/* BLUR BACKGROUND */
 
-padding:20px;
+.bg-blur {
 
-background:black;
-border-bottom:2px solid #00ff88;
+    position: fixed;
+    width: 100%;
+    height: 100%;
 
-}
+    background: url("assets/appicon.png") center/400px no-repeat;
 
-.logo{
+    filter: blur(120px) brightness(40%);
 
-display:flex;
-align-items:center;
-gap:10px;
+    z-index: -1;
 
 }
 
-.logo img{
 
-width:50px;
+/* HEADER */
 
-}
+header {
 
-nav a{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-margin:0 15px;
-text-decoration:none;
-color:white;
+    padding: 20px 10%;
 
-}
-
-nav a:hover{
-
-color:#00ff88;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
 
 }
 
-.hero{
+.logo {
 
-height:80vh;
-
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-
-text-align:center;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 
 }
 
-.hero h2{
+.logo img {
 
-font-size:48px;
-
-}
-
-.btn{
-
-margin-top:20px;
-padding:15px 30px;
-
-background:#00ff88;
-color:black;
-
-text-decoration:none;
-font-weight:bold;
-
-border-radius:5px;
+    width: 40px;
 
 }
 
-.btn:hover{
+nav a {
 
-background:white;
-
-}
-
-section{
-
-padding:80px 10%;
-
-text-align:center;
+    margin-left: 20px;
+    text-decoration: none;
+    color: white;
 
 }
 
-.asset-grid{
+nav a:hover {
 
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:40px;
+    color: #00ff9f;
 
 }
 
-.card{
 
-background:#111;
-padding:30px;
-border-radius:10px;
+/* HERO */
 
-transition:0.3s;
+.hero {
 
-}
+    text-align: center;
 
-.card:hover{
-
-transform:scale(1.05);
+    padding: 120px 20px;
 
 }
 
-.card img{
+.hero h2 {
 
-width:100px;
-
-}
-
-.download-btn{
-
-display:inline-block;
-
-margin-top:20px;
-padding:20px 40px;
-
-background:#ffcc00;
-
-color:black;
-
-text-decoration:none;
-font-size:20px;
-
-border-radius:10px;
+    font-size: 48px;
 
 }
 
-.download-btn:hover{
+.hero p {
 
-background:white;
-
-}
-
-.release-card{
-
-background:#111;
-
-padding:40px;
-
-max-width:600px;
-
-margin:auto;
-
-border-radius:10px;
+    margin-top: 15px;
 
 }
 
-footer{
 
-text-align:center;
-padding:30px;
+.main-btn {
 
-background:black;
+    display: inline-block;
 
-margin-top:40px;
+    margin-top: 30px;
 
-}
+    padding: 15px 40px;
 
-.floating-eggs .egg{
+    background: #00ff9f;
+    color: black;
 
-position:absolute;
-width:40px;
+    text-decoration: none;
 
-animation:fall 6s linear infinite;
+    border-radius: 6px;
 
 }
 
-.e1{ left:20%; animation-delay:0s; }
-.e2{ left:50%; animation-delay:2s; }
-.e3{ left:80%; animation-delay:4s; }
 
-@keyframes fall{
+/* SECTIONS */
 
-0%{
-top:-50px;
+section {
+
+    padding: 80px 10%;
+    text-align: center;
+
 }
 
-100%{
-top:90vh;
+
+/* GALLERY */
+
+.gallery {
+
+    display: flex;
+    overflow: hidden;
+    gap: 40px;
+
+    justify-content: center;
+
 }
+
+.gallery img {
+
+    width: 150px;
+
+    border-radius: 10px;
+
+}
+
+
+/* DOWNLOAD */
+
+.download-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+    gap: 40px;
+
+    margin-top: 40px;
+
+}
+
+.download-card {
+
+    background: #111;
+
+    padding: 40px;
+
+    border-radius: 10px;
+
+    transition: 0.3s;
+
+}
+
+.download-card:hover {
+
+    transform: translateY(-10px);
+    background: #00ff9f;
+    color: black;
+
+}
+
+.download-card img {
+
+    width: 60px;
+
+}
+
+.download-card a {
+
+    display: block;
+
+    margin-top: 20px;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+    color: inherit;
+
+}
+
+
+/* PREVIOUS RELEASE */
+
+.previous-release {
+
+    margin-top: 40px;
+
+}
+
+.previous-release a {
+
+    display: inline-block;
+
+    margin-top: 10px;
+
+    color: #00ff9f;
+
+}
+
+
+/* RELEASE */
+
+.release-card {
+
+    background: #111;
+
+    padding: 40px;
+
+    max-width: 600px;
+
+    margin: auto;
+
+    border-radius: 10px;
+
+}
+
+
+/* FOOTER */
+
+footer {
+
+    text-align: center;
+
+    padding: 40px;
+
+    background: #000;
+
+}
+
+.github-btn {
+
+    display: inline-block;
+
+    margin-top: 10px;
+
+    padding: 10px 25px;
+
+    background: #00ff9f;
+
+    color: black;
+
+    text-decoration: none;
+
+    border-radius: 6px;
+
+}
+
+
+/* RESPONSIVE */
+
+@media(max-width:768px) {
+
+    .hero h2 {
+        font-size: 32px;
+    }
+
+    .gallery {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    header {
+        flex-direction: column;
+        gap: 10px;
+    }
 
 }

@@ -1,140 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Egg Drop Saga</title>
+    <head>
 
-<link rel="stylesheet" href="style.css">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+        <title>Egg Drop Saga</title>
 
-</head>
+        <link rel="icon" href="assets/appicon.png">
 
-<body>
+        <link rel="stylesheet" href="style.css">
 
-<header>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap"
+            rel="stylesheet">
 
-<div class="logo">
-<img src="assets/appicon.png">
-<h1>Egg Drop Saga</h1>
-</div>
+    </head>
 
-<nav>
-<a href="#home">Home</a>
-<a href="#about">About</a>
-<a href="#assets">Game Assets</a>
-<a href="#download">Download</a>
-<a href="#release">Release Notes</a>
-</nav>
+    <body>
 
-</header>
+        <div class="bg-blur"></div>
 
+        <header>
 
-<section id="home" class="hero">
+            <div class="logo">
 
-<h2>Catch The Eggs Before They Fall!</h2>
+                <img src="assets/appicon.png">
+                <h1>Egg Drop Saga</h1>
 
-<p>
-Control the bucket and catch eggs dropped by the chicken. 
-Simple. Fun. Addictive.
-</p>
+            </div>
 
-<a href="#download" class="btn">Download Game</a>
+            <nav>
 
-<div class="floating-eggs">
-<img src="assets/egg.png" class="egg e1">
-<img src="assets/egg.png" class="egg e2">
-<img src="assets/egg.png" class="egg e3">
-</div>
+                <a href="#about">About</a>
+                <a href="#gallery">Gallery</a>
+                <a href="#download">Download</a>
+                <a href="#release">Release</a>
 
-</section>
+            </nav>
 
+        </header>
 
-<section id="about">
+        <section class="hero">
 
-<h2>About The Game</h2>
+            <h2>Catch The Eggs Before They Fall</h2>
 
-<p>
-Egg Drop Saga is a 2D arcade game developed using C++ and OpenGL GLUT.
-The player controls a bucket and catches eggs dropped by a chicken.
-The goal is to catch as many eggs as possible and achieve the highest score.
-</p>
+            <p>
+                A fun OpenGL arcade game where you control a bucket and catch
+                falling eggs.
+            </p>
 
-</section>
+            <a href="#download" class="main-btn">Download Game</a>
 
+        </section>
 
-<section id="assets">
+        <section id="about">
 
-<h2>Game Assets</h2>
+            <h2>About The Game</h2>
 
-<div class="asset-grid">
+            <p>
 
-<div class="card">
-<img src="assets/chicken.png">
-<h3>Chicken</h3>
-<p>The chicken lays eggs during gameplay.</p>
-</div>
+                Egg Drop Saga is a 2D arcade game built with C++ and OpenGL
+                GLUT.
+                The player controls a bucket and catches eggs dropped by a
+                chicken.
+                The goal is to score as many points as possible.
 
-<div class="card">
-<img src="assets/egg.png">
-<h3>Egg</h3>
-<p>The falling object the player must catch.</p>
-</div>
+            </p>
 
-<div class="card">
-<img src="assets/bucket.png">
-<h3>Bucket</h3>
-<p>Player controlled bucket used to catch eggs.</p>
-</div>
+        </section>
 
-</div>
+        <section id="gallery">
 
-</section>
+            <h2>Game Gallery</h2>
 
+            <div class="gallery">
 
-<section id="download">
+                <img src="assets/chicken.png">
+                <img src="assets/bucket.png">
+                <img src="assets/egg.png">
+                <img src="assets/appicon.png">
 
-<h2>Download Game</h2>
+            </div>
 
-<p>Download the latest version of Egg Drop Saga.</p>
+        </section>
 
-<a class="download-btn" href="downloads/EggDropSaga_v1.0.zip">
-Download v1.0
-</a>
+        <section id="download">
 
-</section>
+            <h2>Download</h2>
 
+            <div class="download-grid">
 
-<section id="release">
+                <div class="download-card">
 
-<h2>Release Notes</h2>
+                    <img
+                        src="https://cdn-icons-png.flaticon.com/512/732/732225.png">
 
-<div class="release-card">
+                    <h3>Windows</h3>
 
-<h3>Version 1.0</h3>
+                    <a href="downloads/EggDropSaga_v1.0_windows.zip">
+                        Download
+                    </a>
 
-<ul>
-<li>Initial release</li>
-<li>Chicken egg spawning system</li>
-<li>Bucket movement controls</li>
-<li>Egg catching mechanics</li>
-<li>Score system</li>
-</ul>
+                </div>
 
-</div>
+                <div class="download-card">
 
-</section>
+                    <img
+                        src="https://cdn-icons-png.flaticon.com/512/226/226772.png">
 
+                    <h3>Linux</h3>
 
-<footer>
+                    <a href="downloads/EggDropSaga_v1.0_linux.tar.gz">
+                        Download
+                    </a>
 
-<p>© 2026 Egg Drop Saga | Developed by Istiak Alam</p>
+                </div>
 
-</footer>
+            </div>
 
-<script src="script.js"></script>
+            <div class="previous-release">
 
-</body>
+                <h3>Previous Releases</h3>
+
+                <a href="downloads/previous/EggDropSaga_v0.9.zip">
+                    Version 0.9
+                </a>
+
+            </div>
+
+        </section>
+
+        <section id="release">
+
+            <h2>Release Notes</h2>
+
+            <div class="release-card">
+
+                <h3>Version 1.0</h3>
+
+                <ul>
+
+                    <li>Initial public release</li>
+                    <li>Chicken egg spawning system</li>
+                    <li>Bucket control mechanics</li>
+                    <li>Score tracking</li>
+
+                </ul>
+
+            </div>
+
+        </section>
+
+        <footer>
+
+            <p>© 2026 Egg Drop Saga</p>
+
+            <a class="github-btn"
+                href="https://github.com/YOUR_GITHUB_REPO"
+                target="_blank">
+
+                View Source on GitHub
+
+            </a>
+
+        </footer>
+
+        <script src="script.js"></script>
+
+    </body>
 </html>

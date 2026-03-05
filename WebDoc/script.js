@@ -1,21 +1,22 @@
-// simple scroll animation
+const gallery = document.querySelector(".gallery");
 
-const cards = document.querySelectorAll(".card");
+let scrollAmount = 0;
 
-window.addEventListener("scroll", () => {
+function autoScroll() {
 
-cards.forEach(card => {
+    scrollAmount += 1;
 
-const position = card.getBoundingClientRect().top;
-const screen = window.innerHeight;
+    gallery.scrollTo({
+        left: scrollAmount,
+        behavior: "smooth"
+    });
 
-if(position < screen - 100){
+    if (scrollAmount > gallery.scrollWidth - gallery.clientWidth) {
 
-card.style.opacity = "1";
-card.style.transform = "translateY(0px)";
+        scrollAmount = 0;
+
+    }
 
 }
 
-});
-
-});
+setInterval(autoScroll, 40);
