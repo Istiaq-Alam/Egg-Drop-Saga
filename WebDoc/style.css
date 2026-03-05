@@ -8,7 +8,7 @@ body {
 
     font-family: 'Orbitron', sans-serif;
     color: white;
-    background: #000;
+    background: #000000;
     overflow-x: hidden;
 
 }
@@ -22,9 +22,9 @@ body {
     width: 100%;
     height: 100%;
 
-    background: url("assets/appicon.png") center/400px no-repeat;
+    background: url("assets/appicon.png") center/500px no-repeat;
 
-    filter: blur(120px) brightness(40%);
+    filter: blur(4px) brightness(40%);
 
     z-index: -1;
 
@@ -42,7 +42,7 @@ header {
     padding: 20px 10%;
 
     background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(1px);
 
 }
 
