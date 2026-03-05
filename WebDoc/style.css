@@ -248,7 +248,7 @@ section {
 .release-card {
 
     background: #111;
-
+    text-align: left;
     padding: 40px;
 
     max-width: 600px;
