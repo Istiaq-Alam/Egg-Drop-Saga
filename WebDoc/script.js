@@ -1,4 +1,4 @@
-const gallery = document.querySelector(".gallery");
+//const gallery = document.querySelector(".gallery");
 
 let scrollAmount = 0;
 

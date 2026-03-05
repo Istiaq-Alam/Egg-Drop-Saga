@@ -126,23 +126,45 @@ section {
 }
 
 
-/* GALLERY */
+/* GALLERY MARQUEE */
 
-.gallery {
+.gallery-container {
 
-    display: flex;
     overflow: hidden;
-    gap: 40px;
-
-    justify-content: center;
+    width: 100%;
+    margin-top: 40px;
 
 }
 
-.gallery img {
+.gallery-track {
 
-    width: auto;
+    display: flex;
+    gap: 40px;
+
+    width: max-content;
+
+    animation: scrollGallery 25s linear infinite;
+
+}
+
+.gallery-track img {
     height: 200px;
+    width: auto;
     border-radius: 10px;
+
+}
+
+/* animation */
+
+@keyframes scrollGallery {
+
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
 
 }
 
