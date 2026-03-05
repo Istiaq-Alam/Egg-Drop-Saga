@@ -26,6 +26,11 @@ dist/
 *.ilk
 *.pdb
 *.idb
+*.log
+*.aux
+*.out
+*.synctex.gz
+*.toc
 
 # =========================
 # CodeBlocks files

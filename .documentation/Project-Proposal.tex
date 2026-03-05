@@ -9,6 +9,7 @@
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{graphicx}
+\usepackage{wrapfig}
 \usepackage{longtable}
 \usepackage{caption}
 \usepackage{hyperref}
@@ -18,30 +19,30 @@
 \hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue}
 \renewcommand{\contentsname}{Table of Contents}
 
-
-
 \begin{document}
 
-\begin{titlepage}					% Cover Start
+% ---------------- COVER PAGE ----------------
+
+\begin{titlepage}
 \begin{center}
     \includegraphics[width=0.35\textwidth]{logo.png} \\
     \vspace{0.5cm}
     \textbf{\Huge \textcolor{cyan}{NOTRE DAME} \textcolor{cyan}{UNIVERSITY}} \\
     \vspace{0.5cm}
     \textbf{\Huge \textcolor{orange}{BANGLADESH}} \\
-    
+
     \vspace{0.9cm}
     \textbf{\Huge \underline{Computer Graphics Project Proposal}} \\
-    
+
     \vspace{1.5em}
     \begin{flushleft}
     	\textbf{\Large Course Code: CSE-4204} \\
-		\vspace{0.3cm}        
+		\vspace{0.3cm}
         \textbf{\Large Course Title: Computer Graphics Lab} \\
         \vspace{0.3cm}
-        \textbf{\Large Project Topic: Egg Drop Game using Glut} \\        
+        \textbf{\Large Project Topic: Egg Drop Game using Glut} \\
     \end{flushleft}
-    
+
     \vspace{1em}
     \begin{flushleft}
         \textbf{\Huge \textcolor{blue}{Submitted by:}} \\
@@ -49,11 +50,12 @@
         \textbf{\Large Name: Istiak Alam} \\
         \vspace{0.3cm}
         \textbf{\Large ID: 0692230005101005} \\
-		\vspace{0.3cm}        
+		\vspace{0.3cm}
         \textbf{\Large Batch: CSE-20} \\
         \vspace{0.5cm}
         \textbf{\Large Submission Date: }{\Large \textbf{\today}\par}
     \end{flushleft}
+
     \vfill
     \begin{flushleft}
         \textbf{\Huge \textcolor{blue}{Submitted to:}} \\
@@ -64,38 +66,46 @@
         \vspace{0.3cm}
         \textbf{\Large Notre Dame University Bangladesh}
     \end{flushleft}
+
 \end{center}
-\end{titlepage}						% Cover End
+\end{titlepage}
 
-
+% ---------------- TOC ----------------
 
 \rfoot{\thepage}
-\tableofcontents						% Table of contents
+\tableofcontents
 \thispagestyle{empty}
 \clearpage
+
 \pagenumbering{arabic}
 \pagestyle{fancy}
-\fancyhf{} 							% Header Middle
-\rhead{Computer Graphics}
-\lhead{Project Report-01}
+\fancyhf{}
+\rhead{Computer Graphics Lab}
+\lhead{Project Proposal}
 
-%							PAGE START
-
+% ---------------- MAIN CONTENT ----------------
 
 \section{Project Proposal Description}
 
 \subsection{Project Title}
+
 \textbf{Egg Drop Saga Using OpenGL Glut}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.1\textwidth]{appicon.png}
+    \caption{Proposed Game Application Icon}
+\end{figure}
 
 \subsection{Introduction}
 
-Computer graphics plays an important role in modern software applications, particularly in the development of interactive games and visual simulations. This project proposes the development of a simple yet engaging 2D game called \textit{Egg Drop Saga Game}. The game will be developed using the C++ programming language along with the OpenGL graphics library and GLUT toolkit for rendering graphics and handling user input.
+Computer graphics plays an important role in modern software applications, particularly in the development of interactive games and visual simulations. In this project, we will propose the development of a simple yet engaging 2D game titled \textit{Egg Drop Saga Game}. The game will be developed using the C++ programming language along with the OpenGL graphics library and the GLUT toolkit for rendering graphics and handling user input.
 
-The objective of the game is to create an interactive environment where a player controls a bucket to catch eggs dropped by a chicken positioned at the top of the screen. The player must move the bucket left or right to successfully catch falling eggs while avoiding missed eggs.
+The objective of this proposed game will be to create an interactive environment where a player will control a bucket to catch eggs dropped by a chicken positioned at the top of the screen. The player will need to move the bucket left or right to successfully catch falling eggs while avoiding missed eggs.
 
 \subsection{Objectives}
 
-The main objectives of this project are:
+The main objectives of this proposed project will be:
 
 \begin{itemize}
 \item To design and implement a 2D interactive game using OpenGL.
@@ -107,34 +117,35 @@ The main objectives of this project are:
 
 \subsection{Project Overview}
 
-The game environment consists of three main graphical elements:
+The proposed game environment will consist of three main graphical elements:
 
 \begin{itemize}
-\item \textbf{Chicken}: Positioned at the top of the screen, the chicken periodically lays eggs.
-\item \textbf{Egg}: Eggs fall from the chicken toward the bottom of the screen with a certain speed.
-\item \textbf{Bucket}: Controlled by the player to catch the falling eggs.
+\item \textbf{Chicken}: Positioned at the top of the screen, the chicken will periodically lay eggs.
+\item \textbf{Egg}: Eggs will fall from the chicken toward the bottom of the screen at a certain speed.
+\item \textbf{Bucket}: This object will be controlled by the player to catch the falling eggs.
 \end{itemize}
 
-The player will use keyboard input (left and right arrow keys) to move the bucket horizontally across the screen. If the bucket successfully catches an egg, the player receives a score point. If the egg reaches the ground without being caught, the player loses a life or score opportunity.
+The player will use keyboard input (left and right arrow keys) to move the bucket horizontally across the screen. If the bucket successfully catches an egg, the player will receive a score point. If the egg reaches the ground without being caught, the player may lose a life or scoring opportunity.
+
+% ---------------- GRAPH SECTION ----------------
 
 \section{Graphical Analysis}
 
-This section presents graphical analysis related to the performance or behavior of the Egg Catching Game. The graph illustrates important aspects such as gameplay performance, score progression, or object movement patterns during gameplay. The graph is included as a PDF figure for better visualization and analysis.
+This section will present graphical analysis related to the expected performance or behavior of the Egg Catching Game. The graph will illustrate important aspects such as gameplay performance, score progression, or object movement patterns during gameplay.
 
 \subsection{Graph Representation}
 
-The following figure shows the graphical representation used in this project.
+The following figure will represent the graphical model used in this proposed project.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\textwidth]{graph.pdf}
-    \caption{Target Background Graph of the Egg Drop Saga Game}
-    \label{fig:game_graph}
+    \includegraphics[width=1\textwidth]{graph.pdf}
+    \caption{Target Background Graph of the Proposed Egg Drop Saga Game}
 \end{figure}
 
 \subsection{Graph Source}
 
-The graph used in this report can be accessed from the following resources:
+The graph used in this proposal can be accessed from the following resources:
 
 \begin{itemize}
     \item PDF File: \href{graph.pdf}{Open Graph PDF}
@@ -143,13 +154,49 @@ The graph used in this report can be accessed from the following resources:
 
 \subsection{Graph Description}
 
-The graph demonstrates the relationship between different gameplay parameters such as time, score, or egg spawn rate. It helps in analyzing how the game behaves during execution and provides insights into gameplay dynamics and performance.
+The graph will demonstrate the relationship between different gameplay parameters such as time, score, or egg spawn rate. It will help in analyzing how the game may behave during execution and will provide insights into gameplay dynamics and expected performance.
 
-This analysis is useful for understanding game mechanics and evaluating the effectiveness of the implemented graphics and animation logic.
+% ---------------- GAME ASSETS ----------------
 
-\subsection{Graphics Implementation}
+\section{Game Assets}
 
-The project uses OpenGL primitives such as:
+This section will present the graphical assets that will be used in the development of the Egg Drop Saga Game. These assets will represent the main visual components of the game and will help create an engaging gameplay environment.
+
+\subsection{Chicken Animation}
+
+The chicken will be positioned at the top of the game screen and will periodically lay eggs. To improve the visual appearance of the game, a simple animation will be implemented to simulate the chicken's movement while laying eggs.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.35\textwidth]{animated chicken.png}
+    \caption{Proposed Chicken Animation}
+\end{figure}
+
+\subsection{Bucket Asset}
+
+The bucket will be the primary player-controlled object in the game. The player will move the bucket horizontally across the screen to catch falling eggs.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.35\textwidth]{Bucket.png}
+    \caption{Proposed Bucket Asset}
+\end{figure}
+
+\subsection{Egg Asset}
+
+The egg will be the main falling object generated by the chicken. The player will attempt to catch these eggs using the bucket in order to score points.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.35\textwidth]{Egg.png}
+    \caption{Proposed Egg Asset}
+\end{figure}
+
+% ---------------- IMPLEMENTATION ----------------
+
+\section{Proposed Implementation}
+
+The project will use OpenGL primitives such as:
 
 \begin{itemize}
 \item \textbf{GL\_TRIANGLE\_FAN} for drawing circular shapes like eggs and the chicken body.
@@ -157,31 +204,28 @@ The project uses OpenGL primitives such as:
 \item Basic color shading to represent different game objects.
 \end{itemize}
 
-The animation is implemented through continuous screen updates using the rendering loop. The egg's vertical position is updated over time to simulate gravity and falling motion.
+Animation will be implemented through continuous screen updates using the rendering loop. The egg's vertical position will be updated over time to simulate gravity and falling motion.
 
 \subsection{Collision Detection}
 
-A collision detection mechanism is implemented to determine when an egg intersects with the bucket. This is achieved using a simple bounding box or positional comparison between the coordinates of the egg and the bucket. When a collision occurs, the egg is considered caught and the player's score is updated.
+A collision detection mechanism will be implemented to determine when an egg intersects with the bucket. This will be achieved using a simple bounding box or positional comparison between the coordinates of the egg and the bucket. When a collision occurs, the egg will be considered caught and the player's score will be updated.
 
 \subsection{Game Mechanics}
 
-The gameplay includes the following mechanics:
+The gameplay will include the following mechanics:
 
 \begin{itemize}
-\item Eggs are generated periodically at the chicken's position.
-\item Eggs fall downward with a constant speed.
-\item The player moves the bucket horizontally to catch eggs.
-\item If an egg collides with the bucket, it is removed and the score increases.
-\item If the egg reaches the bottom of the screen, it is considered missed.
+\item Eggs will be generated periodically at the chicken's position.
+\item Eggs will fall downward with a constant speed.
+\item The player will move the bucket horizontally to catch eggs.
+\item If an egg collides with the bucket, it will be removed and the score will increase.
+\item If the egg reaches the bottom of the screen, it will be considered missed.
 \end{itemize}
 
 \subsection{Expected Outcome}
 
-The final outcome of the project will be a fully functional 2D game demonstrating basic concepts of computer graphics, animation, and interactive gameplay. The project will highlight the practical use of OpenGL for rendering objects, handling animation, and implementing user interaction within a graphical environment.
+The final outcome of this proposed project will be a fully functional 2D game demonstrating basic concepts of computer graphics, animation, and interactive gameplay. The project will highlight the practical use of OpenGL for rendering objects, handling animation, and implementing user interaction within a graphical environment.
 
 Additionally, the project will serve as a learning platform for understanding fundamental game development techniques including object rendering, event handling, and collision detection.
-
-
-
 
 \end{document}
