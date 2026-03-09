@@ -9,335 +9,487 @@ const float GAME_HEIGHT = 720.0f;
 
 Background::Background()
 {
-    cloudOffset = 0.0f;
+    cloudOffset  = 0.0f;
     cloudOffset1 = 0.0f;
     cloudOffset2 = 0.0f;
     cloudOffset3 = 0.0f;
-    sunAngle = 0.0f;
-    timeOfDay = 0.0f;
-    skySpeed = 0.0005f; // faster/slower cycle
-    windTime = 0.0f;
+    sunAngle     = 0.0f;
+    timeOfDay    = 0.0f;
+    skySpeed     = 0.0005f;
+    windTime     = 0.0f;
     std::srand(std::time(0));
 
     for (int i = 0; i < 150; i++)
     {
         Star s;
-        s.x = rand() % (int)GAME_WIDTH;
-        s.y = rand() % (int)(GAME_HEIGHT * 0.9f);
+        s.x    = rand() % (int)GAME_WIDTH;
+        s.y    = rand() % (int)(GAME_HEIGHT * 0.9f);
         s.size = 1 + rand() % 3;
-
         stars.push_back(s);
     }
 }
 
 void Background::update()
 {
-    cloudOffset1 += 0.2f;  // far clouds slow
-    cloudOffset2 += 0.5f;  // mid clouds medium
-    cloudOffset3 += 1.0f;  // front clouds fast
+    cloudOffset1 += 0.2f;
+    cloudOffset2 += 0.5f;
+    cloudOffset3 += 1.0f;
 
-    if (cloudOffset1 > GAME_WIDTH) cloudOffset1 = -GAME_WIDTH;
-    if (cloudOffset2 > GAME_WIDTH) cloudOffset2 = -GAME_WIDTH;
-    if (cloudOffset3 > GAME_WIDTH) cloudOffset3 = -GAME_WIDTH;
+    if (cloudOffset1 > GAME_WIDTH)  cloudOffset1 = -GAME_WIDTH;
+    if (cloudOffset2 > GAME_WIDTH)  cloudOffset2 = -GAME_WIDTH;
+    if (cloudOffset3 > GAME_WIDTH)  cloudOffset3 = -GAME_WIDTH;
 
-    sunAngle += 0.2f;
-    windTime += 0.02f;
+    sunAngle  += 0.2f;
+    windTime  += 0.02f;
     timeOfDay += skySpeed;
 
     if (timeOfDay > 1.0f)
         timeOfDay = 0.0f;
 }
 
-void drawTree(float x, float y, float scale)
-{
-    // Trunk
-    glColor3f(0.55f, 0.27f, 0.07f);
-    glBegin(GL_QUADS);
-    glVertex2f(x, y);
-    glVertex2f(x + 20*scale, y);
-    glVertex2f(x + 20*scale, y + 100*scale);
-    glVertex2f(x, y + 100*scale);
-    glEnd();
-
-    // Leaves (3 circles)
-    glColor3f(0.2f, 0.7f, 0.2f);
-
-    for(int i=0; i<3; i++)
-    {
-        float offset = i*30*scale;
-        glBegin(GL_POLYGON);
-        for(int j=0; j<360; j++)
-        {
-            float theta = j*M_PI/180.0f;
-            glVertex2f(x + 10*scale + offset + 40*scale*cos(theta),
-                       y + 120*scale + 40*scale*sin(theta));
-        }
-        glEnd();
-    }
-}
-
+// -----------------------------------------------------------------------
+// drawCloud  (unchanged from original)
+// -----------------------------------------------------------------------
 void drawCloud(float x, float y, float scale)
 {
-    // Main white body
     glColor3f(0.92f, 0.95f, 0.98f);
-
-    for(int i=0; i<5; i++)
+    for (int i = 0; i < 5; i++)
     {
         float cx = x + (i * 30.0f * scale);
-        float cy = y + ( (i%2==0)? 10.0f*scale : 0 );
-
+        float cy = y + ((i % 2 == 0) ? 10.0f * scale : 0);
         glBegin(GL_POLYGON);
-        for(int j=0; j<=360; j+=10)
+        for (int j = 0; j <= 360; j += 10)
         {
             float theta = j * M_PI / 180.0f;
-            glVertex2f(cx + 35*scale*cos(theta),
-                       cy + 25*scale*sin(theta));
+            glVertex2f(cx + 35 * scale * cos(theta),
+                       cy + 25 * scale * sin(theta));
         }
         glEnd();
     }
-
-    // Bottom soft shadow
+    // bottom soft shadow
     glColor3f(0.75f, 0.85f, 0.92f);
-
     glBegin(GL_POLYGON);
-    for(int j=0; j<=360; j+=10)
+    for (int j = 0; j <= 360; j += 10)
     {
         float theta = j * M_PI / 180.0f;
-        glVertex2f(x + 60*scale + 60*scale*cos(theta),
-                   y - 10*scale + 20*scale*sin(theta));
+        glVertex2f(x + 60 * scale + 60 * scale * cos(theta),
+                   y - 10 * scale + 20 * scale * sin(theta));
     }
     glEnd();
 }
 
+// -----------------------------------------------------------------------
+// drawCircle  – helper used by tree canopy
+// -----------------------------------------------------------------------
+static void drawFilledCircle(float cx, float cy, float r)
+{
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex2f(cx, cy);
+    for (int i = 0; i <= 60; i++)
+    {
+        float a = 2.0f * M_PI * i / 60;
+        glVertex2f(cx + r * cos(a), cy + r * sin(a));
+    }
+    glEnd();
+}
+
+// -----------------------------------------------------------------------
+// drawTree  – branching trunk + clustered round canopy  (matches PDF)
+//
+//  anchorX/anchorY  = base of trunk (ground level)
+//  scale            = overall size multiplier
+//  leftBranch       = true  → main branch leans left  (left-side tree)
+//                     false → main branch leans right (right-side tree)
+// -----------------------------------------------------------------------
+static void drawTree(float anchorX, float anchorY, float scale, bool leftBranch)
+{
+    // ----- colours -----
+    float trunkR = 0.50f, trunkG = 0.25f, trunkB = 0.05f;
+    float leafR  = 0.15f, leafG  = 0.72f, leafB  = 0.10f;
+    float leafR2 = 0.10f, leafG2 = 0.60f, leafB2 = 0.08f;  // darker cluster
+
+    float trunkW  = 14.0f * scale;   // half-width of trunk
+    float trunkH  = 90.0f * scale;   // height of main trunk
+
+    // ---- main trunk ----
+    glColor3f(trunkR, trunkG, trunkB);
+    glBegin(GL_QUADS);
+    glVertex2f(anchorX - trunkW * 0.5f, anchorY);
+    glVertex2f(anchorX + trunkW * 0.5f, anchorY);
+    glVertex2f(anchorX + trunkW * 0.5f, anchorY + trunkH);
+    glVertex2f(anchorX - trunkW * 0.5f, anchorY + trunkH);
+    glEnd();
+
+    // ---- branch directions based on side ----
+    float brSign = leftBranch ? -1.0f : 1.0f;
+
+    // branch 1 – goes to the left (or right for right tree)
+    float b1BaseX = anchorX;
+    float b1BaseY = anchorY + trunkH * 0.65f;
+    float b1TipX  = anchorX + brSign * 55.0f * scale;
+    float b1TipY  = b1BaseY + 35.0f * scale;
+    float bw      = trunkW * 0.45f;
+
+    glColor3f(trunkR, trunkG, trunkB);
+    glBegin(GL_QUADS);
+    glVertex2f(b1BaseX - bw, b1BaseY);
+    glVertex2f(b1BaseX + bw, b1BaseY);
+    glVertex2f(b1TipX  + bw, b1TipY);
+    glVertex2f(b1TipX  - bw, b1TipY);
+    glEnd();
+
+    // branch 2 – slight lean other way (upper trunk)
+    float b2BaseX = anchorX;
+    float b2BaseY = anchorY + trunkH * 0.80f;
+    float b2TipX  = anchorX - brSign * 30.0f * scale;
+    float b2TipY  = b2BaseY + 28.0f * scale;
+    float bw2     = trunkW * 0.35f;
+
+    glBegin(GL_QUADS);
+    glVertex2f(b2BaseX - bw2, b2BaseY);
+    glVertex2f(b2BaseX + bw2, b2BaseY);
+    glVertex2f(b2TipX  + bw2, b2TipY);
+    glVertex2f(b2TipX  - bw2, b2TipY);
+    glEnd();
+
+    // ---- canopy clusters (5–6 overlapping circles) ----
+    float topX = anchorX;
+    float topY = anchorY + trunkH;
+
+    float R  = 38.0f * scale;   // main cluster radius
+    float R2 = 30.0f * scale;
+
+    // darker back clusters first
+    glColor3f(leafR2, leafG2, leafB2);
+    drawFilledCircle(topX + brSign * 48 * scale, topY + 20 * scale, R2);
+    drawFilledCircle(topX - brSign * 35 * scale, topY + 28 * scale, R2 * 0.85f);
+
+    // bright front clusters
+    glColor3f(leafR, leafG, leafB);
+    drawFilledCircle(topX,                        topY + 45 * scale, R);
+    drawFilledCircle(topX + brSign * 32 * scale,  topY + 55 * scale, R * 0.88f);
+    drawFilledCircle(topX - brSign * 28 * scale,  topY + 50 * scale, R * 0.80f);
+    drawFilledCircle(topX + brSign * 10 * scale,  topY + 70 * scale, R * 0.75f);
+
+    // branch-tip canopy clusters
+    glColor3f(leafR, leafG, leafB);
+    drawFilledCircle(b1TipX, b1TipY + 28 * scale, R * 0.65f);
+    drawFilledCircle(b2TipX, b2TipY + 22 * scale, R * 0.55f);
+}
+
+// -----------------------------------------------------------------------
+// Background::draw
+// -----------------------------------------------------------------------
 void Background::draw(int screenWidth, int screenHeight)
 {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    float nightFactor = 0.0f;
 
-    if (timeOfDay > 0.5f)
-        nightFactor = (timeOfDay - 0.5f) * 2.0f;
-    // ---------- Animated Sky Gradient ----------
-
+    // =====================================================================
+    // 1.  ANIMATED SKY GRADIENT  (unchanged)
+    // =====================================================================
     float rTop, gTop, bTop;
     float rBottom, gBottom, bBottom;
 
-// DAY COLORS
-    float dayTopR = 0.2f, dayTopG = 0.5f, dayTopB = 0.9f;
-    float dayBotR = 0.6f, dayBotG = 0.85f, dayBotB = 1.0f;
-
-// SUNSET COLORS
-    float sunTopR = 0.9f, sunTopG = 0.4f, sunTopB = 0.3f;
-    float sunBotR = 1.0f, sunBotG = 0.7f, sunBotB = 0.4f;
-
-// NIGHT COLORS
-    float nightTopR = 0.05f, nightTopG = 0.05f, nightTopB = 0.2f;
-    float nightBotR = 0.2f, nightBotG = 0.2f, nightBotB = 0.4f;
-
-// Blend logic
-    if (timeOfDay < 0.5f)
+    // 4-phase smooth cycle: Day(0.0) -> Sunset(0.25) -> Night(0.5) -> Dawn(0.75) -> Day(1.0)
+    // Each SkyKey: topR,topG,topB, botR,botG,botB
+    struct SkyKey
     {
-        float t = timeOfDay * 2.0f;
-
-        rTop = dayTopR * (1-t) + sunTopR * t;
-        gTop = dayTopG * (1-t) + sunTopG * t;
-        bTop = dayTopB * (1-t) + sunTopB * t;
-
-        rBottom = dayBotR * (1-t) + sunBotR * t;
-        gBottom = dayBotG * (1-t) + sunBotG * t;
-        bBottom = dayBotB * (1-t) + sunBotB * t;
-    }
-    else
+        float rT,gT,bT, rB,gB,bB;
+    };
+    SkyKey keys[5] =
     {
-        float t = (timeOfDay - 0.5f) * 2.0f;
+        { 0.20f, 0.50f, 0.90f,   0.60f, 0.85f, 1.00f },  // 0.00 Day
+        { 0.90f, 0.40f, 0.30f,   1.00f, 0.70f, 0.40f },  // 0.25 Sunset
+        { 0.05f, 0.05f, 0.20f,   0.15f, 0.15f, 0.35f },  // 0.50 Night
+        { 0.70f, 0.35f, 0.50f,   1.00f, 0.65f, 0.55f },  // 0.75 Dawn
+        { 0.20f, 0.50f, 0.90f,   0.60f, 0.85f, 1.00f },  // 1.00 Day (wrap)
+    };
 
-        rTop = sunTopR * (1-t) + nightTopR * t;
-        gTop = sunTopG * (1-t) + nightTopG * t;
-        bTop = sunTopB * (1-t) + nightTopB * t;
+    float phase = timeOfDay * 4.0f;
+    int   idx   = (int)phase;
+    if (idx > 3) idx = 3;
+    float t     = phase - (float)idx;
+    // smoothstep easing
+    float ts    = t * t * (3.0f - 2.0f * t);
 
-        rBottom = sunBotR * (1-t) + nightBotR * t;
-        gBottom = sunBotG * (1-t) + nightBotG * t;
-        bBottom = sunBotB * (1-t) + nightBotB * t;
-    }
+    SkyKey& A = keys[idx];
+    SkyKey& B = keys[idx + 1];
+    rTop    = A.rT*(1-ts) + B.rT*ts;
+    gTop    = A.gT*(1-ts) + B.gT*ts;
+    bTop    = A.bT*(1-ts) + B.bT*ts;
+    rBottom = A.rB*(1-ts) + B.rB*ts;
+    gBottom = A.gB*(1-ts) + B.gB*ts;
+    bBottom = A.bB*(1-ts) + B.bB*ts;
 
     glBegin(GL_QUADS);
     glColor3f(rTop, gTop, bTop);
     glVertex2f(0, screenHeight);
-
     glColor3f(rBottom, gBottom, bBottom);
     glVertex2f(0, 0);
     glVertex2f(screenWidth, 0);
-
     glColor3f(rTop, gTop, bTop);
     glVertex2f(screenWidth, screenHeight);
     glEnd();
 
-    if (timeOfDay < 0.5f)
+    // =====================================================================
+    // 2.  SUN / MOON  – sun visible in day (0–0.25 full, 0.25–0.5 fades out)
+    //                   moon visible at night (0.5 full, fades in/out)
+    // =====================================================================
+    float celestialX = screenWidth  * 0.26f;
+    float celestialY = screenHeight * 0.78f;
+
+    // Sun: fully visible 0..0.2, fades out 0.2..0.3, hidden 0.3..0.8, fades in 0.8..1.0
+    float sunAlpha = 0.0f;
+    if      (timeOfDay < 0.20f) sunAlpha = 1.0f;
+    else if (timeOfDay < 0.30f) sunAlpha = 1.0f - (timeOfDay - 0.20f) / 0.10f;
+    else if (timeOfDay > 0.80f) sunAlpha = (timeOfDay - 0.80f) / 0.20f;
+
+    if (sunAlpha > 0.0f)
     {
-        // -------- DRAW SUN --------
-        glColor3f(1.0f, 0.8f, 0.2f);
-        float sunX = screenWidth * 0.15f;
-        float sunY = screenHeight * 0.75f;
+        glColor4f(1.0f, 0.8f, 0.2f, sunAlpha);
         glBegin(GL_POLYGON);
         for (int i = 0; i <= 360; i += 10)
         {
             float theta = i * M_PI / 180.0f;
-            glVertex2f(sunX + 40*cos(theta),
-                       sunY + 40*sin(theta));
+            glVertex2f(celestialX + 40*cos(theta), celestialY + 40*sin(theta));
         }
         glEnd();
     }
-    else
+
+    // Moon: fades in 0.4..0.5, fully visible 0.5..0.7, fades out 0.7..0.8
+    float moonAlpha = 0.0f;
+    if      (timeOfDay > 0.40f && timeOfDay < 0.50f) moonAlpha = (timeOfDay - 0.40f) / 0.10f;
+    else if (timeOfDay >= 0.50f && timeOfDay <= 0.70f) moonAlpha = 1.0f;
+    else if (timeOfDay > 0.70f && timeOfDay < 0.80f) moonAlpha = 1.0f - (timeOfDay - 0.70f) / 0.10f;
+
+    if (moonAlpha > 0.0f)
     {
-        // -------- DRAW MOON --------
-        glColor3f(0.9f, 0.9f, 1.0f);
-        float sunX = screenWidth * 0.15f;
-        float sunY = screenHeight * 0.75f;
+        // Full yellow disc
+        glColor4f(1.0f, 0.85f, 0.0f, moonAlpha);
         glBegin(GL_POLYGON);
-        for (int i = 0; i <= 360; i += 10)
+        for (int i = 0; i <= 360; i += 5)
         {
             float theta = i * M_PI / 180.0f;
-            glVertex2f(sunX + 35*cos(theta),
-                       sunY + 35*sin(theta));
+            glVertex2f(celestialX + 38*cos(theta), celestialY + 38*sin(theta));
         }
         glEnd();
-
-        // Crescent cut
-        glColor3f(0.05f, 0.05f, 0.2f);
-
+        // Crescent cut-out
+        glColor4f(rTop*0.9f+0.05f, gTop*0.9f+0.05f, bTop*0.9f+0.15f, moonAlpha);
         glBegin(GL_POLYGON);
-        for (int i = 0; i <= 360; i += 10)
+        for (int i = 0; i <= 360; i += 5)
         {
             float theta = i * M_PI / 180.0f;
-            glVertex2f(sunX + 25*cos(theta) + 10,
-                       sunY + 30*sin(theta));
+            glVertex2f(celestialX + 30*cos(theta) + 18, celestialY + 32*sin(theta));
         }
         glEnd();
     }
-    // -------- STARS --------
-  if (timeOfDay > 0.5f)
-{
-    float nightFactor = (timeOfDay - 0.5f) * 2.0f;
 
-    glColor4f(1.0f, 1.0f, 1.0f, nightFactor);
+    // =====================================================================
+    // 3.  STARS – fade in during night phase (0.45..0.55 in, 0.65..0.75 out)
+    // =====================================================================
+    float starAlpha = 0.0f;
+    if      (timeOfDay > 0.45f && timeOfDay < 0.55f) starAlpha = (timeOfDay - 0.45f) / 0.10f;
+    else if (timeOfDay >= 0.55f && timeOfDay <= 0.65f) starAlpha = 1.0f;
+    else if (timeOfDay > 0.65f && timeOfDay < 0.75f) starAlpha = 1.0f - (timeOfDay - 0.65f) / 0.10f;
 
-    for (auto &s : stars)
+    if (starAlpha > 0.0f)
     {
-        glBegin(GL_QUADS);
-            glVertex2f(s.x, s.y);
+        glColor4f(1.0f, 1.0f, 1.0f, starAlpha);
+        for (auto& s : stars)
+        {
+            glBegin(GL_QUADS);
+            glVertex2f(s.x,          s.y);
             glVertex2f(s.x + s.size, s.y);
             glVertex2f(s.x + s.size, s.y + s.size);
-            glVertex2f(s.x, s.y + s.size);
-        glEnd();
+            glVertex2f(s.x,          s.y + s.size);
+            glEnd();
+        }
     }
-}
-    // ---------- Far Mountains ----------
-    glColor3f(0.70f, 0.75f, 0.85f);
 
+    // =====================================================================
+    // 4.  MOUNTAINS – 5 peaks, all strictly inside screen bounds
+    //     Base at 42 %H. Peaks named for clarity.
+    // =====================================================================
+
+    float mBase = screenHeight * 0.42f;
+
+    // Named peak positions
+    float m_farL_x = screenWidth * 0.20f,  m_farL_y = screenHeight * 0.78f;
+    float m_farR_x = screenWidth * 0.63f,  m_farR_y = screenHeight * 0.74f;
+    float m_fntL_x = screenWidth * 0.13f,  m_fntL_y = screenHeight * 0.87f;
+    float m_fntC_x = screenWidth * 0.48f,  m_fntC_y = screenHeight * 0.91f;
+    float m_fntR_x = screenWidth * 0.78f,  m_fntR_y = screenHeight * 0.83f;
+
+    // Base extents (left foot, right foot)
+    float m_farL_l = screenWidth * 0.02f,  m_farL_r = screenWidth * 0.38f;
+    float m_farR_l = screenWidth * 0.47f,  m_farR_r = screenWidth * 0.80f;
+    float m_fntL_l = screenWidth * 0.00f,  m_fntL_r = screenWidth * 0.28f;
+    float m_fntC_l = screenWidth * 0.28f,  m_fntC_r = screenWidth * 0.70f;
+    float m_fntR_l = screenWidth * 0.67f,  m_fntR_r = screenWidth * 1.00f;
+
+    // Far-back (lighter grey)
+    glColor3f(0.74f, 0.78f, 0.88f);
     glBegin(GL_TRIANGLES);
-    glVertex2f(screenWidth * 0.1f, screenHeight * 0.4f);
-    glVertex2f(screenWidth * 0.25f, screenHeight * 0.65f);
-    glVertex2f(screenWidth * 0.4f, screenHeight * 0.4f);
-
-    glVertex2f(screenWidth * 0.35f, screenHeight * 0.4f);
-    glVertex2f(screenWidth * 0.55f, screenHeight * 0.7f);
-    glVertex2f(screenWidth * 0.75f, screenHeight * 0.4f);
+    glVertex2f(m_farL_l, mBase);
+    glVertex2f(m_farL_x, m_farL_y);
+    glVertex2f(m_farL_r, mBase);
+    glVertex2f(m_farR_l, mBase);
+    glVertex2f(m_farR_x, m_farR_y);
+    glVertex2f(m_farR_r, mBase);
     glEnd();
 
-    // ---------- Mid Mountains ----------
-    glColor3f(0.55f, 0.65f, 0.80f);
-
+    // Front (darker grey)
+    glColor3f(0.53f, 0.58f, 0.70f);
     glBegin(GL_TRIANGLES);
-    glVertex2f(screenWidth * 0.0f, screenHeight * 0.4f);
-    glVertex2f(screenWidth * 0.2f, screenHeight * 0.6f);
-    glVertex2f(screenWidth * 0.4f, screenHeight * 0.4f);
-
-    glVertex2f(screenWidth * 0.5f, screenHeight * 0.4f);
-    glVertex2f(screenWidth * 0.7f, screenHeight * 0.6f);
-    glVertex2f(screenWidth * 0.9f, screenHeight * 0.4f);
+    glVertex2f(m_fntL_l, mBase);
+    glVertex2f(m_fntL_x, m_fntL_y);
+    glVertex2f(m_fntL_r, mBase);
+    glVertex2f(m_fntC_l, mBase);
+    glVertex2f(m_fntC_x, m_fntC_y);
+    glVertex2f(m_fntC_r, mBase);
+    glVertex2f(m_fntR_l, mBase);
+    glVertex2f(m_fntR_x, m_fntR_y);
+    glVertex2f(m_fntR_r, mBase);
     glEnd();
 
-    // ---------- Back Grass ----------
-    glColor3f(0.55f, 0.85f, 0.35f);
+    // Black outlines on all 3 front mountains
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glLineWidth(2.0f);
+    glBegin(GL_LINE_STRIP);
+    glVertex2f(m_fntL_l, mBase);
+    glVertex2f(m_fntL_x, m_fntL_y);
+    glVertex2f(m_fntL_r, mBase);
+    glEnd();
+    glBegin(GL_LINE_STRIP);
+    glVertex2f(m_fntC_l, mBase);
+    glVertex2f(m_fntC_x, m_fntC_y);
+    glVertex2f(m_fntC_r, mBase);
+    glEnd();
+    glBegin(GL_LINE_STRIP);
+    glVertex2f(m_fntR_l, mBase);
+    glVertex2f(m_fntR_x, m_fntR_y);
+    glVertex2f(m_fntR_r, mBase);
+    glEnd();
+
+    // =====================================================================
+    // 5.  BACK GRASS FILL  (dark olive, fills mountain base down to ground)
+    // =====================================================================
+    glColor3f(0.38f, 0.55f, 0.18f);
     glBegin(GL_QUADS);
-    glVertex2f(0, 0);
+    glVertex2f(0,           0);
     glVertex2f(screenWidth, 0);
-    glVertex2f(screenWidth, screenHeight * 0.4f);
-    glVertex2f(0, screenHeight * 0.4f);
+    glVertex2f(screenWidth, mBase);
+    glVertex2f(0,           mBase);
     glEnd();
 
-// ---------- Front Hill Curve ----------
-    glColor3f(0.45f, 0.75f, 0.25f);
+    // =====================================================================
+    // 6.  FOREGROUND HILL  – low, wide, flat-topped mound (black outline)
+    //     Peak only ~20% above its base, centred ~50%W
+    //     Uses a wide flat ellipse arc so it doesn't climb too high
+    // =====================================================================
+    float hillCX   = screenWidth  * 0.50f;
+    float hillBaseY = screenHeight * 0.30f;  // centre of ellipse (arc top here)
+    float hillRX   = screenWidth  * 0.68f;   // very wide
+    float hillRY   = screenHeight * 0.18f;   // LOW – keeps hill flat
+
+    glColor3f(0.33f, 0.55f, 0.13f);  // dark mid-green hill body
+
     glBegin(GL_POLYGON);
-    for (int i = 0; i <= 180; i++)
+    glVertex2f(0, 0);
+    for (int i = 180; i >= 0; i--)
     {
         float theta = i * M_PI / 180.0f;
-        float x = screenWidth/2 + (screenWidth/2) * cos(theta);
-        float y = screenHeight * 0.35f + (screenHeight * 0.15f) * sin(theta);
-        glVertex2f(x, y);
+        float px = hillCX + hillRX * cos(theta);
+        float py = hillBaseY + hillRY * sin(theta);
+        glVertex2f(px, py);
+    }
+    glVertex2f(screenWidth, 0);
+    glEnd();
+
+    // Thick dark outline on hill crest
+    glColor3f(0.05f, 0.08f, 0.02f);
+    glLineWidth(3.0f);
+    glBegin(GL_LINE_STRIP);
+    for (int i = 180; i >= 0; i--)
+    {
+        float theta = i * M_PI / 180.0f;
+        float px = hillCX + hillRX * cos(theta);
+        float py = hillBaseY + hillRY * sin(theta);
+        glVertex2f(px, py);
     }
     glEnd();
 
+    // =====================================================================
+    // 7.  BRIGHT GREEN GROUND  – cosine-curve top edge with dark outline
+    // =====================================================================
+    glColor3f(0.22f, 0.75f, 0.10f);
 
+    glBegin(GL_POLYGON);
+    glVertex2f(0, 0);
+    glVertex2f(screenWidth, 0);
+    for (int i = 100; i >= 0; i--)
+    {
+        float t  = (float)i / 100.0f;
+        float px = t * screenWidth;
+        float py = screenHeight * (0.10f + 0.06f * cos(t * M_PI));
+        glVertex2f(px, py);
+    }
+    glEnd();
+
+    // Dark outline along top edge of ground strip
+    glColor3f(0.05f, 0.08f, 0.02f);
+    glLineWidth(3.0f);
+    glBegin(GL_LINE_STRIP);
+    for (int i = 0; i <= 100; i++)
+    {
+        float t  = (float)i / 100.0f;
+        float px = t * screenWidth;
+        float py = screenHeight * (0.10f + 0.06f * cos(t * M_PI));
+        glVertex2f(px, py);
+    }
+    glEnd();
+
+    // =====================================================================
+    // 8.  CLOUDS  (unchanged)
+    // =====================================================================
     glPushMatrix();
     glTranslatef(-cloudOffset1, 0, 0);
-
     float floatOffset = sin(windTime) * 9.0f;
-
-    drawCloud(100, screenHeight*0.85f + floatOffset, 0.5f);
-    drawCloud(400, screenHeight*0.80f + floatOffset, 0.6f);
-    drawCloud(700, screenHeight*0.88f + floatOffset, 0.4f);
-
+    drawCloud(100, screenHeight * 0.85f + floatOffset, 0.5f);
+    drawCloud(400, screenHeight * 0.80f + floatOffset, 0.6f);
+    drawCloud(700, screenHeight * 0.88f + floatOffset, 0.4f);
     glPopMatrix();
-
 
     glPushMatrix();
     glTranslatef(-cloudOffset2, 0, 0);
     float float2 = sin(windTime + 1.5f) * 7.0f;
-    drawCloud(50, screenHeight*0.70f + float2, 0.8f);
-    drawCloud(350, screenHeight*0.75f + float2, 0.9f);
-    drawCloud(750, screenHeight*0.72f + float2, 0.7f);
-
+    drawCloud(50,  screenHeight * 0.70f + float2, 0.8f);
+    drawCloud(350, screenHeight * 0.75f + float2, 0.9f);
+    drawCloud(750, screenHeight * 0.72f + float2, 0.7f);
     glPopMatrix();
 
+    // =====================================================================
+    // 9.  TREES
+    //     The trees sit at the BASE/FOOT of the hill slopes, not the crest.
+    //     Left tree  : x = ~20 %W  →  low on the left slope
+    //     Right tree : x = ~87 %W  →  low on the right slope near screen edge
+    //     Y is computed from the hill ellipse so they sit flush on the slope.
+    // =====================================================================
+    auto hillSurfaceY = [&](float px) -> float
+    {
+        float dx = (px - hillCX) / hillRX;
+        if (dx <= -1.0f || dx >= 1.0f) return hillBaseY;
+        return hillBaseY + hillRY * sqrt(1.0f - dx * dx);
+    };
 
+    // Left tree – x at 20 %W (low on the left hill foot)
+    float leftTreeX = screenWidth * 0.20f;
+    float leftTreeY = hillSurfaceY(leftTreeX);
+    drawTree(leftTreeX, leftTreeY, 0.90f, true);
 
-    /* ---------- Animated Cloud ----------
-    glPushMatrix();
-    glTranslatef(-cloudOffset3, 0, 0);
-    float float1 = sin(windTime) * 5.0f;
-    drawCloud(0, screenHeight*0.55f + float1, 1.2f);
-    drawCloud(500, screenHeight*0.60f + float1, 1.1f);
-
-    glPopMatrix();
-
-        glPushMatrix();
-        glTranslatef(cloudOffset, 0, 0);
-
-        float baseY = screenHeight * 0.7f;
-        glColor3f(1.0f, 1.0f, 1.0f);
-
-        for(int c=0; c<3; c++)
-        {
-            float cx = screenWidth * 0.2f + c*40;
-            glBegin(GL_POLYGON);
-            for(int i=0; i<360; i++)
-            {
-                float theta = i*M_PI/180.0f;
-                glVertex2f(cx + 30*cos(theta),
-                           baseY + 20*sin(theta));
-            }
-            glEnd();
-        }
-
-        glPopMatrix();*/
-
-
-
-    // ---------- Trees ----------
-    drawTree(screenWidth * 0.8f, screenHeight * 0.25f, 1.5f); // Big right
-    drawTree(screenWidth * 0.1f, screenHeight * 0.25f, 0.8f); // Small left
-    drawTree(screenWidth * 0.5f, screenHeight * 0.35f, 0.4f); // Far small tree
-
-
+    // Right tree – x at 87 %W (low on the right hill foot, near edge)
+    float rightTreeX = screenWidth * 0.87f;
+    float rightTreeY = hillSurfaceY(rightTreeX);
+    drawTree(rightTreeX, rightTreeY, 1.60f, false);
 }
