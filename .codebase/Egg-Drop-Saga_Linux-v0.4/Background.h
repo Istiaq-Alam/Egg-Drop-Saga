@@ -2,10 +2,9 @@
 #define BACKGROUND_H
 #include <vector>
 
-
-
 class Background {
 private:
+    // Kept for structural compatibility – unused in barn scene
     float cloudOffset;
     float cloudOffset1;
     float cloudOffset2;
@@ -14,13 +13,9 @@ private:
     float timeOfDay;
     float skySpeed;
     float windTime;
-    struct Star {
-    float x;
-    float y;
-    float size;
-};
 
-std::vector<Star> stars;
+    struct Star { float x, y, size; };
+    std::vector<Star> stars;
 
 public:
     Background();
