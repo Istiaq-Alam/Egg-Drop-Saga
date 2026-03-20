@@ -13,7 +13,7 @@
 
 ---
 
-![Version](https://img.shields.io/badge/version-v0.2-blue)
+![Version](https://img.shields.io/badge/version-v0.4-blue)
 ![Language](https://img.shields.io/badge/language-C++-00599C)
 ![Graphics](https://img.shields.io/badge/OpenGL-GLUT-red)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen)
@@ -26,7 +26,7 @@
 ## 🎮 Game Overview
 
 **Egg Drop Saga** is a 2D arcade-style game where chickens sitting on a wire drop eggs one at a time.  
-The player controls a bucket and must catch the falling eggs before they hit the ground.
+The player controls a bucket and must catch the falling eggs before they hit the ground. 
 
 If an egg touches the ground, the player loses a life.  
 The game ends when all 3 lives are lost.
