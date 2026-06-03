@@ -205,7 +205,7 @@ void Game::render()
 
     else if (state == PLAYING)
     {
-        float wireY = GAME_HEIGHT * 0.68f;
+        float wireY = GAME_HEIGHT * 0.65f;
 
         glColor3f(0.6f, 0.3f, 0.2f);
         glLineWidth(1);

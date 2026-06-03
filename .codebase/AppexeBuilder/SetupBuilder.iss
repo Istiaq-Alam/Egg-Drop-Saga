@@ -3,10 +3,10 @@
 ; Non-commercial use only
 
 #define MyAppName "Egg Drop Saga"
-#define MyAppVersion "0.4"
+#define MyAppVersion "0.5"
 #define MyAppPublisher "Istiak Alam"
 #define MyAppURL "https://github.com/Istiaq-Alam/Egg-Drop-Saga"
-#define MyAppExeName "Egg-Drop-Saga-v0.4.exe"
+#define MyAppExeName "Egg-Drop-Saga-v0.5.exe"
 #define MyAppAssocName "NDUB"
 #define MyAppAssocExt ".CSE-Student"
 #define MyAppAssocKey StringChange(MyAppAssocName, " ", "") + MyAppAssocExt
