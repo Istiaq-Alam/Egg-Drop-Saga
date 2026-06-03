@@ -616,47 +616,6 @@ void Background::draw(int W, int H)
         glEnd();
     }
 
-    // ═══════════════════════════════════════════════════════════
-    // 3.  MAIN HORIZONTAL BEAM  (red-circled in reference image)
-    //     A thick dark-wood beam running full width near top
-    // ═══════════════════════════════════════════════════════════
-    float beamY  = H * 0.74f;
-    float beamH  = H * 0.045f;
-    // Beam fill – dark warm wood
-    glColor3f(0.42f, 0.25f, 0.08f);
-    glBegin(GL_QUADS);
-        glVertex2f(0,        beamY);
-        glVertex2f((float)W, beamY);
-        glVertex2f((float)W, beamY + beamH);
-        glVertex2f(0,        beamY + beamH);
-    glEnd();
-    // Top highlight
-    glColor3f(0.55f, 0.35f, 0.14f);
-    glBegin(GL_QUADS);
-        glVertex2f(0,        beamY + beamH - 4);
-        glVertex2f((float)W, beamY + beamH - 4);
-        glVertex2f((float)W, beamY + beamH);
-        glVertex2f(0,        beamY + beamH);
-    glEnd();
-    // Bottom shadow
-    glColor3f(0.28f, 0.15f, 0.04f);
-    glBegin(GL_QUADS);
-        glVertex2f(0,        beamY);
-        glVertex2f((float)W, beamY);
-        glVertex2f((float)W, beamY + 4);
-        glVertex2f(0,        beamY + 4);
-    glEnd();
-    // Outline
-    glColor3f(0.20f, 0.10f, 0.02f);
-    glLineWidth(2.0f);
-    glBegin(GL_LINE_LOOP);
-        glVertex2f(0,        beamY);
-        glVertex2f((float)W, beamY);
-        glVertex2f((float)W, beamY + beamH);
-        glVertex2f(0,        beamY + beamH);
-    glEnd();
-    // Plank texture on beam
-    woodPlanksV(0, beamY, (float)W, beamH, 55.0f, 0.32f, 0.18f, 0.05f);
 
     // ═══════════════════════════════════════════════════════════
     // 4.  SIDE WALLS  (left and right, converging perspective)
@@ -896,6 +855,51 @@ void Background::draw(int W, int H)
     glBegin(GL_LINES);
         glVertex2f(beamPeakX, beamPeakY); glVertex2f(beamRightX, beamFeetY);
     glEnd();
+
+
+    // ═══════════════════════════════════════════════════════════
+    // 3.  MAIN HORIZONTAL BEAM
+    //     A thick dark-wood beam running full width near top
+    // ═══════════════════════════════════════════════════════════
+    float beamY  = H * 0.74f;
+    float beamH  = H * 0.045f;
+    // Beam fill – dark warm wood
+    glColor3f(0.42f, 0.25f, 0.08f);
+    glBegin(GL_QUADS);
+        glVertex2f(0,        beamY);
+        glVertex2f((float)W, beamY);
+        glVertex2f((float)W, beamY + beamH);
+        glVertex2f(0,        beamY + beamH);
+    glEnd();
+    // Top highlight
+    glColor3f(0.55f, 0.35f, 0.14f);
+    glBegin(GL_QUADS);
+        glVertex2f(0,        beamY + beamH - 4);
+        glVertex2f((float)W, beamY + beamH - 4);
+        glVertex2f((float)W, beamY + beamH);
+        glVertex2f(0,        beamY + beamH);
+    glEnd();
+    // Bottom shadow
+    glColor3f(0.28f, 0.15f, 0.04f);
+    glBegin(GL_QUADS);
+        glVertex2f(0,        beamY);
+        glVertex2f((float)W, beamY);
+        glVertex2f((float)W, beamY + 4);
+        glVertex2f(0,        beamY + 4);
+    glEnd();
+    // Outline
+    glColor3f(0.20f, 0.10f, 0.02f);
+    glLineWidth(2.0f);
+    glBegin(GL_LINE_LOOP);
+        glVertex2f(0,        beamY);
+        glVertex2f((float)W, beamY);
+        glVertex2f((float)W, beamY + beamH);
+        glVertex2f(0,        beamY + beamH);
+    glEnd();
+    // Plank texture on beam
+    woodPlanksV(0, beamY, (float)W, beamH, 55.0f, 0.32f, 0.18f, 0.05f);
+
+
 
     // ═══════════════════════════════════════════════════════════
     // 10. LEFT SHELF + MILK CANS
