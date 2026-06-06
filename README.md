@@ -10,7 +10,7 @@
 
 > A 2D Orthographic Arcade Game built using C++ and OpenGL (GLUT)  
 > Developed as part of a Computer Graphics course project.
-
+    
 ---
 
 ![Version](https://img.shields.io/badge/version-v0.4-blue)
