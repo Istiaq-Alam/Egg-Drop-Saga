@@ -9,7 +9,6 @@ dist/
 # =========================
 # Executables
 # =========================
-*.exe
 *.out
 *.app
 *.dll
@@ -35,11 +34,11 @@ dist/
 # =========================
 # CodeBlocks files
 # =========================
-*.layout
-*.depend
-*.cbp.bak
-*.workspace
-*.autosave
+# *.layout
+# *.depend
+# *.cbp.bak
+# *.workspace
+# *.autosave
 
 # =========================
 # CMake (if ever used later)
