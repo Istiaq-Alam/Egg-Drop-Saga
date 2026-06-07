@@ -5,7 +5,7 @@
 #include <ctime>
 
 const float GW = 800.0f;
-const float GH = 720.0f;
+const float GH = 640.0f;
 
 // ─────────────────────────────────────────────────────────────
 // Helpers
@@ -861,7 +861,7 @@ void Background::draw(int W, int H)
     // 3.  MAIN HORIZONTAL BEAM
     //     A thick dark-wood beam running full width near top
     // ═══════════════════════════════════════════════════════════
-    float beamY  = H * 0.74f;
+    float beamY  = H * 0.64f;
     float beamH  = H * 0.045f;
     // Beam fill – dark warm wood
     glColor3f(0.42f, 0.25f, 0.08f);
