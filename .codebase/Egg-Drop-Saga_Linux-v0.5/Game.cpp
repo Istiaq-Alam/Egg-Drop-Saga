@@ -207,6 +207,7 @@ void Game::render()
     {
         float wireY = GAME_HEIGHT * 0.65f;
 
+        // OLD CHICKEN PLATFORM
         /*glColor3f(0.6f, 0.3f, 0.2f);
         glLineWidth(1);
         glBegin(GL_QUADS);
