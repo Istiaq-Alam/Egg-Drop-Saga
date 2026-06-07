@@ -1,5 +1,5 @@
 /*
- * Egg-Drop-Saga Game
+ * Egg-Catcher Game
  *
  * Written by Istiak Alam [2026]
  *
@@ -79,7 +79,7 @@ int main(int argc, char** argv) {
     glutInitWindowPosition(300, 0);
 
     glutReshapeFunc(reshape);
-    glutCreateWindow("Egg Drop Saga - v0.5 - Developed By Istiak Alam");
+    glutCreateWindow("Egg Drop Saga - v0.4 - Developed By Istiak Alam");
 
     //Icon setup
     HWND hwnd = GetActiveWindow();

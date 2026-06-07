@@ -207,14 +207,15 @@ void Game::render()
     {
         float wireY = GAME_HEIGHT * 0.65f;
 
-        glColor3f(0.6f, 0.3f, 0.2f);
+        // OLD CHICKEN PLATFORM
+        /*glColor3f(0.6f, 0.3f, 0.2f);
         glLineWidth(1);
         glBegin(GL_QUADS);
         glVertex2f(GAME_WIDTH * 0.01f, wireY);
         glVertex2f(GAME_WIDTH * 0.99f, wireY);
         glVertex2f(GAME_WIDTH * 0.99f, wireY+20);
         glVertex2f(GAME_WIDTH * 0.01f, wireY+20);
-        glEnd();
+        glEnd();*/
 
         //Draw Chicken
         for (auto& c : chickens)
