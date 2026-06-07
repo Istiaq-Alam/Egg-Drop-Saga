@@ -28,7 +28,7 @@ bool AudioManager::init() {
     Mix_AllocateChannels(16);
 
     //  Music lower
-    Mix_VolumeMusic(50);   // 0–128
+    Mix_VolumeMusic(50);   // 0ï¿½128
 
     std::cout << "SDL Audio Init Success\n";
     return true;

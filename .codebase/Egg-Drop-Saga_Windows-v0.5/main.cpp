@@ -79,7 +79,7 @@ int main(int argc, char** argv) {
     glutInitWindowPosition(300, 0);
 
     glutReshapeFunc(reshape);
-    glutCreateWindow("Egg Drop Saga - v0.5 - Developed By Istiak Alam");
+    glutCreateWindow("Egg Drop Saga - v0.5 - Developed By Istiak-Alam & Tanveer Ratul");
 
     //Icon setup
     HWND hwnd = GetActiveWindow();

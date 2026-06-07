@@ -143,4 +143,3 @@ void Home::drawInstructions()
     for (int i = 0; i < strlen(line3); i++)
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, line3[i]);
 }
-
