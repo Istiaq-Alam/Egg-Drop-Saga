@@ -58,8 +58,8 @@ void AudioManager::load()
     lifeLost = Mix_LoadWAV((basePath + "sounds/life_lost.wav").c_str());
 
     // SFX louder than music
-    Mix_VolumeChunk(chickenDrop, 100);
-    Mix_VolumeChunk(catchSound, 110);
+    Mix_VolumeChunk(chickenDrop, 90);
+    Mix_VolumeChunk(catchSound, 90);
     Mix_VolumeChunk(eggBreak, 115);
     Mix_VolumeChunk(lifeLost, 100);
 }
