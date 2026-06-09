@@ -1,0 +1,753 @@
+% VLSI LAB REPORT STRUCTURE TEMPLATE
+% CREATED BY ISTIAK ALAM (CSE-20)
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\newfontfamily\hackfont{Hack}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{caption}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue}
+\renewcommand{\contentsname}{Table of Contents}
+\titleformat{\chapter}
+  {\centering\Huge\bfseries}  % centering Chapter Name
+  {Chapter \thechapter}               
+  {1em}
+  {} 
+
+
+\begin{document}
+
+% ---------------- COVER PAGE ----------------
+
+\begin{titlepage}
+\begin{center}
+    \includegraphics[width=0.35\textwidth]{assets/logo.png} \\
+    \vspace{0.5cm}
+    \textbf{\Huge \textcolor{cyan}{NOTRE DAME} \textcolor{cyan}{UNIVERSITY}} \\
+    \vspace{0.5cm}
+    \textbf{\Huge \textcolor{orange}{BANGLADESH}} \\
+
+    \vspace{0.9cm}
+    \textbf{\Huge \underline{Computer Graphics Lab Project Report}} \\
+
+    \vspace{1.5em}
+    \begin{flushleft} 
+    	\textbf{\Large Course Code: CSE-4204} \\
+		\vspace{0.3cm}
+        \textbf{\Large Course Title: Computer Graphics Lab} \\
+        \vspace{0.3cm}
+        \textbf{\Large Project Title: Egg Drop Saga (Game)} \\
+    \end{flushleft}
+
+    \vspace{1em}
+    \begin{flushleft}
+        \textbf{\Huge \textcolor{blue}{Submitted by:}} \\
+        \vspace{0.3cm}
+        \textbf{\Large Name: Istiak Alam} \\
+        \vspace{0.3cm}
+        \textbf{\Large ID: 0692230005101005} \\
+        \vspace{0.3cm}
+        \textbf{\Large Name: Tanvir Hossain Ratul} \\
+        \vspace{0.3cm}
+        \textbf{\Large ID: 0692230005101004} \\
+		\vspace{0.3cm}
+        \textbf{\Large Batch: CSE-20} \\
+        \vspace{0.5cm}
+        \textbf{\Large Submission Date: }{\Large \textbf{\today}\par}
+    \end{flushleft}
+
+    \vfill
+    \begin{flushleft}
+        \textbf{\Huge \textcolor{blue}{Submitted to:}} \\
+        \vspace{0.3cm}
+        \textbf{\Large Humayara Binte Rashid} \\
+        \vspace{0.3cm}
+        \textbf{\Large Lecturer, Dept. of CSE} \\
+        \vspace{0.3cm}
+        \textbf{\Large Notre Dame University Bangladesh}
+    \end{flushleft}
+
+\end{center}
+\end{titlepage}
+
+% Table of Contents
+\tableofcontents
+\thispagestyle{empty}
+\clearpage
+\pagenumbering{arabic}
+
+% Header Sections 
+\pagestyle{fancy}
+\fancyhf{} 							% Header Middle
+\lhead{Computer Graphics Lab Project Report}
+\rhead{Introduction}
+\rfoot{\thepage}
+
+\chapter*{\center Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+\thispagestyle{empty}
+
+Egg Drop Saga is a 2D arcade-style game developed using OpenGL and GLUT in C++ as part of the Computer Graphics Laboratory course. The project demonstrates the practical application of fundamental computer graphics concepts including coordinate systems, geometric modeling, transformations, animation, rendering pipelines, and user interaction. In the game, a player controls a bucket to catch eggs dropped by moving chickens while avoiding missed catches that reduce the player's lives. The project incorporates real-time animation, keyboard-based controls, collision detection, score tracking, audio integration, and multiple game states such as menu, gameplay, pause, and game-over screens. The visual elements are created using OpenGL primitive drawing techniques and coordinate-based object construction. The primary objective of the project is to apply theoretical graphics concepts in an interactive environment while gaining experience in event-driven programming and real-time rendering. The final implementation successfully demonstrates the integration of computer graphics principles with game development techniques.
+
+
+\chapter{Introduction}
+%\addcontentsline{toc}{chapter}{Chapter-01 Introduction}
+
+
+\section{Project Background}
+
+Computer Graphics is a branch of computer science that focuses on the creation, manipulation, and rendering of visual content using computational techniques. OpenGL is one of the most widely used graphics libraries for developing interactive graphical applications and games. As part of the Computer Graphics Laboratory course, students are encouraged to apply theoretical concepts such as coordinate systems, geometric modeling, transformations, animation, rendering, and event handling in a practical project.\\
+
+The project \textbf{Egg Drop Saga} is a 2D arcade-style game developed using C++ and OpenGL (GLUT). The game simulates a farm environment where chickens continuously move and drop eggs from the top of the screen. The player controls a bucket positioned at the bottom of the screen and must catch the falling eggs to earn points while avoiding missed catches that reduce the player's lives. The project integrates graphical object modeling, real-time animation, collision detection, user interaction, and audio feedback into a complete gaming experience.
+
+\section{Motivation}
+
+The inspiration for this project came from classic arcade catching games that emphasize quick reaction and hand-eye coordination. These games are simple in design yet provide an engaging user experience through continuous movement, scoring systems, and increasing difficulty. \\
+
+From an academic perspective, the project offered an opportunity to implement various computer graphics concepts learned throughout the course in a practical environment. Developing a complete game using OpenGL allowed the team to gain hands-on experience with rendering pipelines, object-oriented design, animation techniques, coordinate-based drawing, and event-driven programming while creating an enjoyable interactive application.
+
+\newpage
+\section{Objectives}
+The primary objectives of the Egg Drop Saga project are:
+
+\begin{itemize}
+\item To develop a fully functional 2D game using OpenGL and GLUT.
+
+\item To understand and implement the OpenGL rendering pipeline.
+
+\item To apply coordinate-based geometric modeling for creating game objects such as chickens, eggs, buckets, and backgrounds.
+
+\item To implement real-time animation for moving objects within the game environment.
+
+\item To develop keyboard-based user interaction for controlling game elements.
+
+\item To implement collision detection between falling eggs and the player's bucket.
+
+\item To create a score and life management system.
+
+\item To integrate sound effects and background music for enhanced gameplay.
+
+\item To gain practical experience in object-oriented game development using C++.
+
+
+\end{itemize}
+
+\section{Scope}
+
+The scope of the project includes the design and implementation of a complete 2D arcade game using OpenGL. The project covers graphical object creation, rendering, animation, collision detection, score management, sound integration, and user interaction through keyboard controls.\\
+
+The game contains multiple functional components including a main menu, gameplay screen, pause system, score tracking, life management, and game-over interface. All visual elements are generated using OpenGL primitives and coordinate-based drawing techniques rather than external game engines.\\
+
+However, the project does not include advanced features such as 3D graphics, online multiplayer support, artificial intelligence opponents, physics engines, networking systems, or database integration. The focus remains on demonstrating core computer graphics principles within a 2D interactive environment.
+
+\newpage
+\section{Tools and Libraries Used}
+
+The development of Egg Drop Saga required several software tools and libraries, which are listed below:
+
+\begin{table}[!h]
+\centering
+
+\begin{tabular}{|p{4cm}|p{8cm}|}
+\hline
+\textbf{Tool/Library} & \textbf{Purpose} \\
+\hline
+C++ & Primary programming language used for game development. \\
+\hline
+OpenGL & Graphics rendering library used for drawing and displaying visual objects. \\
+\hline
+GLUT (OpenGL Utility Toolkit) & Provides window management, event handling, keyboard input, and rendering callbacks. \\
+\hline
+SDL2\_mixer & Used for audio playback including background music and sound effects. \\
+\hline
+Code::Blocks & Integrated Development Environment (IDE) used for coding and debugging. \\
+\hline
+MinGW GCC Compiler & Compiles and links the C++ source code. \\
+\hline
+Windows Operating System & Development and testing platform. \\
+\hline
+GitHub & Version control and project collaboration. \\
+\hline
+\end{tabular}
+\caption{Tools and Libraries Used}
+\end{table}
+
+The combination of these tools enabled the development of an interactive OpenGL game while providing efficient debugging, code management, graphics rendering, and audio integration capabilities.
+
+
+
+\newpage
+\chapter{System Design}
+\rhead{System Design}
+
+\section{Project Structure Overview}
+
+The Egg Drop Saga project follows a modular object-oriented architecture where each major game component is implemented as an independent class. This design improves code maintainability, readability, and scalability by separating rendering, game logic, audio management, and user interface functionalities into distinct modules.
+
+The overall project directory structure is shown below:
+
+\begin{verbatim}
+Egg-Drop-Saga
+├── assets
+│   ├── egg_drop_saga.ico
+│   ├── icon.rc
+│   ├── Linker Setting.txt
+│   ├── sdl2-config
+│   └── sounds
+│       ├── bucket-catch.wav
+│       ├── chickenpokpok.wav
+│       ├── egg-broke.wav
+│       ├── gamemusic.mp3
+│       ├── gameover_music.mp3
+│       └── home_music.mp3
+│
+├── include
+│   ├── AudioManager.h
+│   ├── Background.h
+│   ├── Bucket.h
+│   ├── Chicken.h
+│   ├── Egg.h
+│   ├── Game.h
+│   └── Home.h
+│
+├── src
+│   ├── AudioManager.cpp
+│   ├── Background.cpp
+│   ├── Bucket.cpp
+│   ├── Chicken.cpp
+│   ├── Egg.cpp
+│   ├── Game.cpp
+│   └── Home.cpp
+│
+├── main.cpp
+└── Project Configuration Files
+\end{verbatim}
+
+The purpose of each major component is described below:
+
+\begin{table}[!h]
+\centering
+
+\begin{tabular}{|p{3cm}|p{10cm}|}
+\hline
+\textbf{Module} & \textbf{Responsibility} \\
+\hline
+main.cpp & Entry point of the application. Initializes OpenGL, creates the game window, registers callback functions, and starts the GLUT event loop. \\
+\hline
+Game Class & Controls the overall game state, score system, life management, collision detection, rendering coordination, and gameplay flow. \\
+\hline
+Chicken Class & Creates and animates the chickens that move horizontally and drop eggs. \\
+\hline
+Egg Class & Manages egg creation, falling animation, collision checking, and respawning logic. \\
+\hline
+Bucket Class & Represents the player-controlled bucket used to catch falling eggs. \\
+\hline
+Background Class & Draws the complete game environment including sky, ground, scenery, decorative objects, and visual layers. \\
+\hline
+Home Class & Handles the home screen, menu interface, instructions, and navigation before gameplay begins. \\
+\hline
+AudioManager Class & Controls background music, sound effects, audio loading, playback, and stopping mechanisms using SDL2\_mixer. \\
+\hline
+Assets Directory & Stores sound effects, music files, application icons, and additional project resources. \\
+\hline
+\end{tabular}
+\caption{Project Modules and Responsibilities}
+\end{table}
+
+The modular architecture ensures that graphical rendering, user interaction, animation, collision detection, and audio processing remain logically separated, making the project easier to understand, debug, and extend in future versions.
+
+
+\section{System Overview}
+
+Egg Drop Saga is implemented using an event-driven architecture based on OpenGL and GLUT. The system is organized around a central \texttt{Game} class that manages gameplay logic, rendering operations, collision detection, animation updates, score management, and state transitions.
+
+The application begins execution from \texttt{main.cpp}, where the OpenGL environment, GLUT window, audio system, and callback functions are initialized. Once initialization is complete, GLUT takes control through its event loop and continuously invokes registered callback functions.
+
+The overall execution flow is shown below:
+
+\begin{verbatim}
+main()
+|
++--> OpenGL Initialization
+|
++--> Audio Initialization
+|
++--> Game Initialization
+|
++--> Register GLUT Callbacks
+|
++--> Enter GLUT Main Loop
+|
++--> Display Callback
+|
++--> Timer Callback
+|
++--> Keyboard Callback
+|
++--> Special Key Callback
+|
++--> Reshape Callback
+\end{verbatim}
+
+The system continuously updates and renders the game at approximately 60 frames per second using a timer-based animation loop.
+
+\section{Game State Management}
+
+The game operates using a finite state machine (FSM) implemented through the \texttt{GameState} enumeration.
+
+\begin{verbatim}
+enum GameState
+{
+HOME,
+PLAYING,
+GAME_OVER
+};
+\end{verbatim}
+
+The state transitions occur as follows:
+
+\begin{verbatim}
+HOME
+|
+| Press S
+v
+PLAYING 
+|
+| Lives = 0
+v
+GAME_OVER
+|
+| Press R
+v
+HOME
+\end{verbatim}
+
+This approach simplifies gameplay management by ensuring that only the logic associated with the active state is executed.
+
+
+\section{OpenGL Rendering Pipeline}
+
+The rendering process of Egg Drop Saga follows a structured pipeline that is executed repeatedly during gameplay.
+
+\subsection*{Stage 1: Initialization}
+
+During program startup, the following operations are performed:
+
+\begin{itemize}
+\item GLUT initialization using \texttt{glutInit()}.
+\item Creation of the game window.
+\item Activation of RGB color mode.
+\item Activation of double buffering.
+\item Configuration of alpha blending.
+\item Setup of the orthographic projection.
+\item Initialization of game resources.
+\item Loading of audio files.
+\end{itemize}
+
+\subsection*{Stage 2: Input Processing}
+
+Player input is captured through GLUT callback functions.
+
+\begin{itemize}
+\item \texttt{keyboard()} handles standard keyboard input.
+\item \texttt{specialKeys()} handles arrow key input.
+\end{itemize}
+
+The input is forwarded to:
+
+\begin{verbatim}
+game.handleInput()
+game.handleSpecialInput()
+\end{verbatim}
+
+These functions update the bucket position, game state, pause state, and audio settings.
+
+\subsection*{Stage 3: Update Cycle}
+
+The timer callback executes every 16 milliseconds.
+
+\begin{verbatim}
+glutTimerFunc(16, timer, 0);
+\end{verbatim}
+
+This produces approximately:\\
+
+
+$FPS = \frac{1000}{16}
+\approx 60$\\
+
+
+During each update cycle:
+
+\begin{itemize}
+\item Background animation is updated.
+\item Home screen animation is updated.
+\item Eggs are spawned if necessary.
+\item Egg positions are updated.
+\item Collision detection is performed.
+\item Score and life counters are updated.
+\end{itemize}
+
+\subsection*{Stage 4: Rendering}
+
+The display callback invokes:
+
+\begin{verbatim}
+game.render();
+\end{verbatim}
+
+The rendering order is:
+
+\begin{enumerate}
+\item Clear frame buffer.
+\item Draw background.
+\item Draw chickens.
+\item Draw eggs.
+\item Draw bucket.
+\item Draw score text.
+\item Draw life indicators.
+\item Draw state-specific screens.
+\end{enumerate}
+
+\subsection*{Stage 5: Buffer Swapping}
+
+After rendering completes:
+
+\begin{verbatim}
+glutSwapBuffers();
+\end{verbatim}
+
+The back buffer becomes visible while the next frame is rendered in the hidden buffer.
+
+This double-buffering technique eliminates screen flickering and ensures smooth animation.
+
+
+\section{Coordinate System Design}
+
+Egg Drop Saga uses a two-dimensional orthographic coordinate system configured through:
+
+\begin{verbatim}
+gluOrtho2D(0, GAME_WIDTH, 0, GAME_HEIGHT);
+\end{verbatim}
+
+The coordinate system is defined as follows:
+
+\begin{itemize}
+\item Origin (0,0) is located at the bottom-left corner.
+\item Positive X values extend toward the right.
+\item Positive Y values extend upward.
+\item All game objects are positioned using world coordinates.
+\end{itemize}
+  
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{assets/glOrthopdf.pdf}
+    \caption{orthographics Graph of the Game Screen}
+\end{figure}
+
+Examples of object positioning:
+
+\begin{itemize}
+\item Bucket is initialized near the bottom of the screen.
+\item Chickens are positioned along the upper wire.
+\item Eggs spawn below randomly selected chickens.
+\item UI elements are positioned using fixed coordinates.
+\end{itemize}
+
+
+
+\chapter{Adder Circuits}
+\lhead{Lab-03: Adder Circuits}
+
+\section*{Introduction}
+A combinational logic circuit which is designed to add two binary digits is called as a half adder. The half adder provides the output along with a carry value (if any). The half adder circuit is designed by connecting an EX-OR gate and one AND gate. It has two input terminals and two output terminals for sum and carry.
+
+
+\section*{Objective}
+The objectives of this VLSI-Lab experiment are as follows:
+\begin{itemize}
+    \item To implement Adder Circuit using CMOS logic design methodology.
+    \item To design schematic-level Adder circuits using the DSCH2 tool.
+    \item To verify the logical correctness of the implemented circuits using truth tables.
+    \item To analyze timing diagrams to observe signal transitions and propagation behavior.
+    \item To develop a clear understanding of Adder Circuit.
+\end{itemize}
+
+\section{Half Adder Function}
+
+\subsection*{Boolean Function}
+\[
+Sum = AB' + A'B
+\]
+\[
+Carry= A⋅B
+\]
+
+\subsection*{Truth Table}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline 
+A & B & Sum & Carry \\ \hline
+0 & 0 & 0 & 0  \\
+0 & 1 & 1 & 0  \\
+1 & 0 & 1 & 0  \\
+1 & 1 & 0 & 1  \\ \hline
+\end{tabular}
+\end{center}
+\newpage
+\subsection*{Schematic Image}
+
+\begin{figure}[!h]
+\centering
+%\includegraphics[width=0.7\textwidth]{Lab-03/Half-Adder.png}
+\caption{CMOS Schematic of Half-Adder}
+\end{figure}
+
+\subsection*{Timing Diagram}
+\begin{figure}[!h]
+\centering
+%\includegraphics[width=0.5\textwidth]{Lab-03/Half-Adder-TD.png}
+\caption{Timing Diagram of Half-Adder}
+\end{figure}
+  
+
+
+\subsection*{Observation}
+The timing diagram of a half adder illustrates the sequence of operations that occur when two binary inputs are added. The diagram typically shows the timing of the XOR operation for the sum and the timing of the AND operation for the carry. The timing diagram can help in understanding the propagation delay and the timing constraints of the circuit. It is important to note that the timing diagram should be adjusted to account for the specific timing requirements of the circuit design, such as rise/fall time and maximum input frequency. 
+
+
+
+
+\chapter{Flip-Flop Circuits}
+\lhead{Lab-04: Flip-Flop Circuits}
+\section*{Introduction}
+This laboratory experiment focuses on the design and implementation of a flip-flop circuit using CMOS logic in the DSCH2 environment. Flip-flops are fundamental sequential elements used for data storage and synchronization in digital systems. In this experiment, a D Flip-Flop was designed using CMOS-based logic gates, and its functionality was verified through truth table analysis and timing simulation. The behavior of the circuit was observed with respect to clock-triggered input transitions.
+
+\section*{Objective}
+The objectives of this laboratory experiment are as follows:
+\begin{itemize}
+    \item To design and implement a flip-flop circuit using CMOS logic.
+    \item To develop schematic-level circuits using the DSCH2 tool.
+    \item To derive and verify the truth table of the flip-flop from simulation.
+    \item To analyze timing diagrams to observe clock-triggered behavior.
+    \item To understand the operation of sequential circuits and data storage elements.
+\end{itemize}
+
+\section{Function of FlipFlop Circuit}
+The D Flip-Flop is a clock-controlled bistable device that transfers the input data (D) to the output (Q) on the active edge of the clock signal.
+
+\[
+Q_{next} = D
+\]
+
+The output changes only at the triggering edge of the clock, ensuring synchronized data storage.
+
+
+\subsection*{Truth Table}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Clock & D & Q(next) \\ \hline
+$\uparrow$ & 0 & 0 \\
+$\uparrow$ & 1 & 1 \\
+No Edge & X & Q(previous) \\ \hline
+\end{tabular}
+\end{center}
+
+\subsection*{Schematic Image}
+\begin{figure}[!h]
+\centering
+%\includegraphics[width=1\textwidth]{Lab-04/FlipFlop.png}
+\caption{CMOS Schematic of D Flip-Flop in DSCH2}
+\end{figure}
+
+
+\subsection*{Timing Diagram}
+\begin{figure}[!h]
+\centering
+%\includegraphics[width=0.7\textwidth]{Lab-04/Timing Diagram.png}
+\caption{Timing Diagram of D Flip-Flop}
+\end{figure}
+
+\subsection*{Observation}
+The timing diagram shows that the output Q follows the input D only at the rising edge of the clock signal. Between clock edges, the output remains constant regardless of changes in the input. \\
+From the simulation results, it was observed that the D Flip-Flop changes its output state only at the rising edge of the clock signal. When the clock transitions from LOW to HIGH, the output Q takes the value of the input D. At all other times, the output remains unchanged, preserving the previously stored value. This behavior confirms the correct operation of the edge-triggered D Flip-Flop implemented using CMOS logic.
+
+
+
+
+\chapter{Stick Diagram in MICROWIND2}
+\lhead{Lab-05: Stick Diagram in MICROWIND2}
+
+\section*{Introduction}
+In VLSI design, the transition from schematic-level representation to physical layout is a critical step in the design process. Stick diagrams serve as an intermediate abstraction that simplifies the visualization of circuit layouts without considering exact dimensions. These diagrams use standardized color codes to represent different layers such as polysilicon, diffusion regions, and metal interconnections.
+
+Microwind2 is a layout design tool that allows designers to implement and simulate CMOS circuits at the physical level. In this experiment, stick diagrams of basic logic gates were implemented to understand layout organization, transistor placement, and interconnection strategies. The study of stick diagrams helps in developing an understanding of design rules, layout optimization, and area-efficient circuit implementation in VLSI systems.
+
+
+\section*{Objective}
+The objectives of this laboratory experiment are as follows:
+\begin{itemize}
+    \item To understand the concept and importance of stick diagrams in VLSI layout design.
+    \item To implement stick diagrams of basic CMOS logic gates using Microwind2.
+    \item To represent transistor-level circuits using simplified, technology-independent layouts.
+    \item To analyze the arrangement of polysilicon, diffusion, and metal layers in CMOS design.
+    \item To develop a clear understanding of the relationship between schematic design and physical layout.
+\end{itemize}
+
+
+\newpage
+\section{1 Input Inverter (NOT Gate)}
+The inverter, also known as a NOT gate, is the most fundamental logic gate in digital design. It produces the logical complement of the input signal. In CMOS technology, the inverter is implemented using one PMOS transistor in the pull-up network and one NMOS transistor in the pull-down network. The stick diagram represents this structure using polysilicon for gate control, diffusion regions for source and drain, and metal layers for interconnections. The inverter serves as the basic building block for more complex CMOS circuits.
+
+\subsection*{Stick Diagram}
+\begin{figure}[!h]
+\centering
+%\includegraphics[width=1\textwidth]{Lab-05/Inverter.png}
+\caption{Stick Diagram of Inverter (NOT Gate) in MICROWIND2}
+\end{figure}
+\newpage
+\subsection*{Output}
+\begin{figure}[!h]
+\centering
+%\includegraphics[width=1\textwidth]{Lab-05/Inverter-Out.png}
+\caption{Analog Simulation of Inverter (NOT Gate)}
+\end{figure}
+\subsection*{Observation}
+From the output waveform, it is observed that the inverter produces the exact complement of the input signal. When the input is at logic HIGH, the NMOS transistor conducts and pulls the output to logic LOW. Conversely, when the input is at logic LOW, the PMOS transistor conducts and pulls the output to logic HIGH. The transition between output states occurs immediately following the input change, demonstrating correct switching behavior. The observed output confirms the proper operation of the CMOS inverter as expected from its theoretical truth table.
+
+
+
+
+
+\newpage
+\section{2 Input NAND Gate}
+A 2-input NAND gate is a fundamental universal logic gate that produces a logic LOW output only when both inputs are logic HIGH. In CMOS layout design, the NAND gate is implemented using two NMOS transistors connected in series in the pull-down network and two PMOS transistors connected in parallel in the pull-up network. The stick diagram represents this structure using simplified layer representations such as polysilicon for gates, diffusion for active regions, and metal for interconnections.
+
+\subsection*{Stick Diagram}
+\begin{figure}[!h]
+\centering
+%\includegraphics[width=1\textwidth]{Lab-05/2in-NAND.png}
+\caption{Stick Diagram of 2in-NAND Gate in MICROWIND2}
+\end{figure}
+\newpage
+\subsection*{Output}
+\begin{figure}[!h]
+\centering
+%\includegraphics[width=1\textwidth]{Lab-05/2in-NAND-Out.png}
+\caption{Analog Simulation of 2in-NAND Gate}
+\end{figure}
+
+\subsection*{Observation}
+From the simulation results obtained in Microwind2, it is observed that the output remains at logic HIGH for all input combinations except when both inputs are HIGH. When inputs A and B are simultaneously at logic HIGH, the series NMOS transistors in the pull-down network conduct, creating a path to ground and forcing the output to logic LOW. For all other input conditions, at least one PMOS transistor in the pull-up network remains active, maintaining the output at logic HIGH. The observed output waveform matches the expected truth table of a 2-input NAND gate, confirming the correctness of the stick diagram implementation.
+
+
+
+
+
+\newpage
+\section{2 Input NOR Gate}
+The 2-input NOR gate is a fundamental digital logic gate that produces a logic HIGH output only when both inputs are at logic LOW. In CMOS implementation, the NOR gate is realized using parallel NMOS transistors in the pull-down network and series PMOS transistors in the pull-up network. In the stick diagram representation using Microwind2, different layers such as polysilicon, diffusion, and metal are arranged according to standard layout conventions to form the required transistor connections. The stick diagram provides a simplified visualization of the physical layout without considering exact dimensions.
+\subsection*{Stick Diagram}
+\begin{figure}[!h]
+\centering
+%\includegraphics[width=1\textwidth]{Lab-05/2in-NOR.png}
+\caption{Stick Diagram of 2in-NOR Gate in MICROWIND2}
+\end{figure}
+\newpage
+\subsection*{Output}
+\begin{figure}[!h]
+\centering
+%\includegraphics[width=1\textwidth]{Lab-05/2in-NOR-Out.png}
+\caption{Analog Simulation of 2in-NOR Gate}
+\end{figure}
+
+\subsection*{Observation}
+From the simulation results, it is observed that the output of the 2-input NOR gate remains logic HIGH only when both inputs are LOW (0,0). For all other input combinations, i.e., when any one or both inputs are HIGH, the output becomes logic LOW. The output waveform clearly reflects this behavior, showing a HIGH level only in the absence of input signals. This verifies the correct implementation of the NOR logic function in the stick diagram using Microwind2.
+
+
+
+
+
+
+\chapter{Stick Diagram of XOR function}
+\lhead{Lab-06: Stick Diagram of XOR function}
+
+\section*{Introduction}
+In VLSI design, the transformation of logical circuits into physical layouts is an essential step in the design process. Stick diagrams serve as a simplified and technology-independent method for representing circuit layouts, allowing designers to visualize transistor placement and interconnections without focusing on exact dimensions.
+
+The XOR gate is an important combinational logic circuit widely used in arithmetic and digital systems. Its implementation in CMOS requires careful arrangement of pull-up and pull-down networks. In this experiment, the XOR gate is designed using its Boolean expression and represented using a stick diagram in Microwind2. The study of this design helps in understanding layout organization, layer interaction, and efficient circuit realization in VLSI systems.
+
+
+
+\section*{Objective}
+The objectives of this laboratory experiment are as follows:
+\begin{itemize}
+    \item To understand the concept and importance of stick diagrams in VLSI layout design.
+    \item To implement stick diagrams of basic CMOS logic gates using Microwind2.
+    \item To represent transistor-level circuits using simplified, technology-independent layouts.
+    \item To analyze the arrangement of polysilicon, diffusion, and metal layers in CMOS design.
+    \item To develop a clear understanding of the relationship between schematic design and physical layout.
+\end{itemize}
+
+
+\newpage
+An XOR (Exclusive-OR) gate is a combinational logic gate that produces a logic HIGH output when the inputs are different and a logic LOW output when the inputs are the same. It is commonly used in digital circuits for comparison, parity checking, and arithmetic operations. 
+
+\subsection*{Boolean Function of XOR Gate}
+\[
+Y = (AB+A'B')'
+\]
+
+\subsection*{Truth Table}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+A & B & Y \\ \hline
+0 & 0 & 0 \\
+0 & 1 & 1 \\
+1 & 0 & 1 \\
+1 & 1 & 0 \\ \hline
+\end{tabular}
+\end{center}
+
+\subsection*{Stick Diagram}
+\begin{figure}[!h]
+\centering
+%\includegraphics[width=0.9\textwidth]{Lab-06/XOR-Function-Stick-Diagram.png}
+\caption{Stick Diagram of XOR Gate}
+\end{figure}
+\newpage
+\subsection*{Output}
+\begin{figure}[!h]
+\centering
+%\includegraphics[width=1\textwidth]{Lab-06/XOR-Function-Output.png}
+\caption{Output in Analog Simulation of XOR Gate}
+\end{figure}
+
+\subsection*{Observation}
+From the implementation and simulation of the XOR gate stick diagram using Microwind2, it was observed that the circuit produces a logic HIGH output when the inputs are different and a logic LOW output when both inputs are the same. The output waveform obtained from the simulation matches the theoretical truth table of the XOR function.\\ \\
+The stick diagram correctly represents the CMOS structure using appropriate placement of polysilicon, diffusion, and metal layers. Proper alignment and interconnection of these layers ensured correct signal flow and circuit operation. The simulation results confirm that the designed layout accurately implements the XOR logic function.
+
+
+
+\chapter*{\center Conclusion}
+\addcontentsline{toc}{chapter}{Conclusion}
+In this VLSI Design Lab course, various CMOS-based digital circuits were successfully designed, implemented, simulated, and analyzed using DSCH2 and MICROWIND2 software tools. The experiments provided practical knowledge of combinational logic circuits, sequential circuits, timing analysis, CMOS implementation techniques, and physical layout representation in VLSI systems.\\ 
+The implementation of basic logic gates such as NOT, NAND, NOR, AND, OR, and XOR using DSCH2 helped in understanding the operation of CMOS pull-up and pull-down networks. Verification through truth tables and timing simulations confirmed the correct logical behavior of each circuit. The implementation of Boolean expressions further strengthened the understanding of CMOS logic design methodology and transistor level circuit realization.\\ \\
+The design and analysis of Half Adder and D Flip-Flop circuits introduced important concepts of arithmetic operations, sequential logic, data storage, and clock-triggered behavior. Timing diagrams demonstrated signal transitions and propagation characteristics of digital circuits.\\
+The implementation of stick diagrams using MICROWIND2 provided practical experience in translating schematic-level circuits into simplified physical layouts. The arrangement of polysilicon, diffusion, and metal layers helped in understanding transistor placement, routing techniques, and layout organization in CMOS design. Analog simulation outputs verified the correctness of the implemented layouts.\\ \\
+Overall, this laboratory course successfully developed fundamental knowledge and practical skills related to VLSI circuit design, CMOS implementation, timing analysis, and physical layout representation. The experiments provided a strong foundation for advanced study and research in VLSI system design and semiconductor technology.\\ \\
+
+\end{document}
