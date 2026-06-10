@@ -11,6 +11,7 @@
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{graphicx}
+\usepackage{float}
 \usepackage{longtable}
 \usepackage{caption}
 \usepackage{hyperref}
@@ -98,7 +99,7 @@
 \addcontentsline{toc}{chapter}{Abstract}
 \thispagestyle{empty}
 
-Egg Drop Saga is a 2D arcade-style game developed using OpenGL and GLUT in C++ as part of the Computer Graphics Laboratory course. The project demonstrates the practical application of fundamental computer graphics concepts including coordinate systems, geometric modeling, transformations, animation, rendering pipelines, and user interaction. In the game, a player controls a bucket to catch eggs dropped by moving chickens while avoiding missed catches that reduce the player's lives. The project incorporates real-time animation, keyboard-based controls, collision detection, score tracking, audio integration, and multiple game states such as menu, gameplay, pause, and game-over screens. The visual elements are created using OpenGL primitive drawing techniques and coordinate-based object construction. The primary objective of the project is to apply theoretical graphics concepts in an interactive environment while gaining experience in event-driven programming and real-time rendering. The final implementation successfully demonstrates the integration of computer graphics principles with game development techniques.
+Egg Drop Saga is a 2D arcade-style game developed using OpenGL and GLUT in C++ as part of the Computer Graphics Lab course. The project demonstrates the practical application of fundamental computer graphics concepts including coordinate systems, geometric modeling, transformations, animation, rendering pipelines, and user interaction. In the game, a player controls a bucket to catch eggs dropped by moving chickens while avoiding missed catches that reduce the player's lives. The project incorporates real-time animation, keyboard-based controls, collision detection, score tracking, audio integration, and multiple game states such as menu, gameplay, pause, and game-over screens. The visual elements are created using OpenGL primitive drawing techniques and coordinate-based object construction. The primary objective of the project is to apply theoretical graphics concepts in an interactive environment while gaining experience in event-driven programming and real-time rendering. The final implementation successfully demonstrates the integration of computer graphics principles with game development techniques.
 
 
 \chapter{Introduction}
@@ -368,6 +369,12 @@ Main responsibilities:
 
 Five chickens are created during game initialization and distributed evenly along the upper wire.
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.3\textwidth]{assets/chicken.png}
+    \caption{In Game Chicken}
+\end{figure}
+
 The chicken model is constructed using primitive OpenGL shapes including:
 
 \begin{itemize}
@@ -398,6 +405,13 @@ Responsibilities include:
 \item Shadow generation
 \end{itemize}
 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.3\textwidth]{assets/Egg.png}
+    \caption{In Game Egg}
+\end{figure}
+
 The egg transitions through three states:
 
 \begin{enumerate}
@@ -421,6 +435,13 @@ Responsibilities include:
 \item Boundary restriction
 \end{itemize}
 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.3\textwidth]{assets/Bucket.png}
+    \caption{In Game Bucket}
+\end{figure}
+
 The bucket is drawn using:
 
 \begin{itemize}
@@ -432,21 +453,6 @@ The bucket is drawn using:
 \end{itemize}
 
 Movement is restricted within the game boundaries to prevent the bucket from leaving the visible play area.
-
-\subsection*{Background Module}
-
-The Background module draws the complete game environment.
-
-Responsibilities include:
-
-\begin{itemize}
-\item Sky rendering
-\item Ground rendering
-\item Environmental decorations
-\item Animated scenery
-\end{itemize}
-
-This layer is rendered before all gameplay objects to create proper depth ordering.
 
 \subsection*{AudioManager Module}
 
@@ -472,6 +478,29 @@ Separate audio tracks are used for:
 \item Chicken Sound Effect
 \end{itemize}
 
+\subsection*{Background Module}
+
+The Background module draws the complete game environment.
+
+Responsibilities include:
+
+\begin{itemize}
+\item Sky rendering
+\item Ground rendering
+\item Environmental decorations
+\item Static scenery
+\end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{assets/background.png}
+    \caption{Game Background}
+\end{figure}
+
+This layer is rendered before all gameplay objects to create proper depth ordering.
+
+
+\newpage
 \section{Transformation and Animation Logic}
 
 The project uses several geometric transformations to create movement and animation effects.
@@ -911,7 +940,7 @@ Code::Blocks & Integrated Development Environment (IDE) used for coding and debu
 \hline
 MinGW GCC Compiler & Compiles and links the C++ source code. \\
 \hline
-Windows Operating System & Development and testing platform. \\
+Windows + Linux Operating System & Development and testing platform. \\
 \hline
 GitHub & Version control and project collaboration. \\
 \hline
@@ -1267,10 +1296,270 @@ This chapter described the implementation details of Egg Drop Saga. The developm
 
 
 
-
-
 \chapter{Results and Output}
 \rhead{Results and Output}
+
+
+This chapter presents the final output of the Egg Drop Saga game and evaluates the successful implementation of the designed features. The project was tested under various gameplay conditions to verify the functionality of object rendering, animation, collision detection, user interaction, and audio integration. The results demonstrate that the game operates smoothly while maintaining consistent visual quality and responsive controls.
+
+\section{Home Screen}
+
+The home screen serves as the entry point of the game. It provides the title of the game, gameplay instructions, and available controls. Background music is played to create an engaging atmosphere before gameplay begins.
+
+The player can start the game by pressing the \texttt{S} key or exit the application using the \texttt{Q} key.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.89\textwidth]{assets/home_screen.png}
+\caption{Home Screen of Egg Drop Saga}
+\label{fig:home_screen}
+\end{figure}
+
+The home screen successfully provides a user-friendly interface and introduces the gameplay mechanics before entering the main game scene.
+
+\section{Main Gameplay Scene}
+
+Figure \ref{fig:gameplay_scene} illustrates the primary gameplay environment. Five chickens are positioned near the top of the screen while eggs are generated randomly beneath them. The player controls a basket located near the ground and attempts to catch the falling eggs.
+
+The gameplay scene includes:
+
+\begin{itemize}
+\item Animated background environment
+\item Five chicken models
+\item Dynamic egg spawning system
+\item Player-controlled basket
+\item Score display
+\item Life indicator using heart icons
+\end{itemize}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\textwidth]{assets/gameplay_scene.png}
+\caption{Main Gameplay Scene}
+\label{fig:gameplay_scene}
+\end{figure}
+
+The scene demonstrates successful integration of all graphical components and gameplay elements.
+
+\newpage
+\section{Egg Falling Animation}
+
+One of the primary gameplay mechanics involves eggs falling from randomly selected chickens. Each egg is rendered using curved geometry, gradient shading, and a dynamic shadow to improve visual realism.
+
+The shadow changes size and transparency according to the egg's height above the ground, creating a depth perception effect within the two-dimensional environment.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\textwidth]{assets/egg_falling.png}
+\caption{Falling Egg Animation}
+\label{fig:egg_falling}
+\end{figure}
+
+The animation operates smoothly at approximately 60 frames per second, providing a responsive gameplay experience.
+
+\newpage
+\section{Egg Catching Mechanism}
+
+When the basket successfully intercepts a falling egg, the collision detection system is triggered. The egg is removed from the scene, the player's score increases, and a catch sound effect is played.
+
+This functionality demonstrates the successful implementation of real-time collision detection and score management.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\textwidth]{assets/egg_catch.png}
+\caption{Successful Egg Catching}
+\label{fig:egg_catch}
+\end{figure}
+
+The collision system accurately detects interactions between the egg and basket without noticeable delay.
+
+\section{Egg Breaking Animation}
+
+If an egg reaches the ground without being caught, a squash-and-stretch animation is executed before displaying the broken egg state.
+
+The animation sequence consists of:
+
+\begin{enumerate}
+\item Egg reaches the ground.
+\item Vertical compression occurs.
+\item Horizontal expansion occurs.
+\item Egg breaking effect is displayed.
+\item Life count decreases.
+\end{enumerate}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\textwidth]{assets/egg_break.png}
+\caption{Egg Breaking Animation}
+\label{fig:egg_break}
+\end{figure}
+
+This feature demonstrates the application of animation principles commonly used in computer graphics and game development.
+
+\section{Pause and Resume System}
+
+The game includes a pause functionality activated through the \texttt{Space} key.
+
+During the paused state:
+
+\begin{itemize}
+\item Object updates are suspended.
+\item Egg movement stops.
+\item Score and life values remain unchanged.
+\item Rendering continues normally.
+\end{itemize}
+
+Upon resuming, a temporary \texttt{RESUMED} message is displayed to inform the player that gameplay has continued.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.4\textwidth]{assets/egg_falling.png}
+\caption{Pause State}
+\label{fig:pause_screen}
+\end{figure}
+
+The pause system improves usability and allows players to temporarily suspend gameplay when necessary.
+
+
+
+\section{Game Over Screen}
+
+When all available lives are exhausted, the game enters the game over state.
+
+The game over screen displays:
+
+\begin{itemize}
+\item Game Over message
+\item Final score
+\item Restart instructions
+\item Exit option
+\end{itemize}
+
+Additionally, the background music is replaced with a dedicated game over soundtrack.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\textwidth]{assets/background.png}
+\caption{Game Over Screen\\}
+\label{fig:game_over}
+\end{figure} 
+
+This screen successfully communicates the end of the game session and provides options for replaying or exiting the application.
+
+\newpage
+\section{Audio System Output}
+
+The SDL2\_mixer audio subsystem was successfully integrated with the OpenGL application.
+
+Different sound effects and music tracks are triggered based on gameplay events.
+
+\begin{table}[H]
+\centering
+
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Audio Type} & \textbf{Purpose} \\
+\hline
+Home Music & Played on home screen \\
+\hline
+Gameplay Music & Played during gameplay \\
+\hline
+Game Over Music & Played after losing all lives \\
+\hline
+Chicken Sound & Played when an egg is spawned \\
+\hline
+Catch Sound & Played when an egg is caught \\
+\hline
+Break Sound & Played when an egg breaks \\
+\hline
+\end{tabular}
+\caption{Audio Features Implemented}
+\end{table}
+
+The audio feedback significantly improves user engagement and gameplay immersion.
+
+\section{Performance Evaluation}
+
+The game was tested on a Windows-based system using OpenGL and GLUT.
+
+Performance observations include:
+
+\begin{itemize}
+\item Stable rendering performance.
+\item Smooth object animation.
+\item Responsive keyboard controls.
+\item Accurate collision detection.
+\item Proper audio synchronization.
+\item No visible rendering flicker.
+\end{itemize}
+
+The timer callback was configured as:
+
+\begin{verbatim}
+glutTimerFunc(16, timer, 0);
+\end{verbatim}
+
+which corresponds to approximately 60 frames per second.
+
+Double buffering was employed using:
+
+\begin{verbatim}
+GLUT_DOUBLE
+\end{verbatim}
+
+to eliminate screen tearing and provide smooth visual updates.
+
+\section{Implemented Features Summary}
+
+This table summarizes the major features successfully implemented in the project.
+
+\begin{table}[H]
+\centering
+
+\label{tab:features}
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Feature} & \textbf{Status} \\
+\hline
+Home Screen Interface & \textcolor{red}{Completed} \\
+\hline
+Background Rendering & \textcolor{red}{Completed} \\
+\hline
+Chicken Modeling & \textcolor{red}{Completed} \\
+\hline
+Egg Rendering & \textcolor{red}{Completed} \\
+\hline
+Bucket Modeling & \textcolor{red}{Completed} \\
+\hline
+Egg Falling Animation & \textcolor{red}{Completed} \\
+\hline
+Squash-and-Stretch Animation & \textcolor{red}{Completed} \\
+\hline
+Collision Detection & \textcolor{red}{Completed} \\
+\hline
+Score Management & \textcolor{red}{Completed} \\
+\hline
+Life Management & \textcolor{red}{Completed} \\
+\hline
+Pause and Resume System & \textcolor{red}{Completed} \\
+\hline
+Game Over System & \textcolor{red}{Completed} \\
+\hline
+Audio Integration & \textcolor{red}{Completed} \\
+\hline
+Fullscreen Support & \textcolor{red}{Completed} \\
+\hline
+Responsive Controls & \textcolor{red}{Completed} \\
+\hline
+\end{tabular}
+\caption{Implemented Features}
+\end{table}
+
+
+
+The results demonstrate that Egg Drop Saga successfully achieves its design objectives. All major gameplay components, including rendering, animation, collision detection, user interaction, audio playback, and game state management, function as intended. The final application provides a complete interactive gaming experience while showcasing fundamental computer graphics concepts such as geometric modeling, transformations, animation, shading, and real-time rendering using OpenGL and GLUT.
+
+
 
 
 
