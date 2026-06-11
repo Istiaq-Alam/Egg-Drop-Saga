@@ -75,7 +75,7 @@ int main(int argc, char** argv) {
     glutInitWindowPosition(400, 100);
 
     glutReshapeFunc(reshape);
-    glutCreateWindow("Egg Drop Saga - By Istiak Alam");
+    glutCreateWindow("Egg Drop Saga - By Istiak Alam & Tanveer Ratul");
 
     glutKeyboardFunc(keyboard);
     glutSpecialFunc(specialKeys);
