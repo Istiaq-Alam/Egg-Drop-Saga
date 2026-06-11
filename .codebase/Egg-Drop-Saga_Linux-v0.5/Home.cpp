@@ -24,10 +24,6 @@ void Home::update()
 
 void Home::draw()
 {
-    // Draw background
-    //Background background; -----> discomment it for pause the background animation
-    //background.draw(GAME_WIDTH, GAME_HEIGHT);
-
     drawTitle();
     drawPlayButton();
     drawInstructions();

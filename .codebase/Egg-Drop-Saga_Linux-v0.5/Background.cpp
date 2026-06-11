@@ -576,7 +576,7 @@ void Background::draw(int W, int H)
                22.0f, 0.58f, 0.36f, 0.14f);
 
     // ═══════════════════════════════════════════════════════════
-    // 2.  VAULTED CEILING  (two angled panels meeting at ridge)
+    //  VAULTED CEILING  (two angled panels meeting at ridge)
     // ═══════════════════════════════════════════════════════════
     // Left ceiling panel
     glColor3f(0.80f, 0.58f, 0.28f);
@@ -618,7 +618,7 @@ void Background::draw(int W, int H)
 
 
     // ═══════════════════════════════════════════════════════════
-    // 4.  SIDE WALLS  (left and right, converging perspective)
+    //   SIDE WALLS  (left and right, converging perspective)
     // ═══════════════════════════════════════════════════════════
     // Left wall - subtle vertical planks
     glColor3f(0.65f, 0.42f, 0.18f);
@@ -656,7 +656,7 @@ void Background::draw(int W, int H)
     }
 
     // ═══════════════════════════════════════════════════════════
-    // 5.  FLOOR  (wider planks, perspective lines converge to door)
+    //   FLOOR  (wider planks, perspective lines converge to door)
     // ═══════════════════════════════════════════════════════════
     filledRect(0, 0, (float)W, FLOOR_TOP, 0.52f, 0.33f, 0.13f);
 
@@ -682,7 +682,7 @@ void Background::draw(int W, int H)
     }
 
     // ═══════════════════════════════════════════════════════════
-    // 6.  BARN DOOR  (central open door with outdoor scene)
+    //  BARN DOOR  (central open door with outdoor scene)
     // ═══════════════════════════════════════════════════════════
     float doorW = W * 0.28f;
     float doorH = H * 0.30f;
@@ -733,7 +733,7 @@ void Background::draw(int W, int H)
     glEnd();
 
     // ═══════════════════════════════════════════════════════════
-    // 7.  LOFT PLATFORM  (mid-height shelf across center)
+    //   LOFT PLATFORM  (mid-height shelf across center)
     // ═══════════════════════════════════════════════════════════
     float loftX  = W * 0.20f;
     float loftW  = W * 0.60f;
@@ -780,7 +780,7 @@ void Background::draw(int W, int H)
     glEnd();
 
     // ═══════════════════════════════════════════════════════════
-    // 8.  LOFT WINDOWS  (two small rectangular windows above loft)
+    //   LOFT WINDOWS  (two small rectangular windows above loft)
     // ═══════════════════════════════════════════════════════════
     float winY = LOFT_Y + loftThick + H * 0.11f;
     float winH = H * 0.08f;
@@ -809,8 +809,8 @@ void Background::draw(int W, int H)
     }
 
     // ═══════════════════════════════════════════════════════════
-    // 9.  CEILING SUPPORT BEAMS – proper A-frame triangle
-    //     Two diagonals meet at the PEAK, horizontal bar connects them
+    //  CEILING SUPPORT BEAMS – proper A-frame triangle
+    //  Two diagonals meet at the PEAK, horizontal bar connects them
     // ═══════════════════════════════════════════════════════════
     float beamPeakX = CX;
     float beamPeakY = CEIL_PEAK - H*0.04f;
@@ -858,8 +858,8 @@ void Background::draw(int W, int H)
 
 
     // ═══════════════════════════════════════════════════════════
-    // 3.  MAIN HORIZONTAL BEAM
-    //     A thick dark-wood beam running full width near top
+    //   MAIN HORIZONTAL BEAM
+    //   A thick dark-wood beam running full width near top
     // ═══════════════════════════════════════════════════════════
     float beamY  = H * 0.64f;
     float beamH  = H * 0.045f;
@@ -902,7 +902,7 @@ void Background::draw(int W, int H)
 
 
     // ═══════════════════════════════════════════════════════════
-    // 10. LEFT SHELF + MILK CANS
+    // LEFT SHELF + MILK CANS
     // ═══════════════════════════════════════════════════════════
     float lShelfY = H * 0.42f;
     float lShelfX = 0;
@@ -934,7 +934,7 @@ void Background::draw(int W, int H)
     drawMilkCan(W * 0.125f, lShelfY + lShelfH, canW*0.88f, canH*0.90f);
 
     // ═══════════════════════════════════════════════════════════
-    // 11. TWO BARRELS  (lower left foreground, sitting on floor)
+    //  TWO BARRELS  (lower left foreground, sitting on floor)
     // ═══════════════════════════════════════════════════════════
     float barH = H * 0.26f;
     float barW = W * 0.115f;
@@ -944,7 +944,7 @@ void Background::draw(int W, int H)
     drawBarrel(W * 0.095f, H * 0.005f, barW, barH);
 
     // ═══════════════════════════════════════════════════════════
-    // 12. LADDER  (center-left, leaning against loft)
+    // LADDER  (center-left, leaning against loft)
     // ═══════════════════════════════════════════════════════════
     float ladX = W * 0.33f;
     float ladW = W * 0.055f;
@@ -952,7 +952,7 @@ void Background::draw(int W, int H)
     drawLadder(ladX, FLOOR_TOP - H*0.02f, ladW, ladH);
 
     // ═══════════════════════════════════════════════════════════
-    // 13. RIGHT SHELF + CERAMIC POTS + EGG BASKET
+    //     RIGHT SHELF + CERAMIC POTS + EGG BASKET
     //     Shelf sits lower, extends edge-to-edge on right wall
     // ═══════════════════════════════════════════════════════════
     float rShelfY = H * 0.26f;          // lower than before
@@ -1002,7 +1002,7 @@ void Background::draw(int W, int H)
     drawEggBasket(W * 0.925f, potBase, W*0.088f, H*0.105f);
 
     // ═══════════════════════════════════════════════════════════
-    // 14. THREE PENDANT LIGHTS
+    //  THREE PENDANT LIGHTS
     // ═══════════════════════════════════════════════════════════
     float lightTop = beamY;   // hang from main beam
     float coneH    = H * 0.38f;
@@ -1012,7 +1012,7 @@ void Background::draw(int W, int H)
     drawPendantLight(W * 0.82f, lightTop, coneH * 0.75f);  // right
 
     // ═══════════════════════════════════════════════════════════
-    // 15. AMBIENT WARM OVERLAY  (subtle warmth over whole scene)
+    // AMBIENT WARM OVERLAY  (subtle warmth over whole scene)
     // ═══════════════════════════════════════════════════════════
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
