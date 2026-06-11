@@ -9,7 +9,7 @@
 </div>
 
 > A 2D Orthographic Arcade Game built using C++ and OpenGL (GLUT)  
-> Developed as part of a Computer Graphics course project.
+> Developed as part of a Computer Graphics course project. [Full-Report](https://egg-drop-saga.vercel.app/Computer%20Graphics%20Lab%20Project%20Report.pdf)
     
 ---
 
