@@ -1,40 +1,36 @@
-\# Egg-Drop-Saga User Manual
+# Egg-Drop-Saga User Manual
 
 
 
-\# System Requirements
+# System Requirements
 
 
 
-\## Windows
+## Windows
 
 
 
-\* Windows 10 or later
+* Windows 10 or later
 
-\* OpenGL-compatible graphics driver
+* OpenGL-compatible graphics driver
 
-\* GCC Compiler (MinGW)
-
-\* GLUT Library
-
-
-
-\## Recommended
+* GCC Compiler (MinGW)
+* GLUT Library
 
 
 
-\* 2 GB RAM or higher
+## Recommended
 
-\* 1366×768 screen resolution or above
-
-
-
-\---
+* 2 GB RAM or higher
+* 1366×768 screen resolution or above
 
 
 
-\# Installation
+---
+
+
+
+# Installation
 
 
 
@@ -52,75 +48,61 @@ No additional installation is required if all dependencies are included into Egg
 
 
 
-\---
+---
 
 
 
-\# Controls
+# Controls
 
-```
 
-\-------------------------------------
 
+-------------------------------------
 | Key           | Action            |
-
 | ------------- | ----------------- |
-
 | S             | Start game        |
-
 | Q             | Exit game         |
-
 | ← Left Arrow  | Move bucket left  |
-
 | → Right Arrow | Move bucket right |
-
 | A             | Move bucket left  |
-
 | D             | Move bucket right |
-
 | P             | Pause game        |
-
 | R             | Restart game      |
-
-\-------------------------------------
-
-```
-
-\---
+-------------------------------------
 
 
 
-\# Gameplay
+---
 
 
 
-\## Catching Eggs
+# Gameplay
 
 
 
-\* Eggs fall from the chicken above.
-
-\* Move the bucket underneath the falling egg.
-
-\* Catching an egg increases your score.
+## Catching Eggs
 
 
 
-\## Missing Eggs
+* Eggs fall from the chicken above.
+* Move the bucket underneath the falling egg.
+* Catching an egg increases your score.
 
 
 
-\* If an egg reaches the ground without being caught:
+## Missing Eggs
+
+
+* If an egg reaches the ground without being caught:
 
 
 
-&#x20; \* A life may be lost (depending on game mode).
+&#x20; * A life may be lost (depending on game mode).
 
-&#x20; \* The game becomes more difficult.
+&#x20; * The game becomes more difficult.
 
 
 
-\## Increasing Difficulty
+## Increasing Difficulty
 
 
 
@@ -128,19 +110,19 @@ As your score increases:
 
 
 
-\* Egg falling speed increases.
+* Egg falling speed increases.
 
-\* Reaction time decreases.
+* Reaction time decreases.
 
-\* Gameplay becomes more challenging.
-
-
-
-\---
+* Gameplay becomes more challenging.
 
 
 
-\# Pause Function
+---
+
+
+
+# Pause Function
 
 
 
@@ -149,9 +131,7 @@ Press:
 
 
 ```text
-
 P
-
 ```
 
 
@@ -165,9 +145,7 @@ Press:
 
 
 ```text
-
 P
-
 ```
 
 
@@ -176,11 +154,11 @@ again to resume.
 
 
 
-\---
+---
 
 
 
-\# Restarting
+# Restarting
 
 
 
@@ -189,9 +167,7 @@ To start over at any time:
 
 
 ```text
-
 R
-
 ```
 
 
@@ -200,11 +176,11 @@ The score and game state will reset.
 
 
 
-\---
+---
 
 
 
-\# Game Over
+# Game Over
 
 
 
@@ -212,9 +188,9 @@ The game ends when:
 
 
 
-\* The player loses all available chances, or
+* The player loses all available chances, or
 
-\* The game's failure condition is reached.
+* The game's failure condition is reached.
 
 
 
@@ -222,71 +198,42 @@ After Game Over:
 
 
 
-\* Final score is displayed.
+* Final score is displayed.
 
-\* Player may restart the game.
-
-
-
-\---
+* Player may restart the game.
 
 
 
-\# Scoring System
+---
 
 
 
+# Scoring System
+
+
+------------------------
 | Action    | Points   |
-
 | --------- | -------- |
-
 | Catch Egg | +1 Score |
-
 | Miss Egg  | No Score |
-
+------------------------
 
 
 The objective is to achieve the highest score possible.
 
 
 
-\---
+---
 
 
 
-\# Graphics Features
+
+
+# Credits
 
 
 
-The game demonstrates several computer graphics concepts:
-
-
-
-\* 2D Transformations
-
-\* Primitive Drawing
-
-\* Animation
-
-\* Object Rendering
-
-\* Collision Detection
-
-\* Interactive User Input
-
-\* Real-Time Rendering
-
-
-
-\---
-
-
-
-\# Credits
-
-
-
-\## Developer
+## Developer
 
 
 
@@ -296,23 +243,23 @@ Tanveer Ratul - ID:04
 
 
 
-\## Project-Link
+## Project-Link
 
 
 
-\[Egg-Drop-Saga](https://github.com/Istiaq-Alam/Egg-Drop-Saga.git)
+[Egg-Drop-Saga](https://github.com/Istiaq-Alam/Egg-Drop-Saga.git)
 
 
 
-\[Website-Link](https://egg-drop-saga.vercel.app/)
+[Website-Link](https://egg-drop-saga.vercel.app/)
 
 
 
-\---
+---
 
 
 
-\# Version Information
+# Version Information
 
 
 
