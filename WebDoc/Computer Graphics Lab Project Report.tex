@@ -1078,6 +1078,109 @@ Implemented audio features:
 \item Chicken sound effect
 \end{itemize}
 
+\subsection{Audio Environment Configuration}
+
+Before implementing the game, several development environment configurations were required to properly integrate OpenGL, GLUT, SDL2, and SDL2\_mixer within the Code::Blocks IDE on Windows.
+
+\subsubsection*{SDL2 Include Directory Configuration}
+
+The SDL2 header directory was added to the compiler search paths.
+
+\begin{itemize}
+    \item Search Directory:
+\end{itemize}
+
+\begin{verbatim}
+C:\Libraries\SDL2\include\SDL2
+\end{verbatim}
+
+This allows the compiler to locate SDL2 and SDL2\_mixer header files during compilation.
+
+\subsubsection*{Linker Settings}
+
+The following linker options were configured in Code::Blocks:
+
+\begin{verbatim}
+-static
+-static-libgcc
+-static-libstdc++
+-lmingw32
+-lSDL2main
+-lSDL2
+-lSDL2_mixer
+\end{verbatim}
+
+If static linking is not required, the \texttt{-static} related options can be removed.
+
+\subsubsection*{Execute Directory Configuration}
+
+The project execution directory was configured as:
+
+\begin{verbatim}
+Project Directory
+\end{verbatim}
+
+This ensures that game assets such as sound files and resources are loaded correctly during runtime.
+
+\subsubsection*{Linked Libraries}
+
+The following libraries were linked with the project:
+
+\begin{itemize}
+    \item mingw32
+    \item SDL2\_main
+    \item SDL2
+    \item SDL2\_mixer
+\end{itemize}
+
+These libraries provide multimedia functionality including audio playback and SDL initialization.
+
+\subsubsection*{Cross-Platform SDL Header Configuration}
+
+To prevent conflicts between SDL and the Windows entry point, the following preprocessor directive was added in the audio manager implementation:
+
+\begin{verbatim}
+#ifdef _WIN32
+#define SDL_MAIN_HANDLED
+#endif
+\end{verbatim}
+
+This allows the project to use the standard C++ \texttt{main()} function while maintaining compatibility with SDL2.
+
+\subsubsection*{Application Icon Integration}
+
+A custom application icon was integrated into the Windows version of the game using the Win32 API.
+
+The following code was used in \texttt{main.cpp}:
+
+\begin{verbatim}
+HWND hwnd = GetActiveWindow();
+HICON hIcon = (HICON)LoadImage(
+    GetModuleHandle(NULL),
+    MAKEINTRESOURCE(IDI_ICON1),
+    IMAGE_ICON,
+    32, 32,
+    LR_DEFAULTCOLOR
+);
+
+SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon);
+SendMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
+\end{verbatim}
+
+This configuration assigns the custom \texttt{egg\_drop\_saga.ico} icon to both the application window and taskbar representation.
+
+\subsubsection*{Resource File Configuration}
+
+The project uses a Windows resource script file (\texttt{icon.rc}) to register the application icon.
+
+The resource file references:
+
+\begin{verbatim}
+egg_drop_saga.ico
+\end{verbatim}
+
+This ensures that the compiled executable contains the custom application icon.
+
 \section{Game Object Implementation}
 
 \subsection*{Chicken Object}
@@ -1568,12 +1671,343 @@ The results demonstrate that Egg Drop Saga successfully achieves its design obje
 \chapter{Discussion}
 \rhead{Discussion}
 
+This chapter discusses the challenges encountered during the development of Egg Drop Saga, the solutions adopted to overcome those challenges, and the knowledge gained throughout the implementation process. The project provided practical experience in OpenGL programming, object modeling, animation, user interaction, and real-time game development.
+
+\section{Challenges Faced During Development}
+
+Although the final implementation appears straightforward from the user's perspective, several technical challenges were encountered during development.
+
+\subsection*{Object Modeling Complexity}
+
+One of the primary challenges was designing visually appealing game objects using only OpenGL primitives. Since the project did not use external image assets for the main game objects, every object had to be constructed manually using geometric shapes.
+
+The chicken model required multiple components including:
+
+\begin{itemize}
+\item Body
+\item Head
+\item Wing
+\item Tail
+\item Comb
+\item Beak
+\item Legs
+\end{itemize}
+
+Similarly, the basket and egg models required careful adjustment of dimensions and proportions to achieve a natural appearance.
+
+Constructing these objects using only vertices and OpenGL primitives required extensive experimentation and refinement.
+
+\subsection*{Maintaining Proper Aspect Ratio}
+
+Another challenge was preserving the game's visual appearance when the window size changed.
+
+Different screen resolutions can stretch or distort graphical objects if the viewport and projection settings are not managed correctly.
+
+Without proper aspect ratio handling:
+
+\begin{itemize}
+\item Eggs could appear wider or narrower.
+\item Chickens could become distorted.
+\item Gameplay coordinates could become inconsistent.
+\end{itemize}
+
+A custom reshape function was implemented to maintain the original game aspect ratio while adapting to different window dimensions.
+
+\subsection*{Collision Detection Accuracy}
+
+Collision detection is one of the most important gameplay mechanics.
+
+Initially, the basket occasionally failed to detect eggs correctly, especially near the basket edges.
+
+Several adjustments were required to determine an appropriate collision boundary that balanced gameplay fairness and responsiveness.
+
+The final implementation checks both horizontal overlap and vertical intersection between the egg and basket, resulting in consistent collision behavior.
+
+\subsection*{Animation Timing}
+
+Creating smooth animations using GLUT's timer system required careful timing management.
+
+The project includes several animations:
+
+\begin{itemize}
+\item Falling eggs
+\item Egg squash effect
+\item Egg breaking animation
+\item Dynamic shadows
+\item Background animations
+\end{itemize}
+
+Maintaining smooth transitions while preserving gameplay responsiveness required synchronization between the update and rendering systems.
+
+\subsection*{Audio Integration}
+
+Integrating SDL2\_mixer with an OpenGL GLUT application introduced additional complexity.
+
+Challenges included:
+
+\begin{itemize}
+\item Library configuration
+\item Linker setup
+\item Sound loading
+\item Audio state management
+\item Music switching between game states
+\end{itemize}
+
+Careful initialization and cleanup procedures were implemented to ensure reliable audio playback.
+
+\subsection*{Game State Management}
+
+The project contains three major states:
+
+\begin{itemize}
+\item Home Screen
+\item Playing State
+\item Game Over State
+\end{itemize}
+
+Managing transitions between these states while maintaining score, lives, music, and object states required additional planning and testing.
+
+Proper state management was essential for creating a smooth user experience.
+
+\section{Solutions Adopted}
+
+Several solutions were implemented to address the challenges encountered during development.
+
+\subsection*{Modular Programming Approach}
+
+The project was divided into separate modules:
+
+\begin{itemize}
+\item Game Module
+\item Chicken Module
+\item Egg Module
+\item Bucket Module
+\item Background Module
+\item Home Module
+\item Audio Module
+\end{itemize}
+
+This modular architecture simplified debugging, testing, and future development.
+
+Each module was responsible for a specific functionality, reducing code complexity and improving maintainability.
+
+\subsection*{Use of OpenGL Transformations}
+
+Transformations such as translation, rotation, and scaling were used extensively.
+
+Examples include:
+
+\begin{itemize}
+\item Positioning chickens across the screen.
+\item Rotating wing components.
+\item Scaling the egg during squash animation.
+\item Translating objects into world coordinates.
+\end{itemize}
+
+Using transformation matrices reduced the need for recalculating individual vertices.
+
+\subsection*{Viewport and Projection Adjustment}
+
+To solve aspect ratio issues, the viewport dimensions were calculated dynamically inside the reshape callback function.
+
+This ensured that:
+
+\begin{itemize}
+\item Objects retained their proportions.
+\item Gameplay coordinates remained consistent.
+\item Visual quality remained stable across different resolutions.
+\end{itemize}
+
+\subsection*{Event-Driven Architecture}
+
+GLUT's callback-based architecture simplified user input handling and rendering updates.
+
+The project uses dedicated callback functions for:
+
+\begin{itemize}
+\item Display rendering
+\item Keyboard input
+\item Special key input
+\item Window resizing
+\item Timed updates
+\end{itemize}
+
+This structure improved responsiveness and separated application logic into manageable components.
+
+\section{Computer Graphics Concepts Applied}
+
+The project successfully applied several important computer graphics concepts studied during the course.
+
+\subsection*{Geometric Modeling}
+
+Every game object was modeled using geometric primitives such as:
+
+\begin{itemize}
+\item Triangles
+\item Quadrilaterals
+\item Polygons
+\item Circles
+\item Ellipses
+\end{itemize}
+
+Complex objects were formed by combining multiple primitive shapes.
+
+\subsection*{Coordinate Systems}
+
+The project uses a two-dimensional orthographic coordinate system.
+
+The OpenGL projection setup maps screen coordinates into the virtual game world.
+
+This concept was essential for:
+
+\begin{itemize}
+\item Object positioning
+\item Movement calculations
+\item Collision detection
+\item User interface rendering
+\end{itemize}
+
+\subsection*{Transformations}
+
+The project demonstrates practical use of geometric transformations.
+
+Translation was used to position objects, rotation was used to orient components such as wings, and scaling was applied to generate squash-and-stretch animations.
+
+These transformations allowed efficient manipulation of graphical objects without redefining their geometry.
+
+\subsection*{Animation Principles}
+
+Animation plays a central role in the project.
+
+Examples include:
+
+\begin{itemize}
+\item Falling motion of eggs
+\item Dynamic shadow updates
+\item Squash-and-stretch effects
+\item User interface transitions
+\end{itemize}
+
+These animations demonstrate the importance of time-based updates in real-time graphics applications.
+
+\subsection*{Color Interpolation and Shading}
+
+Gradient shading techniques were implemented using vertex color interpolation.
+
+Examples include:
+
+\begin{itemize}
+\item Egg surface shading
+\item Basket body shading
+\item Heart indicators
+\item Egg yolk rendering
+\end{itemize}
+
+This produced smoother and more visually appealing objects compared to flat coloring.
+
+\subsection*{Alpha Blending}
+
+Transparency effects were achieved using OpenGL blending functions.
+
+Alpha blending was used for:
+
+\begin{itemize}
+\item Shadows
+\item Highlights
+\item Visual effects
+\end{itemize}
+
+These effects improved realism and visual depth within the game scene.
+
+\section{Lessons Learned}
+
+The development of Egg Drop Saga provided valuable practical experience beyond theoretical classroom concepts.
+
+Through this project, the following skills were strengthened:
+
+\begin{itemize}
+\item OpenGL rendering techniques
+\item Object-oriented programming in C++
+\item Event-driven programming
+\item Game loop design
+\item Animation implementation
+\item Collision detection algorithms
+\item Audio integration using SDL2\_mixer
+\item Modular software development
+\item Debugging and performance optimization
+\end{itemize}
+
+The project also demonstrated how multiple computer graphics concepts can be integrated into a complete interactive application.
+
+\section{Educational Value of the Project}
+
+Egg Drop Saga serves as a practical example of applying computer graphics principles to a real-world software project.
+
+The project combines:
+
+\begin{itemize}
+\item Geometric modeling
+\item Transformations
+\item Rendering
+\item Animation
+\item User interaction
+\item Multimedia integration
+\end{itemize}
+
+As a result, it provides a comprehensive learning experience that reinforces both theoretical and practical aspects of Computer Graphics.\\
+
+
+This chapter discussed the challenges encountered during development, the solutions implemented to address them, and the computer graphics concepts applied throughout the project. The development process provided valuable experience in OpenGL programming, animation, object modeling, collision detection, and multimedia integration. The successful completion of the project demonstrates the practical application of fundamental computer graphics principles in the creation of an interactive game.
+
 
 
 
 
 \chapter{Conclusion}
 \rhead{Conclusion}
+
+
+The development of \textbf{Egg Drop Saga} successfully demonstrated the practical application of fundamental Computer Graphics concepts using OpenGL and GLUT. The project achieved its primary objective of creating an interactive two-dimensional game that combines object modeling, animation, user interaction, collision detection, and audio integration within a real-time rendering environment.\\
+
+Throughout the development process, various graphical objects such as chickens, eggs, baskets, hearts, and environmental elements were designed using OpenGL geometric primitives. These individual components were combined to create a complete and visually engaging game scene. The project also incorporated animation techniques including falling motion, dynamic shadows, and squash-and-stretch effects, which enhanced realism and improved the overall user experience.\\
+
+The implementation of collision detection enabled accurate interaction between the falling eggs and the player's basket, forming the core gameplay mechanic. In addition, the integration of SDL2\_mixer provided background music and sound effects, significantly increasing player immersion. Features such as score tracking, life management, pause and resume functionality, game state transitions, fullscreen support, and custom application icons further contributed to the completeness of the final application.\\
+
+From an educational perspective, this project provided valuable hands-on experience with OpenGL programming and reinforced several important topics studied in Computer Graphics, including coordinate systems, geometric modeling, transformations, viewport management, rendering pipelines, animation principles, color interpolation, alpha blending, and event-driven programming. The project also strengthened programming skills in C++, object-oriented design, debugging, modular software development, and multimedia integration.\\
+
+Overall, Egg Drop Saga successfully fulfills the goals established during the project proposal stage and demonstrates how theoretical Computer Graphics concepts can be applied to create a functional and interactive software application. The completed project serves as a practical example of real-time graphics programming and provides a strong foundation for future exploration of advanced game development and computer graphics techniques.\\
+
+\section{Achievement of Objectives}
+
+The objectives defined at the beginning of the project were successfully achieved, as summarized below:
+
+\begin{table}[H]
+\centering
+
+\begin{tabular}{|p{9cm}|c|}
+\hline
+\textbf{Objective} & \textbf{Status} \\
+\hline
+Develop a complete 2D game using OpenGL and GLUT & \textcolor{blue}{Achieved} \\
+\hline
+Implement geometric object modeling & \textcolor{blue}{Achieved} \\
+\hline
+Apply transformations for positioning and animation & \textcolor{blue}{Achieved} \\
+\hline
+Create real-time gameplay interaction & \textcolor{blue}{Achieved} \\
+\hline
+Implement collision detection mechanisms & \textcolor{blue}{Achieved} \\
+\hline
+Integrate sound effects and background music & \textcolor{blue}{Achieved} \\
+\hline
+Maintain smooth rendering performance & \textcolor{blue}{Achieved} \\
+\hline
+Demonstrate Computer Graphics concepts in practice & \textcolor{blue}{Achieved} \\
+\hline
+\end{tabular}
+\caption{Project Objectives and Achievement Status}
+\end{table}
+
 
 
 
@@ -1583,11 +2017,195 @@ The results demonstrate that Egg Drop Saga successfully achieves its design obje
 \rhead{Future Work}
 
 
+Although Egg Drop Saga successfully implements the core gameplay mechanics and demonstrates several important Computer Graphics concepts, there are numerous opportunities for future enhancement. Additional features and technical improvements could further improve gameplay experience, visual quality, and software architecture.
+
+\section{Enhanced Graphics and Visual Effects}
+
+Future versions of the game can incorporate more advanced graphical features to create a richer visual experience.
+
+Possible improvements include:
+
+\begin{itemize}
+    \item Particle effects for egg breaking animations.
+    \item Dynamic lighting and shading techniques.
+    \item Animated backgrounds with moving clouds and environmental elements.
+    \item Improved shadow rendering using advanced blending techniques.
+    \item Smooth sprite-based animations for chickens and other game objects.
+\end{itemize}
+
+These enhancements would increase realism and provide a more engaging visual presentation.
+
+\section{Multiple Difficulty Levels}
+
+The current implementation increases difficulty by gradually increasing egg falling speed. Future versions could introduce dedicated difficulty modes such as:
+
+\begin{itemize}
+    \item Easy
+    \item Medium
+    \item Hard
+    \item Expert
+\end{itemize}
+
+Each mode could modify:
+
+\begin{itemize}
+    \item Egg falling speed
+    \item Spawn frequency
+    \item Number of lives
+    \item Score multipliers
+\end{itemize}
+
+This would make the game more accessible to players with different skill levels.
+
+\section{Additional Gameplay Mechanics}
+
+Several new gameplay features can be added to increase variety and challenge.
+
+Examples include:
+
+\begin{itemize}
+    \item Golden eggs that provide bonus points.
+    \item Rotten eggs that reduce score or lives.
+    \item Power-ups that temporarily enlarge the basket.
+    \item Slow-motion effects for easier egg catching.
+    \item Combo scoring systems for consecutive catches.
+\end{itemize}
+
+These mechanics would make gameplay more dynamic and rewarding.
+
+\section{High Score System}
+
+The current version stores scores only during a single game session.
+A future enhancement could implement a persistent high-score system using file handling.
+
+Features may include:
+
+\begin{itemize}
+    \item Local leaderboard storage.
+    \item Player name registration.
+    \item Top score tracking.
+    \item Score history management.
+\end{itemize}
+
+This would encourage replayability and competition among players.
+
+\section{Improved User Interface}
+
+The user interface can be expanded to provide a more professional gaming experience.
+
+Potential additions include:
+
+\begin{itemize}
+    \item Dedicated settings menu.
+    \item Volume control options.
+    \item Difficulty selection screen.
+    \item Pause menu with navigation options.
+    \item Animated game-over screen.
+\end{itemize}
+
+These features would improve usability and overall presentation.
+
+\section{Advanced Audio Features}
+
+While the current version includes background music and sound effects, future versions may incorporate:
+
+\begin{itemize}
+    \item Multiple music tracks.
+    \item Dynamic music transitions.
+    \item Adjustable volume controls.
+    \item Context-sensitive sound effects.
+    \item Environmental audio effects.
+\end{itemize}
+
+Such enhancements would provide a more immersive gameplay experience.
+
+\section{Cross-Platform Deployment}
+
+The project is currently configured primarily for Windows environments.
+
+Future development may include:
+
+\begin{itemize}
+    \item Native Linux support.
+    \item macOS compatibility.
+    \item Cross-platform build automation.
+    \item Platform-independent resource management.
+\end{itemize}
+
+This would allow the game to reach a wider range of users.
+
+\section{Migration to Modern OpenGL}
+
+The current implementation uses the OpenGL fixed-function pipeline, which is suitable for educational purposes and introductory graphics programming.
+
+A future version could migrate to modern OpenGL techniques including:
+
+\begin{itemize}
+    \item Vertex Buffer Objects (VBOs)
+    \item Vertex Array Objects (VAOs)
+    \item GLSL shaders
+    \item GPU-based rendering
+    \item Advanced texture mapping
+\end{itemize}
+
+This would improve rendering efficiency and provide experience with contemporary graphics development practices.
+
+\section{Mobile and Touchscreen Support}
+
+Future versions could be adapted for mobile platforms by introducing:
+
+\begin{itemize}
+    \item Touch-based controls.
+    \item Responsive user interfaces.
+    \item Mobile-friendly graphics optimization.
+    \item Android and iOS deployment support.
+\end{itemize}
+
+This would significantly increase accessibility and user reach. \\ \\ \\ 
+
+\section*{\center Future Vision}
+
+The long-term vision for Egg Drop Saga is to transform it from a simple educational OpenGL project into a fully featured casual arcade game. By integrating advanced graphics, expanded gameplay mechanics, persistent player progression, and modern rendering techniques, the project could evolve into a more sophisticated and entertaining application while continuing to serve as an effective demonstration of Computer Graphics principles.\\ \\
 
 
 
-\chapter{References}
+
+
+
+
+\chapter*{References}
+\addcontentsline{toc}{chapter}{References}
 \rhead{References}
+
+
+\begin{enumerate}
+
+\item D. Hearn and M. P. Baker, \textit{Computer Graphics with OpenGL}, 4th ed. Upper Saddle River, NJ, USA: Pearson Education, 2011.
+
+\item M. Kilgard, ``The OpenGL Utility Toolkit (GLUT) Programming Interface,'' Silicon Graphics Inc. \textbf{[Online]}.\\ Available: \href{https://www.opengl.org/resources/libraries/glut/}{https://www.opengl.org/resources/libraries/glut/}. [Accessed: Jun. 2026].
+
+\item \textit{OpenGL Official Documentation}. Khronos Group. \textbf{[Online]}.\\ Available: \href{https://www.opengl.org/documentation/}{https://www.opengl.org/documentation/}. [Accessed: Jun. 2026].
+
+\item \textit{Khronos OpenGL Reference Pages}. Khronos Group. \textbf{[Online]}.\\ Available: \href{https://registry.khronos.org/OpenGL/}{https://registry.khronos.org/OpenGL/}. [Accessed: Jun. 2026].
+
+\item \textit{SDL2 Documentation}. Simple DirectMedia Layer (SDL). \textbf{[Online]}.\\ Available: \href{https://wiki.libsdl.org/}{https://wiki.libsdl.org/}. [Accessed: Jun. 2026].
+
+\item \textit{SDL2\_mixer Documentation}. Simple DirectMedia Layer (SDL). \textbf{[Online]}.\\ Available: \href{https://wiki.libsdl.org/SDL2_mixer}{https://wiki.libsdl.org/SDL2\_mixer}. [Accessed: Jun. 2026].
+
+\item FreeGLUT Project Documentation. \textbf{[Online]}.\\ Available: \href{https://freeglut.sourceforge.net/}{https://freeglut.sourceforge.net/}. [Accessed: Jun. 2026].
+
+\item Microsoft Corporation, ``Windows API Documentation,'' Microsoft Learn. \textbf{[Online]}. Available: \href{https://learn.microsoft.com/windows/win32/}{https://learn.microsoft.com/windows/win32/}. [Accessed: Jun. 2026].
+
+\item B. Stroustrup, \textit{The C++ Programming Language}, 4th ed. Boston, MA, USA: Addison-Wesley Professional, 2013.
+
+\item Code::Blocks Team, ``Code::Blocks IDE Documentation.'' \textbf{[Online]}.\\ Available: \href{https://www.codeblocks.org/}{https://www.codeblocks.org/}. [Accessed: Jun. 2026].
+
+\item Istiak Alam and Tanveer Ratul, Department of Computer Science and Engineering, Notre Dame University Bangladesh, Computer Graphics Lab Project Documentation, 2026. 
+\textbf{[Online]}.\\ \\ Github: \href{https://github.com/Istiaq-Alam/Egg-Drop-Saga.git}{Egg-Drop-Saga}. \\
+Website: \href{https://egg-drop-saga.vercel.app/}{Download here}.
+
+\end{enumerate}
+
 
 
 
@@ -1596,6 +2214,95 @@ The results demonstrate that Egg Drop Saga successfully achieves its design obje
 \chapter*{\center Appendix}
 \addcontentsline{toc}{chapter}{Appendix}
 
+
+This appendix contains the complete source code structure of the \textbf{Egg Drop Saga} project, along with external references, library links, and supporting resources used during development.
+
+
+\section{Full Source Code Listing}
+
+The full implementation of the project is provided in the following source files:
+
+\subsection{Main Program}
+\begin{itemize}
+    \item \texttt{main.cpp} – Entry point, GLUT initialization, rendering loop, input handling, and window management.
+\end{itemize}
+
+\subsection{Core Game Logic}
+\begin{itemize}
+    \item \texttt{Game.h / Game.cpp} – Main game controller handling states, scoring, collision detection, and object updates.
+\end{itemize}
+
+\subsection{Game Objects}
+\begin{itemize}
+    \item \texttt{Bucket.h / Bucket.cpp} – Player-controlled basket with movement and collision logic.
+    \item \texttt{Egg.h / Egg.cpp} – Falling egg object with physics, animation, and breaking logic.
+    \item \texttt{Chicken.h / Chicken.cpp} – Static egg-spawning character rendered using OpenGL primitives.
+\end{itemize}
+
+\subsection{Environment and UI}
+\begin{itemize}
+    \item \texttt{Background.h / Background.cpp} – Scene background rendering and updates.
+    \item \texttt{Home.h / Home.cpp} – Home screen UI and menu rendering.
+\end{itemize}
+
+\subsection{Audio System}
+\begin{itemize}
+    \item \texttt{AudioManager.h / AudioManager.cpp} – Handles background music and sound effects using SDL2\_mixer.
+\end{itemize}
+
+\section{External Libraries Used}
+
+The following external libraries were used in the project:
+
+\begin{itemize}
+    \item OpenGL (GLUT) – for rendering 2D graphics.
+    \item SDL2 – for multimedia and system handling.
+    \item SDL2\_mixer – for audio playback (music and sound effects).
+\end{itemize}
+
+\section{Development Tools and Environment}
+
+\begin{itemize}
+    \item Language: C++
+    \item IDE: Code::Blocks
+    \item Compiler: MinGW (GCC)
+    \item Graphics Library: OpenGL (GLUT)
+    \item Audio Library: SDL2, SDL2\_mixer
+    \item Operating System: Windows
+\end{itemize}
+
+\section{Linker and Build Configuration}
+
+The following linker configuration was used to build the project successfully in Code::Blocks:
+
+\begin{verbatim}
+-static
+-static-libgcc
+-static-libstdc++
+-lmingw32
+-lSDL2main
+-lSDL2
+-lSDL2_mixer
+\end{verbatim}
+
+If static linking is not required, the \texttt{-static} flags can be removed.
+
+\section{Icon and Resource Setup}
+
+The application uses a custom icon integrated through Windows resource files:
+
+\begin{itemize}
+    \item \texttt{icon.rc} – resource script for icon embedding
+    \item \texttt{egg\_drop\_saga.ico} – application icon file
+\end{itemize}
+
+The icon is loaded using the Win32 API in \texttt{main.cpp}.
+
+
+
+
+
+This appendix documents the complete structure and technical environment of the Egg Drop Saga project. The full source code is modularized and organized to ensure maintainability, readability, and extensibility for future development.
 
 
 
