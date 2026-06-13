@@ -2200,8 +2200,7 @@ The long-term vision for Egg Drop Saga is to transform it from a simple educatio
 
 \item Code::Blocks Team, ``Code::Blocks IDE Documentation.'' \textbf{[Online]}.\\ Available: \href{https://www.codeblocks.org/}{https://www.codeblocks.org/}. [Accessed: Jun. 2026].
 
-\item Istiak Alam and Tanveer Ratul, Department of Computer Science and Engineering, Notre Dame University Bangladesh, Computer Graphics Lab Project Documentation, 2026. 
-\textbf{[Online]}.\\ \\ Github: \href{https://github.com/Istiaq-Alam/Egg-Drop-Saga.git}{Egg-Drop-Saga}. \\
+\item Istiak Alam and Tanveer Ratul, Department of Computer Science and Engineering, Notre Dame University Bangladesh, Computer Graphics Lab Project Documentation, 2026.\\ \\ Github: \href{https://github.com/Istiaq-Alam/Egg-Drop-Saga.git}{Egg-Drop-Saga}. \\
 Website: \href{https://egg-drop-saga.vercel.app/}{Download here}.
 
 \end{enumerate}
@@ -2211,98 +2210,6 @@ Website: \href{https://egg-drop-saga.vercel.app/}{Download here}.
 
 
 
-\chapter*{\center Appendix}
-\addcontentsline{toc}{chapter}{Appendix}
-
-
-This appendix contains the complete source code structure of the \textbf{Egg Drop Saga} project, along with external references, library links, and supporting resources used during development.
-
-
-\section{Full Source Code Listing}
-
-The full implementation of the project is provided in the following source files:
-
-\subsection{Main Program}
-\begin{itemize}
-    \item \texttt{main.cpp} – Entry point, GLUT initialization, rendering loop, input handling, and window management.
-\end{itemize}
-
-\subsection{Core Game Logic}
-\begin{itemize}
-    \item \texttt{Game.h / Game.cpp} – Main game controller handling states, scoring, collision detection, and object updates.
-\end{itemize}
-
-\subsection{Game Objects}
-\begin{itemize}
-    \item \texttt{Bucket.h / Bucket.cpp} – Player-controlled basket with movement and collision logic.
-    \item \texttt{Egg.h / Egg.cpp} – Falling egg object with physics, animation, and breaking logic.
-    \item \texttt{Chicken.h / Chicken.cpp} – Static egg-spawning character rendered using OpenGL primitives.
-\end{itemize}
-
-\subsection{Environment and UI}
-\begin{itemize}
-    \item \texttt{Background.h / Background.cpp} – Scene background rendering and updates.
-    \item \texttt{Home.h / Home.cpp} – Home screen UI and menu rendering.
-\end{itemize}
-
-\subsection{Audio System}
-\begin{itemize}
-    \item \texttt{AudioManager.h / AudioManager.cpp} – Handles background music and sound effects using SDL2\_mixer.
-\end{itemize}
-
-\section{External Libraries Used}
-
-The following external libraries were used in the project:
-
-\begin{itemize}
-    \item OpenGL (GLUT) – for rendering 2D graphics.
-    \item SDL2 – for multimedia and system handling.
-    \item SDL2\_mixer – for audio playback (music and sound effects).
-\end{itemize}
-
-\section{Development Tools and Environment}
-
-\begin{itemize}
-    \item Language: C++
-    \item IDE: Code::Blocks
-    \item Compiler: MinGW (GCC)
-    \item Graphics Library: OpenGL (GLUT)
-    \item Audio Library: SDL2, SDL2\_mixer
-    \item Operating System: Windows
-\end{itemize}
-
-\section{Linker and Build Configuration}
-
-The following linker configuration was used to build the project successfully in Code::Blocks:
-
-\begin{verbatim}
--static
--static-libgcc
--static-libstdc++
--lmingw32
--lSDL2main
--lSDL2
--lSDL2_mixer
-\end{verbatim}
-
-If static linking is not required, the \texttt{-static} flags can be removed.
-
-\section{Icon and Resource Setup}
-
-The application uses a custom icon integrated through Windows resource files:
-
-\begin{itemize}
-    \item \texttt{icon.rc} – resource script for icon embedding
-    \item \texttt{egg\_drop\_saga.ico} – application icon file
-\end{itemize}
-
-The icon is loaded using the Win32 API in \texttt{main.cpp}.
-
-
-
-
-
-This appendix documents the complete structure and technical environment of the Egg Drop Saga project. The full source code is modularized and organized to ensure maintainability, readability, and extensibility for future development.
 
 
 
